@@ -1,0 +1,80 @@
+.filters-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  background: var(--bg-card);
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+}
+
+.search-box {
+  position: relative;
+  width: 320px;
+}
+.search-icon {
+  position: absolute;
+  left: 14px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+.search-input {
+  padding-left: 40px;
+  background: var(--bg-surface);
+}
+
+.filter-tabs {
+  display: flex;
+  background: var(--bg-surface);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-light);
+}
+.filter-tab {
+  padding: 6px 16px;
+  border: none; background: none;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.filter-tab:hover { color: var(--text-primary); }
+.filter-tab.active {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Table cells */
+.patient-cell { display: flex; align-items: center; gap: 12px; }
+.patient-cell-avatar {
+  width: 36px; height: 36px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-weight: 700; color: white; flex-shrink: 0;
+}
+.patient-cell-name { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+.patient-cell-age { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+
+.ferida-cell { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.ferida-tipo { font-weight: 500; font-size: 13px; }
+
+.meta-cell { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); }
+
+.action-btns { display: flex; gap: 4px; }
+.icon-action {
+  width: 30px; height: 30px;
+  border-radius: 6px; border: none; background: transparent;
+  color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.icon-action:hover { background: var(--bg-elevated); color: var(--primary); }
+.icon-action.danger:hover { color: var(--danger); background: rgba(239,68,68,0.1); }
+
+@media (max-width: 768px) {
+  .filters-bar { flex-direction: column; gap: 16px; align-items: stretch; }
+  .search-box { width: 100%; }
+}

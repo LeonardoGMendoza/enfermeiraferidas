@@ -1,0 +1,79 @@
+.hc-card {
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}
+
+.hc-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+.hc-card-icon {
+  width: 48px;
+  height: 48px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary);
+  box-shadow: var(--shadow-sm);
+}
+
+.hc-card-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.hc-card-title {
+  font-size: 18px;
+  margin-bottom: 4px;
+}
+
+.hc-card-meta {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.hc-card-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+  flex: 1;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.contact-label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.hc-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.hc-card-stats {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.hc-card-stats strong {
+  color: var(--text-primary);
+  font-size: 14px;
+}

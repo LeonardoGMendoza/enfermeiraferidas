@@ -1,0 +1,131 @@
+.dashboard { animation: fadeIn 0.4s ease; }
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  transition: var(--transition);
+}
+.stat-card:hover { transform: translateY(-3px); }
+
+.stat-icon-wrap {
+  width: 48px; height: 48px;
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.stat-primary .stat-icon-wrap { background: rgba(14,165,233,0.15); color: var(--primary); }
+.stat-accent .stat-icon-wrap { background: rgba(249,115,22,0.15); color: var(--accent); }
+.stat-success .stat-icon-wrap { background: rgba(34,197,94,0.15); color: var(--success); }
+.stat-info .stat-icon-wrap { background: rgba(139,92,246,0.15); color: var(--info); }
+
+.stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; line-height: 1; }
+.stat-label { font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-top: 4px; }
+.stat-sub { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+/* Dash grid */
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.dash-card { padding: 20px; }
+.dash-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.dash-card-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.icon-primary { color: var(--primary); }
+
+/* Appointments */
+.appt-list { display: flex; flex-direction: column; gap: 8px; }
+.appt-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+.appt-item:hover { background: var(--bg-card-hover); }
+.appt-time { font-size: 13px; font-weight: 700; color: var(--primary-light); min-width: 40px; }
+.appt-info { flex: 1; min-width: 0; }
+.appt-patient { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.appt-meta { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; margin-top: 2px; }
+
+/* Patients list */
+.patient-list { display: flex; flex-direction: column; gap: 6px; }
+.patient-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.patient-item:hover { background: var(--bg-card-hover); transform: translateX(4px); }
+.patient-info { flex: 1; min-width: 0; }
+.patient-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.patient-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* Homecares list */
+.hc-list { display: flex; flex-direction: column; gap: 6px; }
+.hc-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px; background: var(--bg-elevated); border-radius: var(--radius-md);
+}
+.hc-info { flex: 1; min-width: 0; }
+.hc-name { font-size: 13px; font-weight: 600; }
+.hc-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+/* Map preview */
+.map-preview-content { display: flex; gap: 16px; align-items: center; }
+.map-preview-visual {
+  flex: 0 0 140px; height: 120px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden;
+}
+.map-preview-bg { font-size: 64px; opacity: 0.3; }
+.map-preview-pins { position: absolute; inset: 0; }
+.map-pin { position: absolute; font-size: 20px; animation: float 4s ease-in-out infinite; }
+.pin-0 { top: 20%; left: 30%; animation-delay: 0s; }
+.pin-1 { top: 50%; left: 60%; animation-delay: 0.5s; }
+.pin-2 { top: 70%; left: 20%; animation-delay: 1s; }
+.pin-3 { top: 30%; left: 75%; animation-delay: 1.5s; }
+
+.map-preview-info { flex: 1; }
+.map-stat { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+.map-stat span { font-size: 20px; font-weight: 800; color: var(--text-primary); }
+.map-hint { font-size: 12px; color: var(--text-muted); margin-top: 10px; line-height: 1.5; }
+
+@media (max-width: 1200px) {
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  .stats-grid { grid-template-columns: 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+}

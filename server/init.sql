@@ -1,0 +1,56 @@
+CREATE TABLE IF NOT EXISTS admin_users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  nome VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS homecares (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  contato VARCHAR(255),
+  telefone VARCHAR(50),
+  email VARCHAR(255),
+  bairro VARCHAR(255),
+  status VARCHAR(50) DEFAULT 'prospectando',
+  pacientes_enviados INTEGER DEFAULT 0,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS patients (
+  id SERIAL PRIMARY KEY,
+  nome VARCHAR(255) NOT NULL,
+  idade INTEGER,
+  telefone VARCHAR(50),
+  endereco TEXT,
+  bairro VARCHAR(255),
+  lat DECIMAL(10, 8),
+  lng DECIMAL(11, 8),
+  tipo_ferida VARCHAR(255),
+  grau VARCHAR(100),
+  homecare_id INTEGER REFERENCES homecares(id) ON DELETE SET NULL,
+  status VARCHAR(50) DEFAULT 'ativo',
+  obs TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS appointments (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER REFERENCES patients(id) ON DELETE CASCADE,
+  data DATE NOT NULL,
+  hora TIME NOT NULL,
+  tipo VARCHAR(100),
+  status VARCHAR(50) DEFAULT 'agendado',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS evolutions (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER REFERENCES patients(id) ON DELETE CASCADE,
+  desc_evolucao TEXT NOT NULL,
+  foto_url TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

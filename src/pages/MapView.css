@@ -1,0 +1,162 @@
+.map-page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--header-height) - 56px); /* subtract padding */
+}
+
+.map-layout {
+  display: flex;
+  gap: 20px;
+  flex: 1;
+  min-height: 0;
+}
+
+.map-sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.map-sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.map-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.map-stat-box {
+  flex: 1;
+  background: var(--bg-elevated);
+  padding: 12px;
+  border-radius: var(--radius-md);
+  text-align: center;
+}
+
+.map-stat-num {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.map-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.map-sidebar-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.map-patient-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 8px;
+}
+
+.map-patient-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: var(--bg-elevated);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.map-patient-item:hover {
+  background: var(--bg-card-hover);
+  transform: translateX(4px);
+}
+
+.map-p-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.map-p-name {
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.map-p-bairro {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.map-container-wrapper {
+  flex: 1;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Leaflet Popup overrides for Dark Theme */
+.leaflet-popup-content-wrapper {
+  background: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md) !important;
+}
+.leaflet-popup-tip {
+  background: var(--bg-card) !important;
+  border-top: 1px solid var(--border-light);
+  border-left: 1px solid var(--border-light);
+}
+
+.map-popup {
+  padding: 4px;
+}
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+.popup-header strong {
+  font-family: var(--font-display);
+  font-size: 14px;
+}
+.popup-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.popup-body div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+@media (max-width: 900px) {
+  .map-layout { flex-direction: column; }
+  .map-sidebar { width: 100%; flex: none; max-height: 300px; }
+  .map-page { height: auto; min-height: calc(100vh - var(--header-height) - 56px); }
+  .map-container-wrapper { min-height: 400px; }
+}
