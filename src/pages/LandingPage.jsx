@@ -49,7 +49,7 @@ export default function LandingPage() {
           </p>
           <div className="hero-actions">
             <a
-              href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20agendar%20uma%20avaliação%20de%20ferida."
+              href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20agendar%20uma%20avaliação%20de%20ferida."
               className="btn btn-accent btn-lg"
               target="_blank"
               rel="noreferrer"
@@ -184,7 +184,7 @@ export default function LandingPage() {
               ))}
             </div>
             <a
-              href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços."
+              href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços."
               className="btn btn-primary btn-lg"
               target="_blank"
               rel="noreferrer"
@@ -215,7 +215,7 @@ export default function LandingPage() {
               ))}
             </div>
             <a
-              href="https://wa.me/5511999999999?text=Olá!%20Sou%20de%20uma%20empresa%20de%20homecare%20e%20gostaria%20de%20conversar%20sobre%20parceria."
+              href="https://wa.me/5511989553812?text=Olá!%20Sou%20de%20uma%20empresa%20de%20homecare%20e%20gostaria%20de%20conversar%20sobre%20parceria."
               className="btn btn-accent btn-lg"
               target="_blank"
               rel="noreferrer"
@@ -244,7 +244,7 @@ export default function LandingPage() {
               <div className="hc-benefit"><span className="hc-benefit-dot" style={{background: 'var(--info)'}} />Parceria com redes de drogarias</div>
               <div className="hc-benefit"><span className="hc-benefit-dot" style={{background: 'var(--info)'}} />Atendimento complementar a clínicas</div>
             </div>
-            <a href="https://wa.me/5511999999999?text=Olá!%20Gostaria%20de%20conversar%20sobre%20uma%20parceria%20corporativa." className="btn btn-primary btn-lg" target="_blank" rel="noreferrer">
+            <a href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20conversar%20sobre%20uma%20parceria%20corporativa." className="btn btn-primary btn-lg" target="_blank" rel="noreferrer">
               🤝 Falar sobre Parcerias B2B
             </a>
           </div>
@@ -279,7 +279,7 @@ export default function LandingPage() {
         <p className="section-sub">Atendemos em toda a região de São Paulo</p>
         <div className="contact-grid">
           {[
-            { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora', action: 'Enviar mensagem', href: 'https://wa.me/5511999999999' },
+            { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora', action: 'Enviar mensagem', href: 'https://wa.me/5511989553812' },
             { icon: '📍', title: 'Área de Atendimento', desc: 'Toda cidade de São Paulo e Grande SP', action: null },
             { icon: '⏰', title: 'Horários', desc: 'Segunda a Sábado, 7h às 19h. Emergências: consultar', action: null },
           ].map((c, i) => (
