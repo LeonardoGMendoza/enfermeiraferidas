@@ -10,6 +10,8 @@ import MapView from './pages/MapView';
 import Homecares from './pages/Homecares';
 import Appointments from './pages/Appointments';
 import Login from './pages/Login';
+import LoginPaciente from './pages/LoginPaciente';
+import PacienteDashboard from './pages/PacienteDashboard';
 
 // Componente para proteger rotas da Área Restrita
 const ProtectedRoute = ({ children }) => {
@@ -34,6 +36,8 @@ export default function App() {
         <Route path="homecares" element={<Homecares />} />
         <Route path="agendamentos" element={<Appointments />} />
       </Route>
+      <Route path="/paciente/login" element={<LoginPaciente />} />
+      <Route path="/paciente/dashboard" element={<PacienteDashboard />} />
     </Routes>
   );
 }
