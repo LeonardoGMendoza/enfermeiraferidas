@@ -1,0 +1,16 @@
+server {
+    listen 80;
+    server_name enfermeiraferidas.com.br www.enfermeiraferidas.com.br;
+
+    location /api/ {
+        proxy_pass http://localhost:3002;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    location / {
+        proxy_pass http://localhost:3001;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+}
