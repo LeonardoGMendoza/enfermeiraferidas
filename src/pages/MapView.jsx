@@ -84,8 +84,10 @@ export default function MapView() {
         <div className="map-container-wrapper card">
           <MapContainer center={mapCenter} zoom={11} style={{ height: '100%', width: '100%', borderRadius: 'var(--radius-lg)', zIndex: 1 }}>
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+              attribution='&copy; <a href="https://maps.google.com">Google Maps</a>'
+              url="https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}"
+              subdomains={['0','1','2','3']}
+              maxZoom={20}
             />
             {patients.filter(p => p.lat && p.lng).map(p => {
               const hc = homecares.find(h => h.id === p.homecareId);

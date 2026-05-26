@@ -4,14 +4,15 @@
   align-items: center;
   justify-content: center;
   background: #020611;
-  background-image: radial-gradient(circle at 50% 0%, rgba(14,165,233,0.1) 0%, transparent 50%),
-                    radial-gradient(circle at 100% 100%, rgba(139,92,246,0.1) 0%, transparent 50%);
-  padding: 20px;
+  background-image:
+    radial-gradient(circle at 50% 0%, rgba(14,165,233,0.12) 0%, transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(139,92,246,0.1) 0%, transparent 50%);
+  padding: 16px;
 }
 
 .login-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 460px;
   padding: 40px;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-lg), var(--shadow-glow);
@@ -45,6 +46,7 @@
 .login-header p {
   color: var(--text-secondary);
   font-size: 14px;
+  line-height: 1.6;
 }
 
 .login-form {
@@ -62,16 +64,19 @@
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-muted);
+  pointer-events: none;
 }
 
 .pl-10 {
-  padding-left: 42px;
+  padding-left: 44px !important;
 }
 
 .login-btn {
-  margin-top: 32px;
+  margin-top: 28px;
   width: 100%;
   justify-content: center;
+  font-size: 16px;
+  padding: 14px;
 }
 
 .login-footer {
@@ -84,10 +89,68 @@
 .login-error {
   background: rgba(239, 68, 68, 0.1);
   color: var(--danger);
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: var(--radius-md);
   font-size: 13px;
   margin-bottom: 20px;
   border: 1px solid rgba(239, 68, 68, 0.2);
   text-align: center;
+  line-height: 1.5;
+}
+
+/* ── Mobile pequeno (até 480px) ── */
+@media (max-width: 480px) {
+  .login-page {
+    align-items: flex-start;
+    padding: 24px 12px;
+  }
+
+  .login-card {
+    padding: 28px 20px;
+    border-radius: var(--radius-lg);
+    max-width: 100%;
+  }
+
+  .login-header h2 {
+    font-size: 20px;
+  }
+
+  .login-logo-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .login-btn {
+    font-size: 15px;
+    padding: 13px;
+  }
+}
+
+/* ── Tablet (481px – 1024px) ── */
+@media (min-width: 481px) and (max-width: 1024px) {
+  .login-card {
+    max-width: 420px;
+    padding: 36px 32px;
+  }
+}
+
+/* ── TV / telas grandes (1440px+) ── */
+@media (min-width: 1440px) {
+  .login-card {
+    max-width: 520px;
+    padding: 56px 48px;
+  }
+
+  .login-header h2 {
+    font-size: 30px;
+  }
+
+  .login-header p {
+    font-size: 16px;
+  }
+
+  .login-btn {
+    font-size: 18px;
+    padding: 16px;
+  }
 }
