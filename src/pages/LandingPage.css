@@ -54,6 +54,11 @@
 .bubble-1 { width: 450px; height: 450px; top: -10%; right: -5%; animation-delay: 0s; }
 .bubble-2 { width: 600px; height: 600px; bottom: -20%; left: -10%; animation-delay: -4s; box-shadow: inset 0 0 30px rgba(249,115,22,0.15), inset 15px 0 40px rgba(14,165,233,0.15); }
 .bubble-3 { width: 250px; height: 250px; top: 40%; left: 55%; animation-delay: -8s; }
+.bubble-4 { width: 120px; height: 120px; top: 20%; left: 20%; animation-delay: -2s; animation-duration: 10s; box-shadow: inset 0 0 20px rgba(249,115,22,0.2); }
+.bubble-5 { width: 80px; height: 80px; top: 70%; left: 40%; animation-delay: -6s; animation-duration: 8s; }
+.bubble-6 { width: 60px; height: 60px; top: 15%; left: 45%; animation-delay: -3s; animation-duration: 12s; box-shadow: inset 0 0 15px rgba(139,92,246,0.25); }
+.bubble-7 { width: 180px; height: 180px; bottom: 5%; right: 20%; animation-delay: -9s; animation-duration: 14s; }
+.bubble-8 { width: 50px; height: 50px; top: 55%; right: 10%; animation-delay: -1s; animation-duration: 7s; box-shadow: inset 0 0 15px rgba(34,197,94,0.2); }
 
 @keyframes float-bubble {
   0%, 100% { transform: translateY(0) rotate(0deg); }
@@ -191,16 +196,20 @@
 .social-grid { display: flex; justify-content: center; gap: 24px; margin-top: 40px; flex-wrap: wrap; }
 .social-card {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
-  width: 140px; height: 140px; border-radius: var(--radius-xl);
-  text-decoration: none; color: var(--text-primary);
-  transition: var(--transition-slow);
+  width: 170px; height: 180px; border-radius: var(--radius-xl);
+  text-decoration: none; color: var(--text-secondary);
+  transition: var(--transition-slow); gap: 6px; padding: 20px 12px;
 }
-.social-icon { margin-bottom: 12px; transition: var(--transition); }
-.social-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-glow); border-color: var(--border-active); }
-.social-card:hover .insta-icon { color: #E1306C; }
-.social-card:hover .fb-icon { color: #1877F2; }
-.social-card:hover .in-icon { color: #0A66C2; }
-.social-card span { font-size: 14px; font-weight: 600; }
+.social-svg { width: 40px; height: 40px; margin-bottom: 6px; transition: var(--transition); }
+.social-card span { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+.social-handle { font-size: 11px !important; font-weight: 400 !important; color: var(--text-muted) !important; }
+.social-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-glow); }
+.social-insta:hover { border-color: #E1306C; box-shadow: 0 8px 32px rgba(225,48,108,0.25); }
+.social-insta:hover .social-svg { color: #E1306C; }
+.social-fb:hover { border-color: #1877F2; box-shadow: 0 8px 32px rgba(24,119,242,0.25); }
+.social-fb:hover .social-svg { color: #1877F2; }
+.social-li:hover { border-color: #0A66C2; box-shadow: 0 8px 32px rgba(10,102,194,0.25); }
+.social-li:hover .social-svg { color: #0A66C2; }
 
 /* Footer */
 .landing-footer { background: var(--bg-surface); border-top: 1px solid var(--border); padding: 40px 60px; text-align: center; }

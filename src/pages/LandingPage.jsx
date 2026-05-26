@@ -32,6 +32,11 @@ export default function LandingPage() {
           <div className="hero-bubble bubble-1" />
           <div className="hero-bubble bubble-2" />
           <div className="hero-bubble bubble-3" />
+          <div className="hero-bubble bubble-4" />
+          <div className="hero-bubble bubble-5" />
+          <div className="hero-bubble bubble-6" />
+          <div className="hero-bubble bubble-7" />
+          <div className="hero-bubble bubble-8" />
           <div className="hero-glow" />
         </div>
         <div className="hero-content">
@@ -257,17 +262,30 @@ export default function LandingPage() {
         <h2 className="section-title">Acompanhe Nosso Trabalho</h2>
         <p className="section-sub">Dicas de cuidados, evolução de pacientes e muito mais</p>
         <div className="social-grid">
-          <a href="#" className="social-card glass" target="_blank" rel="noreferrer">
-            <span style={{ fontSize: '32px', marginBottom: '12px' }}>📷</span>
+          <a href="https://www.instagram.com/sandra.luciane.58/" className="social-card glass social-insta" target="_blank" rel="noreferrer">
+            <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+              <circle cx="12" cy="12" r="4"/>
+              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+            </svg>
             <span>Instagram</span>
+            <span className="social-handle">@sandra.luciane.58</span>
           </a>
-          <a href="#" className="social-card glass" target="_blank" rel="noreferrer">
-            <span style={{ fontSize: '32px', marginBottom: '12px' }}>📘</span>
+          <a href="https://www.facebook.com/sandra.luciane.58" className="social-card glass social-fb" target="_blank" rel="noreferrer">
+            <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+            </svg>
             <span>Facebook</span>
+            <span className="social-handle">Sandra Luciane</span>
           </a>
-          <a href="#" className="social-card glass" target="_blank" rel="noreferrer">
-            <span style={{ fontSize: '32px', marginBottom: '12px' }}>💼</span>
+          <a href="https://www.linkedin.com/in/sandralucianefonseca-enf/" className="social-card glass social-li" target="_blank" rel="noreferrer">
+            <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+              <rect x="2" y="9" width="4" height="12"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
             <span>LinkedIn</span>
+            <span className="social-handle">Sandra Luciane Fonseca</span>
           </a>
         </div>
       </section>
