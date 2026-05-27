@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, Map, Building2, Calendar,
@@ -15,17 +15,39 @@ const navItems = [
 ];
 
 export default function Layout() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  const [sidebarOpen, setSidebarOpen] = useState(window.innerWidth >= 768);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) setSidebarOpen(true);
+      else setSidebarOpen(false);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <div className={`app-shell ${sidebarOpen ? '' : 'sidebar-collapsed'}`}>
-      {/* Sidebar */}
-      <aside className="sidebar">
+
+      {sidebarOpen && isMobile && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          style={{
+            position: 'fixed', inset: 0,
+            background: 'rgba(0,0,0,0.55)',
+            zIndex: 99,
+            backdropFilter: 'blur(2px)',
+          }}
+        />
+      )}
+
+      <aside className="sidebar" style={{ zIndex: 100 }}>
         <div className="sidebar-logo">
-          <div className="logo-icon">
-            <Activity size={20} />
-          </div>
+          <div className="logo-icon"><Activity size={20} /></div>
           {sidebarOpen && (
             <div className="logo-text">
               <span className="logo-name">Enfermeira</span>
@@ -39,7 +61,12 @@ export default function Layout() {
 
         <nav className="sidebar-nav">
           {navItems.map(({ to, icon: Icon, label }) => (
-            <NavLink key={to} to={to} className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <NavLink
+              key={to}
+              to={to}
+              onClick={() => isMobile && setSidebarOpen(false)}
+              className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}
+            >
               <Icon size={20} />
               {sidebarOpen && <span>{label}</span>}
               {sidebarOpen && <ChevronRight size={14} className="nav-arrow" />}
@@ -57,22 +84,33 @@ export default function Layout() {
               </div>
             </div>
           )}
-          <div style={{display:'flex', gap: '8px', flexDirection: sidebarOpen ? 'row' : 'column'}}>
+          <div style={{ display: 'flex', gap: '8px', flexDirection: sidebarOpen ? 'row' : 'column' }}>
             <button className="btn btn-ghost btn-sm" onClick={() => navigate('/')} title="Voltar ao site">
               {sidebarOpen ? '← Site' : '←'}
             </button>
-            <button className="btn btn-ghost btn-sm text-danger" onClick={() => { localStorage.removeItem('ef_token'); navigate('/login'); }} title="Sair do Sistema">
+            <button
+              className="btn btn-ghost btn-sm text-danger"
+              onClick={() => { localStorage.removeItem('ef_token'); navigate('/login'); }}
+              title="Sair do Sistema"
+            >
               {sidebarOpen ? 'Sair' : 'X'}
             </button>
           </div>
         </div>
       </aside>
 
-      {/* Main */}
       <div className="main-area">
-        {/* Header */}
         <header className="app-header">
           <div className="header-left">
+            {isMobile && (
+              <button
+                className="btn btn-ghost btn-sm"
+                onClick={() => setSidebarOpen(true)}
+                style={{ marginRight: '8px' }}
+              >
+                <Menu size={20} />
+              </button>
+            )}
             <div className="header-breadcrumb">
               <Activity size={16} className="breadcrumb-icon" />
               <span>Sistema de Gestão</span>
@@ -89,7 +127,6 @@ export default function Layout() {
           </div>
         </header>
 
-        {/* Page content */}
         <main className="main-content">
           <Outlet />
         </main>
