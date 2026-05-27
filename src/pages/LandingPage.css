@@ -218,29 +218,44 @@
   .section { padding: 60px 20px; }
   .landing-header { padding: 14px 20px; }
   .lh-nav a { display: none; }
+  
   .hero {
     padding: 90px 20px 60px;
     gap: 0;
     flex-direction: column;
     overflow: hidden;
   }
-  .hero-visual { display: none; }
+  
+  /* FORÇA esconder o card visual e bolhas no mobile */
+  .hero-visual { 
+    display: none !important; 
+  }
+  
   .hero-title { font-size: clamp(28px, 8vw, 40px); }
   .hero-subtitle { font-size: 15px; }
   .hero-actions { flex-direction: column; }
   .hero-actions .btn { width: 100%; justify-content: center; }
   .hero-stats { gap: 16px; flex-wrap: wrap; }
   .hero-stat-num { font-size: 20px; }
-  .bubble-1, .bubble-2, .bubble-3 { display: none; }
+  
+  /* Esconde todas as bolhas decorativas */
+  .bubble-1, .bubble-2, .bubble-3, .bubble-4, 
+  .bubble-5, .bubble-6, .bubble-7, .bubble-8 { 
+    display: none !important; 
+  }
+  
   .services-grid,
   .contact-grid { grid-template-columns: 1fr; }
+  
   .about-wrapper { flex-direction: column; gap: 32px; }
   .about-visual { width: 100%; }
   .about-badge-grid { grid-template-columns: 1fr 1fr; }
+  
   .hc-cta { padding: 24px; gap: 24px; flex-direction: column; }
   .hc-cta-title { font-size: 22px; }
   .hc-cta-img { display: none; }
   .hc-cta-benefits { grid-template-columns: 1fr; }
+  
   .section-title { font-size: clamp(22px, 6vw, 32px); }
   .landing-footer { padding: 32px 20px; }
 }
