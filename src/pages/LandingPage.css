@@ -218,19 +218,26 @@
   .section { padding: 60px 20px; }
   .landing-header { padding: 14px 20px; }
   .lh-nav a { display: none; }
-  .hero { padding: 90px 20px 60px; gap: 40px; }
+  .hero {
+    padding: 90px 20px 60px;
+    gap: 0;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .hero-visual { display: none; }
   .hero-title { font-size: clamp(28px, 8vw, 40px); }
   .hero-subtitle { font-size: 15px; }
   .hero-actions { flex-direction: column; }
   .hero-actions .btn { width: 100%; justify-content: center; }
-  .hero-stats { gap: 16px; }
+  .hero-stats { gap: 16px; flex-wrap: wrap; }
   .hero-stat-num { font-size: 20px; }
-  .bubble-1, .bubble-2 { display: none; }
-  .hero-float-card { right: 0; font-size: 12px; padding: 8px 12px; }
-  .hero-float-card-2 { right: 0; }
-  .services-grid, .contact-grid { grid-template-columns: 1fr; }
+  .bubble-1, .bubble-2, .bubble-3 { display: none; }
+  .services-grid,
+  .contact-grid { grid-template-columns: 1fr; }
+  .about-wrapper { flex-direction: column; gap: 32px; }
+  .about-visual { width: 100%; }
   .about-badge-grid { grid-template-columns: 1fr 1fr; }
-  .hc-cta { padding: 24px; gap: 24px; }
+  .hc-cta { padding: 24px; gap: 24px; flex-direction: column; }
   .hc-cta-title { font-size: 22px; }
   .hc-cta-img { display: none; }
   .hc-cta-benefits { grid-template-columns: 1fr; }
