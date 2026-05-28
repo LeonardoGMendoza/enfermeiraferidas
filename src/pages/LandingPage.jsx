@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Activity, MapPin, Phone, Star, ArrowRight, Shield, Clock, Heart, Cross, Menu, X } from 'lucide-react';
 import './LandingPage.css';
 
-// Ícones SVG de enfermagem/curativos para substituir as bolinhas
 const NursingIcons = [
-  // Curativo/Band-aid
   { id: 'bandaid', size: 80, delay: '0s', duration: '14s', top: '8%', right: '5%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +16,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Seringa
   { id: 'syringe', size: 90, delay: '-4s', duration: '16s', top: '65%', left: '2%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -31,7 +28,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Cruz médica
   { id: 'cross', size: 60, delay: '-8s', duration: '12s', top: '38%', left: '52%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -41,7 +37,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Coração com pulso
   { id: 'heart', size: 70, delay: '-2s', duration: '10s', top: '18%', left: '18%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -50,7 +45,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Pílula
   { id: 'pill', size: 65, delay: '-6s', duration: '8s', top: '68%', left: '38%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -60,7 +54,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Termômetro
   { id: 'thermo', size: 50, delay: '-3s', duration: '12s', top: '13%', left: '43%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -71,7 +64,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Estetoscópio
   { id: 'stethoscope', size: 85, delay: '-9s', duration: '14s', bottom: '8%', right: '18%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -85,7 +77,6 @@ const NursingIcons = [
       </svg>
     )
   },
-  // Pezinho/Pé diabético
   { id: 'foot', size: 55, delay: '-1s', duration: '7s', top: '53%', right: '8%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -104,9 +95,12 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const closeMenu = () => setMobileMenuOpen(false);
+
   return (
     <div className="landing">
-      {/* Header */}
+
+      {/* ── Header ── */}
       <header className="landing-header">
         <div className="lh-logo">
           <div className="lh-logo-icon"><Activity size={20} /></div>
@@ -114,6 +108,8 @@ export default function LandingPage() {
             <span className="lh-logo-name">Enfermeira Feridas</span>
           </div>
         </div>
+
+        {/* Desktop nav */}
         <nav className="lh-nav-desktop">
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
@@ -122,41 +118,35 @@ export default function LandingPage() {
             Área Restrita
           </button>
         </nav>
-        <button className="mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Menu">
+
+        {/* Botão hambúrguer */}
+        <button
+          className="mobile-menu-btn"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          aria-label="Menu"
+        >
           {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </header>
-      
-      {/* Mobile Menu - Estilo Facebook (Dropdown Flutuante) */}
+
+      {/* ── Mobile Menu ── */}
       {mobileMenuOpen && (
         <>
-          <div className="mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)}></div>
+          <div className="mobile-menu-overlay" onClick={closeMenu} />
           <div className="mobile-dropdown-menu">
-            <div className="mobile-dropdown-header">
-              <div className="md-avatar"><Activity size={24} /></div>
-              <div className="md-user-info">
-                <span className="md-name">Navegação</span>
-                <span className="md-sub">Enfermeira Feridas</span>
-              </div>
-            </div>
-            
             <div className="mobile-dropdown-body">
-              <a href="#servicos" className="md-item" onClick={() => setMobileMenuOpen(false)}>
-                <span>Serviços</span>
-                <span className="md-chevron">›</span>
+              <a href="#servicos" className="md-item" onClick={closeMenu}>
+                Serviços
               </a>
-              <a href="#sobre" className="md-item" onClick={() => setMobileMenuOpen(false)}>
-                <span>Sobre Nós</span>
-                <span className="md-chevron">›</span>
+              <a href="#sobre" className="md-item" onClick={closeMenu}>
+                Sobre
               </a>
-              <a href="#contato" className="md-item" onClick={() => setMobileMenuOpen(false)}>
-                <span>Contato</span>
-                <span className="md-chevron">›</span>
+              <a href="#contato" className="md-item" onClick={closeMenu}>
+                Contato
               </a>
             </div>
-            
             <div className="mobile-dropdown-footer">
-              <button className="btn btn-primary" onClick={() => { navigate('/app'); setMobileMenuOpen(false); }}>
+              <button className="btn btn-primary" onClick={() => { navigate('/app'); closeMenu(); }}>
                 Área Restrita
               </button>
             </div>
@@ -164,12 +154,11 @@ export default function LandingPage() {
         </>
       )}
 
-      {/* Hero */}
+      {/* ── Hero ── */}
       <section className="hero">
         <div className="hero-bg">
           <div className="hero-grid" />
           <div className="hero-glow" />
-          {/* Ícones de enfermagem animados */}
           {NursingIcons.map((icon) => (
             <div
               key={icon.id}
@@ -189,6 +178,7 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+
         <div className="hero-content">
           <div className="hero-badge">
             <Shield size={14} />
@@ -232,6 +222,7 @@ export default function LandingPage() {
             </div>
           </div>
         </div>
+
         <div className="hero-visual">
           <div className="hero-card glass">
             <div className="hcard-header">
@@ -270,7 +261,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Serviços */}
+      {/* ── Serviços ── */}
       <section className="section" id="servicos">
         <div className="section-label">O que oferecemos</div>
         <h2 className="section-title">Serviços Especializados</h2>
@@ -293,7 +284,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Sobre */}
+      {/* ── Sobre ── */}
       <section className="section section-alt" id="sobre">
         <div className="about-wrapper">
           <div className="about-visual">
@@ -318,12 +309,12 @@ export default function LandingPage() {
               Dedicação e expertise<br />no cuidado de feridas
             </h2>
             <p className="about-text">
-              Sou enfermeira com especialização em cuidados de feridas complexas. Minha missão é 
-              proporcionar tratamento de qualidade hospitalar no conforto do lar, com atenção 
+              Sou enfermeira com especialização em cuidados de feridas complexas. Minha missão é
+              proporcionar tratamento de qualidade hospitalar no conforto do lar, com atenção
               humanizada e protocolos clínicos atualizados.
             </p>
             <p className="about-text">
-              Atendo pacientes encaminhados por empresas de homecare em toda São Paulo, 
+              Atendo pacientes encaminhados por empresas de homecare em toda São Paulo,
               oferecendo relatórios periódicos de evolução e comunicação constante com as equipes.
             </p>
             <div className="about-highlights">
@@ -350,63 +341,45 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Homecare CTA */}
-      <section className="section" id="homecares">
-        <div className="hc-cta glass">
+      {/* ── PARCERIAS: Redes de Farmácias e Clínicas (CORRIGIDO) ── */}
+      <section className="section section-alt" id="parcerias-redes">
+        <div className="hc-cta">
           <div className="hc-cta-content">
-            <div className="section-label">Para Empresas</div>
-            <h2 className="hc-cta-title">Parceria com Homecares</h2>
+            <div className="section-label" style={{ color: 'var(--info)', background: 'rgba(139,92,246,0.1)' }}>
+              📢 PARCERIAS B2B
+            </div>
+            <h2 className="hc-cta-title">Redes de Farmácias e Clínicas</h2>
             <p className="hc-cta-text">
-              Tem pacientes que precisam de cuidados especializados em feridas? 
-              Vamos conversar sobre uma parceria. Ofereço relatórios mensais, 
-              comunicação ágil e atendimento de qualidade para seus pacientes.
+              Ampliamos o atendimento aos seus clientes! Estabelecemos parcerias com grandes redes
+              de farmácias, plataformas de saúde (como Nomad) e clínicas especializadas.
             </p>
             <div className="hc-cta-benefits">
-              {['Relatórios periódicos de evolução','Comunicação direta com a equipe','Atendimento rápido e humanizado','Documentação clínica completa'].map((b,i) => (
-                <div key={i} className="hc-benefit">
-                  <span className="hc-benefit-dot" />
-                  {b}
-                </div>
-              ))}
+              <div className="hc-benefit">
+                <span className="hc-benefit-dot" style={{background: 'var(--info)'}} />
+                Suporte a plataformas de telemedicina
+              </div>
+              <div className="hc-benefit">
+                <span className="hc-benefit-dot" style={{background: 'var(--info)'}} />
+                Parceria com grandes redes de drogarias
+              </div>
+              <div className="hc-benefit">
+                <span className="hc-benefit-dot" style={{background: 'var(--info)'}} />
+                Atendimento complementar a clínicas e homecares
+              </div>
             </div>
             <a
-              href="https://wa.me/5511989553812?text=Olá!%20Sou%20de%20uma%20empresa%20de%20homecare%20e%20gostaria%20de%20conversar%20sobre%20parceria."
-              className="btn btn-accent btn-lg"
+              href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20conversar%20sobre%20uma%20parceria%20corporativa."
+              className="btn btn-primary btn-lg"
               target="_blank"
               rel="noreferrer"
             >
-              💼 Propor Parceria
-            </a>
-          </div>
-          <div className="hc-cta-img">🏥</div>
-        </div>
-      </section>
-
-      {/* Redes de Farmácias e Clínicas */}
-      <section className="section section-alt" id="parcerias-redes">
-        <div className="hc-cta glass">
-          <div className="hc-cta-img" style={{ fontSize: '72px', marginRight: '24px' }}>
-            <Cross size={80} className="text-info" />
-          </div>
-          <div className="hc-cta-content">
-            <div className="section-label" style={{ color: 'var(--info)', background: 'rgba(139,92,246,0.1)' }}>Parcerias B2B</div>
-            <h2 className="hc-cta-title">Redes de Farmácias e Clínicas</h2>
-            <p className="hc-cta-text">
-              Ampliamos o atendimento aos seus clientes! Estabelecemos parcerias com grandes redes de farmácias, plataformas de saúde (como Nomad) e clínicas especializadas.
-            </p>
-            <div className="hc-cta-benefits">
-              <div className="hc-benefit"><span className="hc-benefit-dot" style={{background: 'var(--info)'}} />Suporte a plataformas de telemedicina</div>
-              <div className="hc-benefit"><span className="hc-benefit-dot" style={{background: 'var(--info)'}} />Parceria com redes de drogarias</div>
-              <div className="hc-benefit"><span className="hc-benefit-dot" style={{background: 'var(--info)'}} />Atendimento complementar a clínicas</div>
-            </div>
-            <a href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20conversar%20sobre%20uma%20parceria%20corporativa." className="btn btn-primary btn-lg" target="_blank" rel="noreferrer">
               🤝 Falar sobre Parcerias B2B
             </a>
           </div>
         </div>
       </section>
 
-      {/* Redes Sociais */}
+      {/* ── Redes Sociais ── */}
       <section className="section social-section" id="redes">
         <div className="section-label">Redes Sociais</div>
         <h2 className="section-title">Acompanhe Nosso Trabalho</h2>
@@ -440,7 +413,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Contato */}
+      {/* ── Contato ── */}
       <section className="section section-alt" id="contato">
         <div className="section-label">Contato</div>
         <h2 className="section-title">Agende sua Avaliação</h2>
@@ -465,7 +438,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* ── Footer ── */}
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="lh-logo">
@@ -476,6 +449,7 @@ export default function LandingPage() {
           <p className="footer-copy">© {new Date().getFullYear()} Todos os direitos reservados</p>
         </div>
       </footer>
+
     </div>
   );
 }
