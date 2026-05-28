@@ -126,16 +126,42 @@ export default function LandingPage() {
           {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </header>
-      {/* Mobile Menu Drawer */}
+      
+      {/* Mobile Menu - Estilo Facebook (Dropdown Flutuante) */}
       {mobileMenuOpen && (
-        <div className="mobile-nav-drawer">
-          <a href="#servicos" onClick={() => setMobileMenuOpen(false)}>Serviços</a>
-          <a href="#sobre" onClick={() => setMobileMenuOpen(false)}>Sobre</a>
-          <a href="#contato" onClick={() => setMobileMenuOpen(false)}>Contato</a>
-          <button className="btn btn-primary" onClick={() => { navigate('/app'); setMobileMenuOpen(false); }}>
-            Área Restrita
-          </button>
-        </div>
+        <>
+          <div className="mobile-menu-overlay" onClick={() => setMobileMenuOpen(false)}></div>
+          <div className="mobile-dropdown-menu">
+            <div className="mobile-dropdown-header">
+              <div className="md-avatar"><Activity size={24} /></div>
+              <div className="md-user-info">
+                <span className="md-name">Navegação</span>
+                <span className="md-sub">Enfermeira Feridas</span>
+              </div>
+            </div>
+            
+            <div className="mobile-dropdown-body">
+              <a href="#servicos" className="md-item" onClick={() => setMobileMenuOpen(false)}>
+                <span>Serviços</span>
+                <span className="md-chevron">›</span>
+              </a>
+              <a href="#sobre" className="md-item" onClick={() => setMobileMenuOpen(false)}>
+                <span>Sobre Nós</span>
+                <span className="md-chevron">›</span>
+              </a>
+              <a href="#contato" className="md-item" onClick={() => setMobileMenuOpen(false)}>
+                <span>Contato</span>
+                <span className="md-chevron">›</span>
+              </a>
+            </div>
+            
+            <div className="mobile-dropdown-footer">
+              <button className="btn btn-primary" onClick={() => { navigate('/app'); setMobileMenuOpen(false); }}>
+                Área Restrita
+              </button>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Hero */}
