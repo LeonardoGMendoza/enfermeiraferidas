@@ -196,6 +196,12 @@
 .footer-copy { color: var(--text-muted); font-size: 12px; }
 
 /* =============================================
+   OVERFLOW GLOBAL — evita scroll horizontal
+   ============================================= */
+.landing { overflow-x: hidden; }
+.hero { overflow-x: hidden; }
+
+/* =============================================
    RESPONSIVIDADE — TABLET (≤1024px)
    ============================================= */
 @media (max-width: 1024px) {
@@ -207,51 +213,102 @@
   .hc-cta { flex-direction: column; padding: 40px; gap: 32px; }
   .hc-cta-benefits { grid-template-columns: 1fr; }
   .section { padding: 70px 32px; }
-  .nursing-icon-float:nth-child(n+6) { opacity: 0.35; }
+  .nursing-icon-float:nth-child(n+5) { opacity: 0.25; }
 }
 
 /* =============================================
-   RESPONSIVIDADE — MOBILE (≤640px)
+   RESPONSIVIDADE — MOBILE (≤768px)
+   ============================================= */
+@media (max-width: 768px) {
+  /* Esconde todos os ícones de enfermagem no mobile — evita overlap */
+  .nursing-icon-float { display: none !important; }
+
+  /* Hero sem overflow */
+  .hero {
+    flex-direction: column !important;
+    padding: 90px 20px 48px !important;
+    gap: 24px !important;
+    min-height: 100svh;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Card visual escondido no mobile */
+  .hero-visual { display: none !important; }
+
+  /* Conteúdo ocupa a largura toda */
+  .hero-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    flex: none !important;
+    box-sizing: border-box;
+  }
+
+  /* Header */
+  .landing-header { padding: 12px 16px; }
+
+  /* Esconde nav desktop, mostra hambúrguer */
+  .lh-nav-desktop { display: none !important; }
+  .mobile-menu-btn {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* =============================================
+   RESPONSIVIDADE — MOBILE PEQUENO (≤640px)
    ============================================= */
 @media (max-width: 640px) {
-  .landing-header { padding: 14px 20px; }
-  .lh-nav-desktop { display: none !important; }
-  .mobile-menu-btn { display: flex !important; align-items: center; justify-content: center; }
-  .mobile-nav-drawer { display: flex; }
+  /* Tipografia */
+  .hero-title { font-size: clamp(26px, 7vw, 38px) !important; }
+  .hero-subtitle { font-size: 14px !important; max-width: 100% !important; }
+  .hero-badge { font-size: 12px; padding: 5px 12px; }
 
-  .hero {
-    padding: 90px 20px 48px;
-    flex-direction: column;
-    gap: 32px;
-    overflow: hidden;
-    min-height: auto;
+  /* Botões */
+  .hero-actions { flex-direction: column !important; }
+  .hero-actions .btn {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
   }
-  .hero-content { max-width: 100%; }
-  .hero-title { font-size: clamp(28px, 8vw, 40px); }
-  .hero-subtitle { font-size: 15px; max-width: 100%; }
-  .hero-actions { flex-direction: column; }
-  .hero-actions .btn { width: 100%; justify-content: center; }
-  .hero-stats { gap: 16px; flex-wrap: wrap; }
+
+  /* Stats */
+  .hero-stats { gap: 12px; flex-wrap: wrap; justify-content: flex-start; }
   .hero-stat-num { font-size: 20px; }
-  
-  /* Esconde todas as bolhas decorativas */
-  .bubble-1, .bubble-2, .bubble-3, .bubble-4, 
-  .bubble-5, .bubble-6, .bubble-7, .bubble-8 { 
-    display: none !important; 
-  }
-  
-  .services-grid,
-  .contact-grid { grid-template-columns: 1fr; }
-  
-  .about-wrapper { flex-direction: column; gap: 32px; }
-  .about-visual { width: 100%; }
-  .about-badge-grid { grid-template-columns: 1fr 1fr; }
-  
-  .hc-cta { padding: 24px; gap: 24px; flex-direction: column; }
-  .hc-cta-title { font-size: 22px; }
-  .hc-cta-img { display: none; }
-  .hc-cta-benefits { grid-template-columns: 1fr; }
-  
-  .section-title { font-size: clamp(22px, 6vw, 32px); }
-  .landing-footer { padding: 32px 20px; }
+
+  /* Seções */
+  .section { padding: 48px 16px !important; }
+  .section-title { font-size: clamp(20px, 6vw, 30px); }
+  .section-sub { font-size: 14px; margin-bottom: 32px; }
+
+  /* Grids */
+  .services-grid { grid-template-columns: 1fr !important; gap: 12px; }
+  .contact-grid { grid-template-columns: 1fr !important; gap: 12px; }
+
+  /* Sobre */
+  .about-wrapper { flex-direction: column !important; gap: 24px; }
+  .about-visual { width: 100% !important; flex: none !important; }
+  .about-badge-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .about-badge-card { padding: 14px 10px; }
+  .about-text { font-size: 14px; }
+
+  /* CTA */
+  .hc-cta { padding: 20px 16px !important; gap: 16px; flex-direction: column; }
+  .hc-cta-title { font-size: 20px !important; }
+  .hc-cta-text { font-size: 14px; }
+  .hc-cta-img { display: none !important; }
+  .hc-cta-benefits { grid-template-columns: 1fr; gap: 8px; }
+  .hc-benefit { font-size: 13px; }
+
+  /* Social */
+  .social-grid { gap: 12px; }
+  .social-card { width: 120px; height: 140px; padding: 14px 8px; }
+  .social-svg { width: 30px; height: 30px; }
+  .social-card span { font-size: 12px; }
+  .social-handle { font-size: 10px !important; }
+
+  /* Footer */
+  .landing-footer { padding: 28px 16px; }
+  .lh-logo-name { font-size: 14px; }
 }

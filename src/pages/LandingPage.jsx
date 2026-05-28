@@ -19,7 +19,7 @@ const NursingIcons = [
     )
   },
   // Seringa
-  { id: 'syringe', size: 90, delay: '-4s', duration: '16s', top: '65%', left: '-2%',
+  { id: 'syringe', size: 90, delay: '-4s', duration: '16s', top: '65%', left: '2%',
     svg: (
       <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
         <line x1="10" y1="54" x2="50" y2="14" stroke="rgba(249,115,22,0.6)" strokeWidth="2.5" strokeLinecap="round"/>
@@ -114,7 +114,7 @@ export default function LandingPage() {
             <span className="lh-logo-name">Enfermeira Feridas</span>
           </div>
         </div>
-        <nav className="lh-nav lh-nav-desktop">
+        <nav className="lh-nav-desktop">
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
           <a href="#contato">Contato</a>
