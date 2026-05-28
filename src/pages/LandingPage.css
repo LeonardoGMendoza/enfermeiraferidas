@@ -66,31 +66,6 @@
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-.mobile-dropdown-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  border-bottom: 1px solid var(--border-light);
-  background: rgba(255,255,255,0.03);
-}
-
-.md-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  flex-shrink: 0;
-}
-
-.md-user-info { display: flex; flex-direction: column; }
-.md-name { font-weight: 700; font-size: 15px; color: var(--text-primary); }
-.md-sub { font-size: 12px; color: var(--text-muted); }
-
 .mobile-dropdown-body {
   display: flex;
   flex-direction: column;
@@ -114,8 +89,6 @@
   background: rgba(255,255,255,0.05);
   color: var(--text-primary);
 }
-
-.md-chevron { font-size: 18px; color: var(--text-muted); font-weight: 400; }
 
 .mobile-dropdown-footer {
   padding: 16px;
@@ -322,7 +295,6 @@
   .landing-header { padding: 12px 20px; }
   .lh-logo-name { font-size: 14px; white-space: nowrap; }
 
-  /* Esconde nav desktop, mostra hambúrguer */
   .lh-nav-desktop { display: none; }
   .mobile-menu-btn { display: flex; }
 
@@ -332,7 +304,6 @@
   .about-wrapper { flex-direction: column; gap: 40px; }
   .about-visual { flex: none; width: 100%; }
 
-  /* CTA em coluna */
   .hc-cta { flex-direction: column; padding: 40px 32px; gap: 24px; text-align: left; }
   .hc-cta-img { display: none; }
   .hc-cta-benefits { grid-template-columns: 1fr; }
@@ -342,7 +313,7 @@
 }
 
 /* =============================================
-   MOBILE (≤768px)
+   MOBILE (≤768px) - CORRIGIDO TEXTO FARMÁCIAS
    ============================================= */
 @media (max-width: 768px) {
   .landing-header { padding: 12px 16px; }
@@ -369,15 +340,42 @@
   .hero-stats { flex-wrap: wrap; gap: 16px; }
   .hero-stat-divider { display: none; }
 
-  /* CTA blocos */
+  /* CORREÇÃO DO TEXTO CORTADO NA SEÇÃO FARMÁCIAS */
   .hc-cta {
     flex-direction: column;
     padding: 24px 20px;
     gap: 16px;
     align-items: flex-start;
+    width: 100%;
+    box-sizing: border-box;
   }
-  .hc-cta-title { font-size: 22px; }
-  .hc-cta-benefits { grid-template-columns: 1fr; gap: 8px; }
+  .hc-cta-content {
+    width: 100%;
+    overflow-x: visible;
+  }
+  .hc-cta-title { 
+    font-size: 22px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .hc-cta-text { 
+    font-size: 14px; 
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  .hc-cta-benefits { 
+    grid-template-columns: 1fr; 
+    gap: 8px;
+    width: 100%;
+  }
+  .hc-benefit { 
+    font-size: 13px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
 }
 
 /* =============================================
