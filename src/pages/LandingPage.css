@@ -17,9 +17,10 @@
   color: white; box-shadow: 0 4px 12px var(--primary-glow);
 }
 .lh-logo-name { font-family: var(--font-display); font-weight: 800; font-size: 16px; }
-.lh-nav { display: flex; align-items: center; gap: 28px; }
-.lh-nav a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: var(--transition); }
-.lh-nav a:hover { color: var(--text-primary); }
+/* Nav desktop (escondido no mobile via media query) */
+.lh-nav-desktop { display: flex; align-items: center; gap: 28px; }
+.lh-nav-desktop a { color: var(--text-secondary); text-decoration: none; font-size: 14px; font-weight: 500; transition: var(--transition); }
+.lh-nav-desktop a:hover { color: var(--text-primary); }
 
 .hero {
   min-height: 100vh; display: flex; align-items: center;
@@ -220,17 +221,21 @@
    RESPONSIVIDADE — MOBILE (≤768px)
    ============================================= */
 @media (max-width: 768px) {
-  /* Esconde todos os ícones de enfermagem no mobile — evita overlap */
+  /* Esconde todos os ícones de enfermagem no mobile */
   .nursing-icon-float { display: none !important; }
 
-  /* Hero sem overflow */
+  /* Esconde icone decorativo das CTAs */
+  .hc-cta-img { display: none !important; }
+
+  /* Hero sem overflow - empilhado */
   .hero {
     flex-direction: column !important;
     padding: 90px 20px 48px !important;
     gap: 24px !important;
     min-height: 100svh;
-    width: 100%;
+    width: 100% !important;
     box-sizing: border-box;
+    align-items: flex-start !important;
   }
 
   /* Card visual escondido no mobile */
@@ -244,16 +249,25 @@
     box-sizing: border-box;
   }
 
+  /* Hero stats — em linha, sem divisores que quebram */
+  .hero-stats { flex-wrap: wrap !important; gap: 16px !important; }
+  .hero-stat-divider { display: none !important; }
+
   /* Header */
-  .landing-header { padding: 12px 16px; }
+  .landing-header { padding: 12px 16px !important; }
 
   /* Esconde nav desktop, mostra hambúrguer */
   .lh-nav-desktop { display: none !important; }
   .mobile-menu-btn {
     display: flex !important;
-    align-items: center;
-    justify-content: center;
+    align-items: center !important;
+    justify-content: center !important;
   }
+
+  /* CTAs empilhadas */
+  .hc-cta { flex-direction: column !important; padding: 20px 16px !important; gap: 16px !important; }
+  .hc-cta-title { font-size: 22px !important; }
+  .hc-cta-benefits { grid-template-columns: 1fr !important; gap: 8px !important; }
 }
 
 /* =============================================
@@ -294,11 +308,11 @@
   .about-text { font-size: 14px; }
 
   /* CTA */
-  .hc-cta { padding: 20px 16px !important; gap: 16px; flex-direction: column; }
+  .hc-cta { padding: 20px 16px !important; gap: 16px !important; flex-direction: column !important; }
   .hc-cta-title { font-size: 20px !important; }
   .hc-cta-text { font-size: 14px; }
   .hc-cta-img { display: none !important; }
-  .hc-cta-benefits { grid-template-columns: 1fr; gap: 8px; }
+  .hc-cta-benefits { grid-template-columns: 1fr !important; gap: 8px !important; margin-bottom: 20px; }
   .hc-benefit { font-size: 13px; }
 
   /* Social */
