@@ -151,6 +151,17 @@ app.post('/api/orcamento', async (req, res) => {
   }
 });
 
+// Endpoint para buscar pacientes
+app.get('/api/pacientes', async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM pacientes ORDER BY created_at DESC");
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar pacientes:', error);
+    res.status(500).json({ error: 'Erro ao buscar pacientes' });
+  }
+});
+
 // Endpoint para buscar alertas pendentes (Dashboard)
 app.get('/api/alertas', async (req, res) => {
   try {

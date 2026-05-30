@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, User, CheckCircle, XCircle } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, CheckCircle, XCircle, Activity } from 'lucide-react';
 import './Dashboard.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';

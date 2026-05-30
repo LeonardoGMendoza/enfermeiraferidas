@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, MapPin, Phone, Edit2, Trash2, Eye } from 'lucide-react';
-import { getPatients, getHomecares, savePatient, deletePatient } from '../data';
+import { getHomecares } from '../data';
 import PatientModal from '../components/PatientModal';
 
 const STATUS_MAP = {
@@ -19,8 +19,27 @@ export default function Patients() {
   const [editing, setEditing] = useState(null);
   const navigate = useNavigate();
 
-  const load = () => { setPatients(getPatients()); setHomecares(getHomecares()); };
-  useEffect(load, []);
+  const [loading, setLoading] = useState(true);
+
+  const load = async () => { 
+    try {
+      const res = await fetch('/api/pacientes');
+      if (res.ok) {
+        const data = await res.json();
+        setPatients(data);
+      } else {
+        setPatients([]);
+      }
+    } catch (e) {
+      console.error(e);
+      setPatients([]);
+    } finally {
+      setLoading(false);
+    }
+    setHomecares(getHomecares()); 
+  };
+  
+  useEffect(() => { load(); }, []);
 
   const filtered = patients.filter(p => {
     const q = search.toLowerCase();
@@ -101,7 +120,7 @@ export default function Patients() {
                         <div className="patient-cell-avatar">{p.nome?.[0] || '?'}</div>
                         <div>
                           <div className="patient-cell-name">{p.nome}</div>
-                          <div className="patient-cell-age">{p.idade} anos · <Phone size={11} /> {p.telefone}</div>
+                          <div className="patient-cell-age"><Phone size={11} /> {p.phone}</div>
                         </div>
                       </div>
                     </td>
@@ -112,12 +131,12 @@ export default function Patients() {
                       </div>
                     </td>
                     <td>
-                      <span className="meta-cell"><MapPin size={13} /> {p.bairro}</span>
+                      <span className="meta-cell"><MapPin size={13} /> {p.endereco || 'Não informado'}</span>
                     </td>
                     <td>
                       <span className="meta-cell">{hc ? hc.nome : <span className="text-muted">—</span>}</span>
                     </td>
-                    <td><span className={`badge ${st.cls}`}>{st.label}</span></td>
+                    <td><span className={`badge badge-success`}>Ativo</span></td>
                     <td>
                       <div className="action-btns">
                         <button className="icon-action" title="Ver detalhes" onClick={() => navigate(`/app/pacientes/${p.id}`)}>
