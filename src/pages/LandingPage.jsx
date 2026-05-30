@@ -379,14 +379,12 @@ export default function LandingPage() {
                 Atendimento complementar a clínicas e homecares
               </div>
             </div>
-            <a
-              href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20conversar%20sobre%20uma%20parceria%20corporativa."
+            <button
               className="btn btn-primary btn-lg"
-              target="_blank"
-              rel="noreferrer"
+              onClick={() => handleOpenOrcamento('Parcerias B2B / Homecare')}
             >
-              🤝 Falar sobre Parcerias B2B
-            </a>
+              🤝 Cadastrar Parceria B2B
+            </button>
           </div>
         </div>
       </section>
@@ -461,9 +459,6 @@ export default function LandingPage() {
           <p className="footer-copy">© {new Date().getFullYear()} Todos os direitos reservados</p>
         </div>
       </footer>
-
-      </footer>
-
     </div>
   );
 }
