@@ -75,6 +75,83 @@ app.post('/api/setup-admin', async (req, res) => {
   }
 });
 
+// ==========================================
+// WHATSAPP & N8N WEBHOOKS
+// ==========================================
+
+// Webhook para receber novo pedido do n8n
+app.post('/api/webhook/novo-pedido', async (req, res) => {
+  try {
+    const { phone, nome, endereco, bairro, tipo_servico, valor } = req.body;
+    const result = await pool.query(
+      `INSERT INTO alertas_dashboard 
+       (phone, nome, endereco, bairro, tipo_servico, valor, status_pagamento) 
+       VALUES ($1, $2, $3, $4, $5, $6, 'pendente') RETURNING *`,
+      [phone, nome, endereco, bairro, tipo_servico, valor]
+    );
+    res.json({ success: true, alerta: result.rows[0] });
+  } catch (error) {
+    console.error('Erro no webhook novo-pedido:', error);
+    res.status(500).json({ error: 'Erro ao processar pedido' });
+  }
+});
+
+// Endpoint para buscar alertas pendentes (Dashboard)
+app.get('/api/alertas', async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM alertas_dashboard WHERE lido = FALSE ORDER BY created_at DESC"
+    );
+    res.json(result.rows);
+  } catch (error) {
+    console.error('Erro ao buscar alertas:', error);
+    res.status(500).json({ error: 'Erro ao buscar alertas' });
+  }
+});
+
+// Endpoint para confirmar pagamento e arquivar alerta (Dashboard)
+app.post('/api/alertas/:id/confirmar', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    // Atualiza status do alerta
+    const updateResult = await pool.query(
+      "UPDATE alertas_dashboard SET status_pagamento = 'confirmado', lido = TRUE WHERE id = $1 RETURNING *",
+      [id]
+    );
+
+    if (updateResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Alerta não encontrado' });
+    }
+
+    const alerta = updateResult.rows[0];
+
+    // Aqui podemos inserir um POST de volta para o n8n para ele notificar o cliente via Z-API
+    // fetch('https://n8n.sandlj.com.br/webhook/confirmacao-pix', { method: 'POST', body: ... })
+    // Isso pode ser feito direto no frontend ou backend, mas é melhor o n8n ter um webhook.
+
+    res.json({ success: true, alerta });
+  } catch (error) {
+    console.error('Erro ao confirmar alerta:', error);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
+// Endpoint para rejeitar PIX
+app.post('/api/alertas/:id/rejeitar', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query(
+      "UPDATE alertas_dashboard SET status_pagamento = 'rejeitado', lido = TRUE WHERE id = $1 RETURNING *",
+      [id]
+    );
+    res.json({ success: true, alerta: result.rows[0] });
+  } catch (error) {
+    console.error('Erro ao rejeitar alerta:', error);
+    res.status(500).json({ error: 'Erro interno' });
+  }
+});
+
 app.listen(process.env.PORT || 3000, () => {
   console.log(`Server running on port ${process.env.PORT || 3000}`);
 });

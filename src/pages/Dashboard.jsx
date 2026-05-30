@@ -1,20 +1,64 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Building2, Calendar, TrendingUp, Clock, MapPin, ChevronRight, Activity } from 'lucide-react';
+import { Users, Building2, Calendar, TrendingUp, Clock, MapPin, ChevronRight, Activity, Bell, Check, X } from 'lucide-react';
 import { getPatients, getHomecares, getAppointments } from '../data';
 import './Dashboard.css';
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Dashboard() {
   const [patients, setPatients] = useState([]);
   const [homecares, setHomecares] = useState([]);
   const [appointments, setAppointments] = useState([]);
+  const [alertas, setAlertas] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     setPatients(getPatients());
     setHomecares(getHomecares());
     setAppointments(getAppointments());
+    
+    // Fetch alertas from backend
+    const fetchAlertas = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/alertas`);
+        if (res.ok) {
+          const data = await res.json();
+          setAlertas(data);
+        }
+      } catch (err) {
+        console.error('Erro ao buscar alertas:', err);
+      }
+    };
+    
+    fetchAlertas();
+    const interval = setInterval(fetchAlertas, 10000); // Polling cada 10s
+    return () => clearInterval(interval);
   }, []);
+
+  const handleConfirmPix = async (id) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/alertas/${id}/confirmar`, { method: 'POST' });
+      if (res.ok) {
+        setAlertas(alertas.filter(a => a.id !== id));
+        // Aqui também deve criar o paciente e agendamento usando data.js para o local storage
+        alert('Pagamento confirmado e paciente notificado!');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleRejectPix = async (id) => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/alertas/${id}/rejeitar`, { method: 'POST' });
+      if (res.ok) {
+        setAlertas(alertas.filter(a => a.id !== id));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const today = new Date().toISOString().split('T')[0];
   const todayAppts = appointments.filter(a => a.data === today);
@@ -59,6 +103,39 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* Alertas WhatsApp */}
+      {alertas.length > 0 && (
+        <div className="alertas-section mb-6">
+          <h2 className="section-title flex items-center gap-2 mb-4 text-warning">
+            <Bell size={20} /> Pedidos Pendentes WhatsApp ({alertas.length})
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {alertas.map(alerta => (
+              <div key={alerta.id} className="card p-4 border-l-4 border-warning bg-opacity-10 bg-warning">
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="font-bold text-lg">{alerta.nome}</h3>
+                  <span className="badge badge-warning">PIX Pendente</span>
+                </div>
+                <div className="text-sm text-gray-400 mb-4">
+                  <p><strong>Telefone:</strong> {alerta.phone}</p>
+                  <p><strong>Endereço:</strong> {alerta.endereco}</p>
+                  <p><strong>Serviço:</strong> {alerta.tipo_servico}</p>
+                  <p><strong>Valor:</strong> R$ {alerta.valor}</p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={() => handleConfirmPix(alerta.id)} className="btn btn-success flex-1 py-2 text-sm flex justify-center items-center gap-1">
+                    <Check size={16} /> Confirmar PIX
+                  </button>
+                  <button onClick={() => handleRejectPix(alerta.id)} className="btn btn-danger flex-1 py-2 text-sm flex justify-center items-center gap-1">
+                    <X size={16} /> Rejeitar
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="dash-grid">
         {/* Today's appointments */}

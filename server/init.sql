@@ -54,3 +54,23 @@ CREATE TABLE IF NOT EXISTS evolutions (
   foto_url TEXT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS wa_sessions (
+  phone VARCHAR(50) PRIMARY KEY,
+  estado VARCHAR(50),
+  dados JSONB,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS alertas_dashboard (
+  id SERIAL PRIMARY KEY,
+  phone VARCHAR(50) NOT NULL,
+  nome VARCHAR(255),
+  endereco TEXT,
+  bairro VARCHAR(255),
+  tipo_servico VARCHAR(100),
+  valor DECIMAL(10,2),
+  status_pagamento VARCHAR(50) DEFAULT 'pendente',
+  lido BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

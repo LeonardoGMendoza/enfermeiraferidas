@@ -1,0 +1,129 @@
+import json
+import os
+
+workflow = {
+  "name": "Enfermeira Feridas - Atendimento Automático",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "enfermeira-whatsapp",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "webhook-receive",
+      "name": "Webhook WA",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [ 250, 300 ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.body.isStatusReply }}",
+              "value2": False
+            },
+            {
+              "value1": "={{ $json.body.isGroup }}",
+              "value2": False
+            }
+          ]
+        }
+      },
+      "id": "if-not-group",
+      "name": "Ignora Status/Grupo",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [ 450, 300 ]
+    },
+    {
+      "parameters": {
+        "model": "llama3-70b-8192",
+        "messages": {
+          "messageValues": [
+            {
+              "type": "system",
+              "message": "Você é o assistente virtual da Enfermeira Feridas. Seu objetivo é atender os pacientes, informar preços, coletar dados para agendamento e enviar a chave PIX (CPF: 74163884149). Preços: Curativo (R$150), Avaliação (R$200), Acompanhamento (R$180). Pergunte o nome, endereço, serviço desejado. Quando o cliente disser que pagou, agradeça e diga que o pagamento está sendo validado."
+            },
+            {
+              "type": "user",
+              "message": "={{ $json.body.text.message }}"
+            }
+          ]
+        }
+      },
+      "id": "groq-chat",
+      "name": "Groq Chat Model",
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1,
+      "position": [ 700, 280 ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.z-api.io/instances/3F2F61CB306150004741423ED5B98F9F/token/D00FB2CBCEC59D1A1DFF3037/send-text",
+        "sendHeaders": True,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": True,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"phone\": \"{{ $('Webhook WA').item.json.body.phone }}\",\n  \"message\": \"{{ $json.text }}\"\n}",
+        "options": {}
+      },
+      "id": "zapi-send",
+      "name": "Z-API Enviar",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.1,
+      "position": [ 950, 280 ]
+    }
+  ],
+  "connections": {
+    "Webhook WA": {
+      "main": [
+        [
+          {
+            "node": "Ignora Status/Grupo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ignora Status/Grupo": {
+      "main": [
+        [
+          {
+            "node": "Groq Chat Model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "main": [
+        [
+          {
+            "node": "Z-API Enviar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}
+
+os.makedirs('deploy', exist_ok=True)
+with open('deploy/n8n-workflow-enfermeiraferidas.json', 'w', encoding='utf-8') as f:
+    json.dump(workflow, f, indent=2, ensure_ascii=False)
+
+print("Workflow n8n generated!")
