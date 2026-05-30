@@ -12,6 +12,7 @@ import Appointments from './pages/Appointments';
 import Login from './pages/Login';
 import LoginPaciente from './pages/LoginPaciente';
 import PacienteDashboard from './pages/PacienteDashboard';
+import Orcamento from './pages/Orcamento';
 
 // Componente para proteger rotas da Área Restrita
 const ProtectedRoute = ({ children }) => {
@@ -38,6 +39,7 @@ export default function App() {
       </Route>
       <Route path="/paciente/login" element={<LoginPaciente />} />
       <Route path="/paciente/dashboard" element={<PacienteDashboard />} />
+      <Route path="/orcamento" element={<Orcamento />} />
     </Routes>
   );
 }
