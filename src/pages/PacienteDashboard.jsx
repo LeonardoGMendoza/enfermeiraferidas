@@ -35,9 +35,26 @@ export default function PacienteDashboard() {
           <h2 style={{ color: 'var(--text-primary)', fontSize: '22px', marginBottom: '8px' }}>
             Bem-vindo(a) ao seu espaço!
           </h2>
-          <p style={{ color: 'var(--text-muted)', lineHeight: 1.6 }}>
+          <p style={{ color: 'var(--text-muted)', lineHeight: 1.6, marginBottom: '16px' }}>
             Aqui você poderá acompanhar seus agendamentos e evolução do tratamento.
           </p>
+          
+          {paciente.tipo_ferida && (
+            <div style={{ 
+              background: 'rgba(14, 165, 233, 0.1)', 
+              border: '1px solid var(--accent-primary)', 
+              borderRadius: '8px', 
+              padding: '12px',
+              display: 'inline-block'
+            }}>
+              <span style={{ fontSize: '14px', color: 'var(--text-muted)', display: 'block', marginBottom: '4px' }}>
+                Serviço Solicitado:
+              </span>
+              <strong style={{ color: 'var(--accent-primary)', fontSize: '16px' }}>
+                {paciente.tipo_ferida}
+              </strong>
+            </div>
+          )}
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
           <div className="card glass" style={{ padding: '20px', textAlign: 'center' }}>

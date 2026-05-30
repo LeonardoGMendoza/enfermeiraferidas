@@ -65,9 +65,15 @@ async function setupDB() {
         email VARCHAR(255) UNIQUE,
         password_hash VARCHAR(255) NOT NULL,
         endereco TEXT,
+        bairro VARCHAR(100),
+        tipo_ferida VARCHAR(100),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    // Em caso de banco já existente, vamos garantir que as colunas existam
+    await pool.query(`ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS bairro VARCHAR(100)`);
+    await pool.query(`ALTER TABLE pacientes ADD COLUMN IF NOT EXISTS tipo_ferida VARCHAR(100)`);
 
     // Tabela de Alertas Dashboard (caso não exista)
     await pool.query(`

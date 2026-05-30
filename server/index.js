@@ -78,7 +78,7 @@ app.post('/api/login-paciente', async (req, res) => {
     }
 
     const token = jwt.sign({ id: paciente.id, phone: paciente.phone }, JWT_SECRET, { expiresIn: '24h' });
-    res.json({ token, paciente: { id: paciente.id, nome: paciente.nome, phone: paciente.phone, email: paciente.email } });
+    res.json({ token, paciente: { id: paciente.id, nome: paciente.nome, phone: paciente.phone, email: paciente.email, tipo_ferida: paciente.tipo_ferida } });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erro no servidor' });
@@ -131,11 +131,11 @@ app.post('/api/orcamento', async (req, res) => {
     
     // Insere o paciente no banco de dados (ou atualiza se já existir)
     await pool.query(`
-      INSERT INTO pacientes (nome, phone, email, password_hash)
-      VALUES ($1, $2, $3, $4)
+      INSERT INTO pacientes (nome, phone, email, password_hash, tipo_ferida)
+      VALUES ($1, $2, $3, $4, $5)
       ON CONFLICT (phone) DO UPDATE 
-      SET nome = EXCLUDED.nome, email = EXCLUDED.email, password_hash = EXCLUDED.password_hash
-    `, [nome, phone, email, hash]);
+      SET nome = EXCLUDED.nome, email = EXCLUDED.email, password_hash = EXCLUDED.password_hash, tipo_ferida = EXCLUDED.tipo_ferida
+    `, [nome, phone, email, hash, servico]);
 
     // Cria um alerta no Dashboard para a atendente aprovar e marcar horário
     const alertaResult = await pool.query(`
