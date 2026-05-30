@@ -123,6 +123,45 @@ app.get('/api/paciente/me', async (req, res) => {
   }
 });
 
+// Endpoint: Paciente avisou que copiou o PIX (cria/atualiza alerta para atendente)
+app.post('/api/paciente/avisar-pix', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'Não autorizado' });
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+
+    const pacienteResult = await pool.query('SELECT * FROM pacientes WHERE id = $1', [decoded.id]);
+    if (pacienteResult.rows.length === 0) return res.status(404).json({ error: 'Paciente não encontrado' });
+    const paciente = pacienteResult.rows[0];
+
+    // Verifica se já existe um alerta pendente para esse paciente
+    const existente = await pool.query(
+      "SELECT id FROM alertas_dashboard WHERE phone = $1 AND lido = FALSE LIMIT 1",
+      [paciente.phone]
+    );
+
+    if (existente.rows.length > 0) {
+      // Atualiza o existente para "aguardando_confirmacao"
+      await pool.query(
+        "UPDATE alertas_dashboard SET status_pagamento = 'aguardando_confirmacao', updated_at = NOW() WHERE id = $1",
+        [existente.rows[0].id]
+      );
+    } else {
+      // Cria novo alerta
+      await pool.query(
+        "INSERT INTO alertas_dashboard (phone, nome, tipo_servico, status_pagamento) VALUES ($1, $2, $3, 'aguardando_confirmacao')",
+        [paciente.phone, paciente.nome, paciente.tipo_ferida || 'Serviço solicitado']
+      );
+    }
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Erro ao avisar pix:', error);
+    res.status(500).json({ error: 'Erro no servidor' });
+  }
+});
+
 // Create initial admin user (for testing purposes, run once)
 app.post('/api/setup-admin', async (req, res) => {
   try {

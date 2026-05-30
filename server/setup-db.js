@@ -87,9 +87,11 @@ async function setupDB() {
         valor DECIMAL(10,2),
         status_pagamento VARCHAR(50),
         lido BOOLEAN DEFAULT false,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
+    await pool.query(`ALTER TABLE alertas_dashboard ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP`);
 
     // Inserir Admin e Atendente iniciais se não existirem
     const hashAdmin = await bcrypt.hash('123456', 10);

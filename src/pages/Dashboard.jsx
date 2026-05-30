@@ -109,44 +109,79 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* Alertas WhatsApp */}
+      {/* Alertas PIX Pendentes */}
       {alertas.length > 0 && (
-        <div className="alertas-section mb-6">
-          <h2 className="section-title flex items-center gap-2 mb-4 text-warning">
-            <Bell size={20} /> Pedidos Pendentes WhatsApp ({alertas.length})
+        <div className="alertas-section mb-6" style={{ animation: 'none' }}>
+          <h2 style={{ 
+            display: 'flex', alignItems: 'center', gap: '10px', 
+            marginBottom: '16px', fontSize: '18px', fontWeight: 'bold',
+            color: '#eab308'
+          }}>
+            <span style={{ animation: 'pulse 1s infinite' }}><Bell size={22} /></span>
+            ⚠️ Confirmações PIX Pendentes ({alertas.length})
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {alertas.map(alerta => (
-              <div key={alerta.id} className="card p-4 border-l-4 border-warning bg-opacity-10 bg-warning">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="font-bold text-lg">{alerta.nome}</h3>
-                  <span className="badge badge-warning">PIX Pendente</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+            {alertas.map(alerta => {
+              const aguardando = alerta.status_pagamento === 'aguardando_confirmacao';
+              return (
+                <div key={alerta.id} style={{
+                  background: aguardando ? 'rgba(234, 179, 8, 0.12)' : 'var(--bg-card)',
+                  border: aguardando ? '2px solid #eab308' : '1px solid var(--border-color)',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  animation: aguardando ? 'pulseBorder 2s ease-in-out infinite' : 'none',
+                  position: 'relative'
+                }}>
+                  {aguardando && (
+                    <div style={{
+                      position: 'absolute', top: '-1px', right: '12px',
+                      background: '#eab308', color: '#000', fontSize: '11px',
+                      fontWeight: 'bold', padding: '3px 10px', borderRadius: '0 0 8px 8px',
+                      letterSpacing: '0.5px'
+                    }}>
+                      🔔 PAGOU - AGUARDANDO CONFIRMAÇÃO
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px', marginTop: aguardando ? '16px' : '0' }}>
+                    <div>
+                      <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', fontWeight: 'bold', margin: '0 0 4px' }}>{alerta.nome}</h3>
+                      <p style={{ color: 'var(--text-muted)', fontSize: '13px', margin: 0 }}>
+                        📞 {alerta.phone} &nbsp;&nbsp; 🩹 {alerta.tipo_servico || 'Serviço não informado'}
+                      </p>
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: '12px' }}>
+                    <label style={{ color: 'var(--text-muted)', fontSize: '12px', fontWeight: 'bold', display: 'block', marginBottom: '6px' }}>Data da Visita (opcional):</label>
+                    <input 
+                      type="datetime-local" 
+                      style={{ width: '100%', background: 'var(--bg-secondary)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: '8px', padding: '8px', fontSize: '13px', boxSizing: 'border-box' }}
+                      value={scheduleDates[alerta.id] || ''}
+                      onChange={(e) => setScheduleDates({...scheduleDates, [alerta.id]: e.target.value})}
+                    />
+                  </div>
+                  <div style={{ display: 'flex', gap: '10px' }}>
+                    <button 
+                      onClick={() => handleConfirmPix(alerta.id)} 
+                      style={{ 
+                        flex: 1, padding: '12px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                        background: aguardando ? '#16a34a' : 'var(--accent-success)',
+                        color: 'white', fontWeight: 'bold', fontSize: '15px',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
+                        boxShadow: aguardando ? '0 0 12px rgba(22, 163, 74, 0.5)' : 'none'
+                      }}
+                    >
+                      <Check size={18} /> ✅ Confirmar PIX
+                    </button>
+                    <button 
+                      onClick={() => handleRejectPix(alerta.id)} 
+                      style={{ padding: '12px 16px', borderRadius: '8px', border: '1px solid var(--border-color)', cursor: 'pointer', background: 'transparent', color: 'var(--text-muted)' }}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
                 </div>
-                <div className="text-sm text-gray-400 mb-4">
-                  <p><strong>Telefone:</strong> {alerta.phone}</p>
-                  <p><strong>Endereço:</strong> {alerta.endereco}</p>
-                  <p><strong>Serviço:</strong> {alerta.tipo_servico}</p>
-                  <p><strong>Valor:</strong> R$ {alerta.valor}</p>
-                </div>
-                <div className="mb-3">
-                  <label className="text-sm text-gray-400 mb-1 block font-bold">Agendar Visita:</label>
-                  <input 
-                    type="datetime-local" 
-                    className="form-input text-sm w-full bg-slate-800 border-slate-700 text-white rounded p-2"
-                    value={scheduleDates[alerta.id] || ''}
-                    onChange={(e) => setScheduleDates({...scheduleDates, [alerta.id]: e.target.value})}
-                  />
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => handleConfirmPix(alerta.id)} className="btn btn-success flex-1 py-2 text-sm flex justify-center items-center gap-1">
-                    <Check size={16} /> Confirmar PIX
-                  </button>
-                  <button onClick={() => handleRejectPix(alerta.id)} className="btn btn-danger flex-1 py-2 text-sm flex justify-center items-center gap-1">
-                    <X size={16} /> Rejeitar
-                  </button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}

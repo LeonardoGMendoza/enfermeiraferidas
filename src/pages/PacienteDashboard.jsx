@@ -6,6 +6,7 @@ export default function PacienteDashboard() {
   const navigate = useNavigate();
   const [paciente, setPaciente] = useState(JSON.parse(localStorage.getItem('ef_paciente') || '{}'));
   const token = localStorage.getItem('ef_paciente_token');
+  const [pixCopiado, setPixCopiado] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -132,14 +133,35 @@ export default function PacienteDashboard() {
             </div>
             <button 
               className="btn btn-primary" 
-              style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px' }}
-              onClick={() => {
+              style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px', fontSize: '16px', padding: '14px' }}
+              onClick={async () => {
                 navigator.clipboard.writeText('00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F');
-                alert('Código PIX copiado com sucesso! Abra o app do seu banco para pagar.');
+                setPixCopiado(true);
+                // Avisa a atendente que o paciente copiou o PIX
+                try {
+                  await fetch('/api/paciente/avisar-pix', {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }
+                  });
+                } catch(e) { console.error(e); }
               }}
             >
-              Copiar Código PIX
+              📋 Copiar Código PIX
             </button>
+            {pixCopiado && (
+              <div style={{ 
+                marginTop: '16px', 
+                padding: '16px', 
+                borderRadius: '8px', 
+                background: 'rgba(234, 179, 8, 0.1)', 
+                border: '1px solid rgba(234, 179, 8, 0.4)',
+                textAlign: 'center'
+              }}>
+                <p style={{ color: '#eab308', fontSize: '14px', margin: 0 }}>
+                  ⏳ Código copiado! Nossa atendente já foi notificada e vai confirmar seu pagamento em breve.
+                </p>
+              </div>
+            )}
           </div>
         )}
       </div>
