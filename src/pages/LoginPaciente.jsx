@@ -4,8 +4,8 @@ import { Activity, Phone, KeyRound } from 'lucide-react';
 import './Login.css';
 
 export default function LoginPaciente() {
-  const [telefone, setTelefone] = useState('');
-  const [codigo, setCodigo] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -15,11 +15,10 @@ export default function LoginPaciente() {
     setError('');
     setLoading(true);
     try {
-      const tel = telefone.replace(/\D/g, '');
-      const response = await fetch('/api/paciente/verificar-codigo', {
+      const response = await fetch('/api/login-paciente', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ telefone: tel, codigo })
+        body: JSON.stringify({ email, password })
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Código inválido');
@@ -44,21 +43,21 @@ export default function LoginPaciente() {
         <form onSubmit={handleLogin} className="login-form">
           {error && <div className="login-error">{error}</div>}
           <div className="form-group">
-            <label className="form-label">Telefone (com DDD)</label>
+            <label className="form-label">E-mail</label>
             <div className="input-with-icon">
               <Phone size={18} className="input-icon" />
-              <input type="tel" required className="form-input pl-10"
-                placeholder="11999999999" value={telefone}
-                onChange={e => setTelefone(e.target.value)} />
+              <input type="email" required className="form-input pl-10"
+                placeholder="seu@email.com" value={email}
+                onChange={e => setEmail(e.target.value)} />
             </div>
           </div>
           <div className="form-group" style={{ marginTop: '16px' }}>
-            <label className="form-label">Código de Acesso</label>
+            <label className="form-label">Senha</label>
             <div className="input-with-icon">
               <KeyRound size={18} className="input-icon" />
-              <input type="text" required maxLength={6} className="form-input pl-10"
-                placeholder="123456" value={codigo}
-                onChange={e => setCodigo(e.target.value)} />
+              <input type="password" required className="form-input pl-10"
+                placeholder="••••••••" value={password}
+                onChange={e => setPassword(e.target.value)} />
             </div>
           </div>
           <button type="submit" className="btn btn-primary btn-lg login-btn" disabled={loading}>

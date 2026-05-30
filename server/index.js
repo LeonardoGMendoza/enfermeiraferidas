@@ -60,6 +60,31 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+// Login Paciente Route
+app.post('/api/login-paciente', async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const result = await pool.query('SELECT * FROM pacientes WHERE email = $1', [email]);
+    
+    if (result.rows.length === 0) {
+      return res.status(401).json({ error: 'Paciente não encontrado' });
+    }
+
+    const paciente = result.rows[0];
+    const validPassword = await bcrypt.compare(password, paciente.password_hash);
+    
+    if (!validPassword) {
+      return res.status(401).json({ error: 'Senha incorreta' });
+    }
+
+    const token = jwt.sign({ id: paciente.id, phone: paciente.phone }, JWT_SECRET, { expiresIn: '24h' });
+    res.json({ token, paciente: { id: paciente.id, nome: paciente.nome, phone: paciente.phone, email: paciente.email } });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro no servidor' });
+  }
+});
+
 // Create initial admin user (for testing purposes, run once)
 app.post('/api/setup-admin', async (req, res) => {
   try {
