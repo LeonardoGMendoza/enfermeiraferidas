@@ -16,18 +16,21 @@
 }
 
 .btn-back {
-  background: none;
-  border: none;
-  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 10px 16px;
+  border-radius: 8px;
   align-self: flex-start;
   margin-left: max(0px, calc(50% - 300px));
   margin-bottom: 24px;
-  transition: color 0.2s;
+  transition: all 0.2s;
 }
 
 .btn-back:hover {

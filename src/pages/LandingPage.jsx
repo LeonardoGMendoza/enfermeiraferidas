@@ -208,11 +208,7 @@ export default function LandingPage() {
             >
               💬 Agendar via WhatsApp
             </a>
-            <button className="btn btn-primary btn-lg" onClick={() => handleOpenOrcamento()}>
-              Fazer Orçamento pelo Site
-            </button>
           </div>
-          <p className="mt-4 text-sm text-gray-400">Você pode solicitar o serviço pelo WhatsApp ou diretamente aqui no site!</p>
           <div className="hero-stats">
             <div className="hero-stat">
               <span className="hero-stat-num">200+</span>
@@ -288,7 +284,7 @@ export default function LandingPage() {
               <h3 className="service-title">{s.title}</h3>
               <p className="service-desc">{s.desc}</p>
               <button 
-                className="btn btn-ghost btn-sm mt-4 w-full border border-slate-700 hover:border-primary"
+                className="btn btn-primary btn-sm mt-4 w-full"
                 onClick={() => handleOpenOrcamento(s.title)}
               >
                 Solicitar Orçamento
