@@ -71,6 +71,46 @@ export default function PacienteDashboard() {
             </a>
           </div>
         </div>
+
+        {/* PIX Payment Section */}
+        <div className="card glass" style={{ padding: '24px', marginTop: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+            <div style={{ background: 'var(--accent-primary)', borderRadius: '8px', padding: '8px', display: 'flex' }}>
+              <span style={{ fontWeight: 'bold', color: 'white', fontSize: '14px', letterSpacing: '1px' }}>PIX</span>
+            </div>
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', margin: 0 }}>Pagamento via PIX</h3>
+          </div>
+          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
+            Para confirmar o seu agendamento, realize o pagamento utilizando o código Copia e Cola abaixo:
+          </p>
+          <div style={{ 
+            background: 'var(--bg-secondary)', 
+            padding: '16px', 
+            borderRadius: '8px', 
+            border: '1px solid var(--border-color)',
+            marginBottom: '16px'
+          }}>
+            <code style={{ 
+              color: 'var(--text-primary)', 
+              fontSize: '12px', 
+              wordBreak: 'break-all',
+              fontFamily: 'monospace',
+              display: 'block'
+            }}>
+              00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F
+            </code>
+          </div>
+          <button 
+            className="btn btn-primary" 
+            style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px' }}
+            onClick={() => {
+              navigator.clipboard.writeText('00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F');
+              alert('Código PIX copiado com sucesso! Abra o app do seu banco para pagar.');
+            }}
+          >
+            Copiar Código PIX
+          </button>
+        </div>
       </div>
     </div>
   );
