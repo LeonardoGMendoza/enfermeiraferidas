@@ -85,6 +85,44 @@ app.post('/api/login-paciente', async (req, res) => {
   }
 });
 
+// Get Paciente Profile & Status Route
+app.get('/api/paciente/me', async (req, res) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'Não autorizado' });
+    
+    const token = authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    const pacienteResult = await pool.query('SELECT * FROM pacientes WHERE id = $1', [decoded.id]);
+    if (pacienteResult.rows.length === 0) return res.status(404).json({ error: 'Paciente não encontrado' });
+    
+    const paciente = pacienteResult.rows[0];
+    
+    // Buscar o alerta mais recente para ver o status do pagamento
+    const alertaResult = await pool.query(
+      'SELECT status_pagamento FROM alertas_dashboard WHERE phone = $1 ORDER BY created_at DESC LIMIT 1',
+      [paciente.phone]
+    );
+    
+    const status_pagamento = alertaResult.rows.length > 0 ? alertaResult.rows[0].status_pagamento : 'pendente';
+    
+    res.json({ 
+      paciente: { 
+        id: paciente.id, 
+        nome: paciente.nome, 
+        phone: paciente.phone, 
+        email: paciente.email, 
+        tipo_ferida: paciente.tipo_ferida,
+        status_pagamento
+      } 
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erro no servidor' });
+  }
+});
+
 // Create initial admin user (for testing purposes, run once)
 app.post('/api/setup-admin', async (req, res) => {
   try {

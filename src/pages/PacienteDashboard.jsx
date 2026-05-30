@@ -1,9 +1,30 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Calendar, Phone, LogOut } from 'lucide-react';
+import { Activity, Calendar, Phone, LogOut, CheckCircle } from 'lucide-react';
 
 export default function PacienteDashboard() {
   const navigate = useNavigate();
-  const paciente = JSON.parse(localStorage.getItem('ef_paciente') || '{}');
+  const [paciente, setPaciente] = useState(JSON.parse(localStorage.getItem('ef_paciente') || '{}'));
+  const token = localStorage.getItem('ef_paciente_token');
+
+  useEffect(() => {
+    if (!token) {
+      navigate('/paciente/login');
+      return;
+    }
+    
+    fetch('/api/paciente/me', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.paciente) {
+        setPaciente(data.paciente);
+        localStorage.setItem('ef_paciente', JSON.stringify(data.paciente));
+      }
+    })
+    .catch(err => console.error('Erro ao buscar dados do paciente:', err));
+  }, [token, navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem('ef_paciente_token');
@@ -72,45 +93,55 @@ export default function PacienteDashboard() {
           </div>
         </div>
 
-        {/* PIX Payment Section */}
-        <div className="card glass" style={{ padding: '24px', marginTop: '20px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-            <div style={{ background: 'var(--accent-primary)', borderRadius: '8px', padding: '8px', display: 'flex' }}>
-              <span style={{ fontWeight: 'bold', color: 'white', fontSize: '14px', letterSpacing: '1px' }}>PIX</span>
+        {/* PIX Payment Section or Success Message */}
+        {paciente.status_pagamento === 'confirmado' ? (
+          <div className="card glass" style={{ padding: '24px', marginTop: '20px', textAlign: 'center', border: '1px solid var(--color-success)' }}>
+            <CheckCircle size={48} color="var(--color-success)" style={{ margin: '0 auto 16px' }} />
+            <h3 style={{ color: 'var(--text-primary)', fontSize: '20px', marginBottom: '8px' }}>Pagamento Confirmado!</h3>
+            <p style={{ color: 'var(--text-muted)' }}>
+              Seu agendamento foi confirmado. Aguarde o contato da nossa equipe de enfermagem pelo WhatsApp com os detalhes da visita.
+            </p>
+          </div>
+        ) : (
+          <div className="card glass" style={{ padding: '24px', marginTop: '20px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
+              <div style={{ background: 'var(--accent-primary)', borderRadius: '8px', padding: '8px', display: 'flex' }}>
+                <span style={{ fontWeight: 'bold', color: 'white', fontSize: '14px', letterSpacing: '1px' }}>PIX</span>
+              </div>
+              <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', margin: 0 }}>Pagamento via PIX</h3>
             </div>
-            <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', margin: 0 }}>Pagamento via PIX</h3>
-          </div>
-          <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
-            Para confirmar o seu agendamento, realize o pagamento utilizando o código Copia e Cola abaixo:
-          </p>
-          <div style={{ 
-            background: 'var(--bg-secondary)', 
-            padding: '16px', 
-            borderRadius: '8px', 
-            border: '1px solid var(--border-color)',
-            marginBottom: '16px'
-          }}>
-            <code style={{ 
-              color: 'var(--text-primary)', 
-              fontSize: '12px', 
-              wordBreak: 'break-all',
-              fontFamily: 'monospace',
-              display: 'block'
+            <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
+              Para confirmar o seu agendamento, realize o pagamento utilizando o código Copia e Cola abaixo:
+            </p>
+            <div style={{ 
+              background: 'var(--bg-secondary)', 
+              padding: '16px', 
+              borderRadius: '8px', 
+              border: '1px solid var(--border-color)',
+              marginBottom: '16px'
             }}>
-              00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F
-            </code>
+              <code style={{ 
+                color: 'var(--text-primary)', 
+                fontSize: '12px', 
+                wordBreak: 'break-all',
+                fontFamily: 'monospace',
+                display: 'block'
+              }}>
+                00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F
+              </code>
+            </div>
+            <button 
+              className="btn btn-primary" 
+              style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px' }}
+              onClick={() => {
+                navigator.clipboard.writeText('00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F');
+                alert('Código PIX copiado com sucesso! Abra o app do seu banco para pagar.');
+              }}
+            >
+              Copiar Código PIX
+            </button>
           </div>
-          <button 
-            className="btn btn-primary" 
-            style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '8px' }}
-            onClick={() => {
-              navigator.clipboard.writeText('00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F');
-              alert('Código PIX copiado com sucesso! Abra o app do seu banco para pagar.');
-            }}
-          >
-            Copiar Código PIX
-          </button>
-        </div>
+        )}
       </div>
     </div>
   );
