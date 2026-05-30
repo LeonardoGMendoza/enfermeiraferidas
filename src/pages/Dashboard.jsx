@@ -11,6 +11,7 @@ export default function Dashboard() {
   const [homecares, setHomecares] = useState([]);
   const [appointments, setAppointments] = useState([]);
   const [alertas, setAlertas] = useState([]);
+  const [scheduleDates, setScheduleDates] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,7 +39,11 @@ export default function Dashboard() {
 
   const handleConfirmPix = async (id) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/alertas/${id}/confirmar`, { method: 'POST' });
+      const res = await fetch(`${API_BASE_URL}/api/alertas/${id}/confirmar`, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ data_agendamento: scheduleDates[id] || 'A combinar' })
+      });
       if (res.ok) {
         setAlertas(alertas.filter(a => a.id !== id));
         // Aqui também deve criar o paciente e agendamento usando data.js para o local storage
@@ -122,6 +127,15 @@ export default function Dashboard() {
                   <p><strong>Endereço:</strong> {alerta.endereco}</p>
                   <p><strong>Serviço:</strong> {alerta.tipo_servico}</p>
                   <p><strong>Valor:</strong> R$ {alerta.valor}</p>
+                </div>
+                <div className="mb-3">
+                  <label className="text-sm text-gray-400 mb-1 block font-bold">Agendar Visita:</label>
+                  <input 
+                    type="datetime-local" 
+                    className="form-input text-sm w-full bg-slate-800 border-slate-700 text-white rounded p-2"
+                    value={scheduleDates[alerta.id] || ''}
+                    onChange={(e) => setScheduleDates({...scheduleDates, [alerta.id]: e.target.value})}
+                  />
                 </div>
                 <div className="flex gap-2">
                   <button onClick={() => handleConfirmPix(alerta.id)} className="btn btn-success flex-1 py-2 text-sm flex justify-center items-center gap-1">

@@ -113,6 +113,7 @@ app.get('/api/alertas', async (req, res) => {
 app.post('/api/alertas/:id/confirmar', async (req, res) => {
   try {
     const { id } = req.params;
+    const { data_agendamento } = req.body;
     
     // Atualiza status do alerta
     const updateResult = await pool.query(
@@ -126,11 +127,29 @@ app.post('/api/alertas/:id/confirmar', async (req, res) => {
 
     const alerta = updateResult.rows[0];
 
-    // Aqui podemos inserir um POST de volta para o n8n para ele notificar o cliente via Z-API
-    // fetch('https://n8n.sandlj.com.br/webhook/confirmacao-pix', { method: 'POST', body: ... })
-    // Isso pode ser feito direto no frontend ou backend, mas é melhor o n8n ter um webhook.
+    // Gerar uma senha aleatória para o paciente acessar o portal
+    const senha_gerada = Math.floor(100000 + Math.random() * 900000).toString(); // Senha numérica de 6 dígitos
+    
+    // Enviar POST de volta para o n8n para notificar o cliente via Z-API
+    // Enviamos action='confirmar_pix' para o n8n saber que é do Dashboard
+    try {
+      await fetch('https://n8n.sandlj.com.br/webhook/enfermeira-whatsapp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'confirmar_pix',
+          phone: alerta.phone,
+          nome: alerta.nome,
+          data_agendamento: data_agendamento || 'A combinar',
+          senha_paciente: senha_gerada
+        })
+      });
+    } catch (fetchErr) {
+      console.error('Erro ao notificar n8n:', fetchErr);
+      // Continua mesmo se o n8n falhar para não travar o painel
+    }
 
-    res.json({ success: true, alerta });
+    res.json({ success: true, alerta, senha_gerada });
   } catch (error) {
     console.error('Erro ao confirmar alerta:', error);
     res.status(500).json({ error: 'Erro interno' });
