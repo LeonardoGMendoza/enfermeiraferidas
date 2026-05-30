@@ -60,31 +60,14 @@ export default function Orcamento() {
             </p>
 
             <div style={{ background: 'var(--bg-secondary)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
-              <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', marginBottom: '12px' }}>Confirme seu Agendamento</h3>
-              <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
-                Para agilizar o seu atendimento, realize o pagamento via PIX Copia e Cola:
+              <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', marginBottom: '12px' }}>Atenção</h3>
+              <p style={{ color: 'var(--text-primary)', fontSize: '15px', lineHeight: '1.5' }}>
+                Para poder fecharmos a solicitação do serviço, entre na sua <strong>Área de Paciente</strong> e faça o pagamento via PIX para prosseguir com a visita.
               </p>
-              
-              <div style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '8px', border: '1px dashed var(--accent-primary)', marginBottom: '16px' }}>
-                <code style={{ color: 'var(--text-primary)', fontSize: '12px', wordBreak: 'break-all', fontFamily: 'monospace', display: 'block' }}>
-                  00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F
-                </code>
-              </div>
-              
-              <button 
-                className="btn btn-primary" 
-                style={{ width: '100%', marginBottom: '16px' }}
-                onClick={() => {
-                  navigator.clipboard.writeText('00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F');
-                  alert('Código PIX copiado! Abra o aplicativo do seu banco para pagar.');
-                }}
-              >
-                Copiar Código PIX
-              </button>
             </div>
 
-            <button className="btn btn-outline" style={{ width: '100%' }} onClick={() => navigate('/paciente/login')}>
-              Acessar Minha Área do Paciente
+            <button className="btn btn-primary" style={{ width: '100%', fontSize: '16px', padding: '12px' }} onClick={() => navigate('/paciente/login')}>
+              Acessar Minha Área de Paciente
             </button>
           </div>
         </div>
