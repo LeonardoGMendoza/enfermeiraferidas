@@ -96,6 +96,36 @@ app.post('/api/webhook/novo-pedido', async (req, res) => {
   }
 });
 
+// Endpoint para cadastro de paciente via site (Orçamento)
+app.post('/api/orcamento', async (req, res) => {
+  try {
+    const { nome, phone, email, password, servico } = req.body;
+    
+    // Hash da senha do paciente
+    const hash = await bcrypt.hash(password, 10);
+    
+    // Insere o paciente no banco de dados (ou atualiza se já existir)
+    await pool.query(`
+      INSERT INTO pacientes (nome, phone, email, password_hash)
+      VALUES ($1, $2, $3, $4)
+      ON CONFLICT (phone) DO UPDATE 
+      SET nome = EXCLUDED.nome, email = EXCLUDED.email, password_hash = EXCLUDED.password_hash
+    `, [nome, phone, email, hash]);
+
+    // Cria um alerta no Dashboard para a atendente aprovar e marcar horário
+    const alertaResult = await pool.query(`
+      INSERT INTO alertas_dashboard 
+      (phone, nome, tipo_servico, status_pagamento) 
+      VALUES ($1, $2, $3, 'pendente') RETURNING *
+    `, [phone, nome, servico]);
+
+    res.json({ success: true, alerta: alertaResult.rows[0] });
+  } catch (error) {
+    console.error('Erro ao cadastrar orçamento:', error);
+    res.status(500).json({ error: 'Erro ao processar orçamento' });
+  }
+});
+
 // Endpoint para buscar alertas pendentes (Dashboard)
 app.get('/api/alertas', async (req, res) => {
   try {
