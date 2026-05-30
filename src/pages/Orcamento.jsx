@@ -9,6 +9,7 @@ export default function Orcamento() {
   const [selectedService, setSelectedService] = useState('');
   const [formData, setFormData] = useState({ nome: '', phone: '', email: '', password: '' });
   const [isPreSelected, setIsPreSelected] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     // Pegar o serviço da URL se vier do botão da Landing Page
@@ -34,12 +35,62 @@ export default function Orcamento() {
         const errData = await response.json();
         throw new Error(errData.error || 'Erro ao solicitar orçamento');
       }
-      alert('Orçamento solicitado com sucesso! Iremos entrar em contato.');
-      navigate('/');
+      setIsSubmitted(true);
     } catch (err) {
       alert('Erro: ' + err.message);
     }
   };
+
+  if (isSubmitted) {
+    return (
+      <div className="orcamento-page">
+        <header className="landing-header">
+          <div className="lh-logo" onClick={() => navigate('/')} style={{cursor: 'pointer'}}>
+            <div className="lh-logo-icon"><Activity size={20} /></div>
+            <span className="lh-logo-name">Enfermeira Feridas</span>
+          </div>
+        </header>
+
+        <div className="orcamento-container">
+          <div className="orcamento-card glass" style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: '48px', marginBottom: '16px' }}>✅</div>
+            <h1 className="orcamento-title" style={{ marginBottom: '8px' }}>Pedido Recebido!</h1>
+            <p className="orcamento-subtitle" style={{ marginBottom: '24px' }}>
+              Seu cadastro foi criado e o serviço <strong>{selectedService}</strong> foi solicitado com sucesso.
+            </p>
+
+            <div style={{ background: 'var(--bg-secondary)', padding: '24px', borderRadius: '12px', border: '1px solid var(--border-color)', marginBottom: '24px' }}>
+              <h3 style={{ color: 'var(--text-primary)', fontSize: '18px', marginBottom: '12px' }}>Confirme seu Agendamento</h3>
+              <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '16px' }}>
+                Para agilizar o seu atendimento, realize o pagamento via PIX Copia e Cola:
+              </p>
+              
+              <div style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '8px', border: '1px dashed var(--accent-primary)', marginBottom: '16px' }}>
+                <code style={{ color: 'var(--text-primary)', fontSize: '12px', wordBreak: 'break-all', fontFamily: 'monospace', display: 'block' }}>
+                  00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F
+                </code>
+              </div>
+              
+              <button 
+                className="btn btn-primary" 
+                style={{ width: '100%', marginBottom: '16px' }}
+                onClick={() => {
+                  navigator.clipboard.writeText('00020126530014BR.GOV.BCB.PIX0131desenvolvimento3000@outlook.com5204000053039865802BR5924Leonardo Junior Gonzales6009SAO PAULO62140510oJPC2LZmwM63042F8F');
+                  alert('Código PIX copiado! Abra o aplicativo do seu banco para pagar.');
+                }}
+              >
+                Copiar Código PIX
+              </button>
+            </div>
+
+            <button className="btn btn-outline" style={{ width: '100%' }} onClick={() => navigate('/paciente/login')}>
+              Acessar Minha Área do Paciente
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="orcamento-page">
