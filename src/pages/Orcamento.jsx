@@ -21,12 +21,16 @@ export default function Orcamento() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Endpoint que será criado no backend
-      await fetch('http://localhost:3000/api/orcamento', {
+      // Endpoint no backend (agora usando proxy Nginx via /api/)
+      const response = await fetch('/api/orcamento', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, servico: selectedService })
       });
+      
+      if (!response.ok) {
+        throw new Error('Erro ao solicitar orçamento');
+      }
       alert('Orçamento solicitado com sucesso! Iremos entrar em contato.');
       navigate('/');
     } catch (err) {

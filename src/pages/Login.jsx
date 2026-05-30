@@ -16,27 +16,21 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // Quando o backend estiver pronto, você usará isso:
-      /*
-      const response = await fetch('http://localhost:3000/api/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
       });
+      
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'Erro ao logar');
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Erro ao logar');
+      }
+      
       localStorage.setItem('ef_token', data.token);
       localStorage.setItem('ef_user', JSON.stringify(data.user));
       navigate('/app');
-      */
-
-      // Simulação Temporária enquanto o BD não é configurado:
-      if (email === 'admin@feridas.com' && password === '123456') {
-        localStorage.setItem('ef_token', 'temp_token_123');
-        navigate('/app');
-      } else {
-        throw new Error('E-mail ou senha incorretos. (Use admin@feridas.com / 123456 na demonstração)');
-      }
     } catch (err) {
       setError(err.message);
     } finally {
