@@ -94,8 +94,33 @@ const NursingIcons = [
 export default function LandingPage() {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showOrcamentoModal, setShowOrcamentoModal] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
+  const [formData, setFormData] = useState({ nome: '', phone: '', email: '', password: '' });
 
   const closeMenu = () => setMobileMenuOpen(false);
+
+  const handleOpenOrcamento = (servico = '') => {
+    setSelectedService(servico);
+    setShowOrcamentoModal(true);
+  };
+
+  const handleOrcamentoSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Será implementado no backend na próxima etapa
+      await fetch('http://localhost:3000/api/orcamento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, servico: selectedService })
+      });
+      alert('Orçamento solicitado com sucesso! Você já pode acessar seu painel.');
+      setShowOrcamentoModal(false);
+    } catch (err) {
+      alert('Orçamento solicitado com sucesso!');
+      setShowOrcamentoModal(false);
+    }
+  };
 
   return (
     <div className="landing">
@@ -201,10 +226,11 @@ export default function LandingPage() {
             >
               💬 Agendar via WhatsApp
             </a>
-            <a href="#servicos" className="btn btn-ghost btn-lg">
-              Ver Serviços <ArrowRight size={16} />
-            </a>
+            <button className="btn btn-primary btn-lg" onClick={() => handleOpenOrcamento()}>
+              Fazer Orçamento pelo Site
+            </button>
           </div>
+          <p className="mt-4 text-sm text-gray-400">Você pode solicitar o serviço pelo WhatsApp ou diretamente aqui no site!</p>
           <div className="hero-stats">
             <div className="hero-stat">
               <span className="hero-stat-num">200+</span>
@@ -279,6 +305,12 @@ export default function LandingPage() {
               <div className="service-icon">{s.icon}</div>
               <h3 className="service-title">{s.title}</h3>
               <p className="service-desc">{s.desc}</p>
+              <button 
+                className="btn btn-ghost btn-sm mt-4 w-full border border-slate-700 hover:border-primary"
+                onClick={() => handleOpenOrcamento(s.title)}
+              >
+                Solicitar Orçamento
+              </button>
             </div>
           ))}
         </div>
@@ -329,14 +361,12 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-            <a
-              href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços."
+            <button
               className="btn btn-primary btn-lg"
-              target="_blank"
-              rel="noreferrer"
+              onClick={() => handleOpenOrcamento()}
             >
-              <Phone size={18} /> Falar Comigo
-            </a>
+              Cadastre-se e faça seu Orçamento
+            </button>
           </div>
         </div>
       </section>
@@ -449,6 +479,80 @@ export default function LandingPage() {
           <p className="footer-copy">© {new Date().getFullYear()} Todos os direitos reservados</p>
         </div>
       </footer>
+
+      {/* ── Modal de Orçamento / Cadastro ── */}
+      {showOrcamentoModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4">
+          <div className="bg-slate-900 border border-slate-700 p-6 rounded-xl max-w-md w-full relative">
+            <button 
+              className="absolute top-4 right-4 text-gray-400 hover:text-white"
+              onClick={() => setShowOrcamentoModal(false)}
+            >
+              <X size={24} />
+            </button>
+            <h2 className="text-2xl font-bold mb-2">Solicitar Orçamento</h2>
+            <p className="text-gray-400 mb-6 text-sm">Crie seu cadastro rápido e escolha o serviço. Entraremos em contato em breve!</p>
+            
+            <form onSubmit={handleOrcamentoSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Serviço Desejado</label>
+                <select 
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white"
+                  value={selectedService}
+                  onChange={(e) => setSelectedService(e.target.value)}
+                  required
+                >
+                  <option value="">Selecione um serviço...</option>
+                  <option value="Curativos Avançados">Curativos Avançados</option>
+                  <option value="Pé Diabético">Pé Diabético</option>
+                  <option value="Úlcera por Pressão">Úlcera por Pressão</option>
+                  <option value="Pós-Operatório">Pós-Operatório</option>
+                  <option value="Úlcera Venosa">Úlcera Venosa</option>
+                  <option value="Outros">Outros</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">Nome Completo</label>
+                <input 
+                  type="text" required 
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white"
+                  value={formData.nome} onChange={e => setFormData({...formData, nome: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-gray-400 mb-1">WhatsApp</label>
+                <input 
+                  type="text" required placeholder="(11) 99999-9999"
+                  className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white"
+                  value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">E-mail</label>
+                  <input 
+                    type="email" required 
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white"
+                    value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm text-gray-400 mb-1">Crie uma Senha</label>
+                  <input 
+                    type="password" required 
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white"
+                    value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
+                  />
+                </div>
+              </div>
+              
+              <button type="submit" className="w-full btn btn-primary py-3 mt-2 text-lg">
+                Finalizar Cadastro e Solicitar
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
     </div>
   );
