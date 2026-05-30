@@ -121,8 +121,8 @@ export default function LandingPage() {
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
           <a href="#contato">Contato</a>
-          <button className="btn btn-primary btn-sm" onClick={() => navigate('/app')}>
-            Área Restrita
+          <button className="btn btn-primary btn-sm" onClick={() => navigate('/paciente/login')}>
+            Área do Paciente
           </button>
         </nav>
 
@@ -153,8 +153,8 @@ export default function LandingPage() {
               </a>
             </div>
             <div className="mobile-dropdown-footer">
-              <button className="btn btn-primary" onClick={() => { navigate('/app'); closeMenu(); }}>
-                Área Restrita
+              <button className="btn btn-primary" onClick={() => { navigate('/paciente/login'); closeMenu(); }} style={{ marginBottom: '8px' }}>
+                Área do Paciente
               </button>
             </div>
           </div>

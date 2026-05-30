@@ -92,10 +92,9 @@ async function setupDB() {
     await pool.query(`
       INSERT INTO admin_users (nome, email, password_hash, role)
       VALUES 
-        ('Administrador', 'admin@feridas.com', $1, 'admin'),
-        ('Atendimento', 'atendimento@feridas.com', $2, 'atendente')
+        ('Sandra Nakata', 'sandra.nakata92@gmail.com', $1, 'admin')
       ON CONFLICT (email) DO NOTHING
-    `, [hashAdmin, hashAtendente]);
+    `, [hashAdmin]);
 
     console.log('Banco de dados estruturado com sucesso!');
     process.exit(0);

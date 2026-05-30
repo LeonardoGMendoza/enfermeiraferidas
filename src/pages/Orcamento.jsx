@@ -31,13 +31,13 @@ export default function Orcamento() {
       });
       
       if (!response.ok) {
-        throw new Error('Erro ao solicitar orçamento');
+        const errData = await response.json();
+        throw new Error(errData.error || 'Erro ao solicitar orçamento');
       }
       alert('Orçamento solicitado com sucesso! Iremos entrar em contato.');
       navigate('/');
     } catch (err) {
-      alert('Orçamento solicitado com sucesso!');
-      navigate('/');
+      alert('Erro: ' + err.message);
     }
   };
 
