@@ -423,4 +423,232 @@
 
   .landing-footer { padding: 28px 16px; }
   .lh-logo-name { font-size: 14px; }
+
+  /* Parceiras - mobile */
+  .parceiras-grid { grid-template-columns: 1fr; gap: 16px; }
+  .parceira-card { flex-direction: column; gap: 16px; }
+  .parceira-logo-wrap { width: 100%; max-width: 200px; margin: 0 auto; }
+  .parceira-services { grid-template-columns: 1fr 1fr; gap: 6px; }
+  .parceira-actions { flex-direction: column; }
+  .parceira-actions .btn { width: 100%; justify-content: center; }
+  .pb-flow { flex-direction: column; gap: 10px; }
+  .pb-arrow { transform: rotate(90deg); }
 }
+
+/* ── PARCEIRAS DE CONFIANÇA ── */
+.parceiras-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* Card principal da parceira */
+.parceira-card {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  align-items: flex-start;
+  padding: 32px;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.parceira-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary), #e91e8c, var(--primary));
+  background-size: 200% 100%;
+  animation: shimmerBorder 3s ease-in-out infinite;
+}
+
+@keyframes shimmerBorder {
+  0%   { background-position: -200% 0; }
+  100% { background-position:  200% 0; }
+}
+
+.parceira-card:hover {
+  border-color: rgba(14, 165, 233, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(14, 165, 233, 0.1);
+}
+
+/* Logo */
+.parceira-logo-wrap {
+  width: 180px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.parceira-logo {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+  object-fit: contain;
+}
+
+/* Info */
+.parceira-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.parceira-badge {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.parceira-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.parceira-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.parceira-desc strong {
+  color: var(--accent);
+}
+
+/* Services grid */
+.parceira-services {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.parceira-service-item {
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Buttons */
+.parceira-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+}
+.btn-outline:hover {
+  background: rgba(255,255,255,0.06);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+/* Benefit card */
+.parceria-benefit-card {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: linear-gradient(135deg, rgba(14,165,233,0.06), rgba(233,30,140,0.06));
+  border: 1px solid rgba(14,165,233,0.15);
+}
+
+.pb-icon {
+  font-size: 32px;
+}
+
+.pb-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.pb-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.pb-text strong {
+  color: var(--accent);
+}
+
+.pb-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.pb-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+}
+
+.pb-step-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.pb-step-result {
+  background: linear-gradient(135deg, rgba(14,165,233,0.1), rgba(233,30,140,0.1));
+  border-color: rgba(14,165,233,0.3);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.pb-arrow {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+/* Nav link especial */
+.nav-parceiras-link {
+  color: var(--accent) !important;
+  font-weight: 600 !important;
+}
+.nav-parceiras-link:hover {
+  color: var(--primary-dark) !important;
+}
+

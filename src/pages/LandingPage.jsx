@@ -120,6 +120,7 @@ export default function LandingPage() {
         <nav className="lh-nav-desktop">
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
+          <a href="#parceiras" className="nav-parceiras-link">🤝 Parceiras</a>
           <a href="#contato">Contato</a>
           <button className="btn btn-primary btn-sm" onClick={() => navigate('/paciente/login')}>
             Área do Paciente
@@ -147,6 +148,9 @@ export default function LandingPage() {
               </a>
               <a href="#sobre" className="md-item" onClick={closeMenu}>
                 Sobre
+              </a>
+              <a href="#parceiras" className="md-item" onClick={closeMenu}>
+                🤝 Parceiras
               </a>
               <a href="#contato" className="md-item" onClick={closeMenu}>
                 Contato
@@ -381,6 +385,90 @@ export default function LandingPage() {
             >
               🤝 Cadastrar Parceria B2B
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Parceiras de Confiança ── */}
+      <section className="section" id="parceiras">
+        <div className="section-label" style={{ color: 'var(--accent)', background: 'rgba(14,165,233,0.1)' }}>
+          🤝 PARCERIA OFICIAL
+        </div>
+        <h2 className="section-title">Parceiras de Confiança</h2>
+        <p className="section-sub">
+          Trabalhamos em conjunto para oferecer cuidado completo e humanizado ao seu familiar
+        </p>
+        <div className="parceiras-grid">
+          <div className="parceira-card card glass">
+            <div className="parceira-logo-wrap">
+              <img
+                src="/serenya-logo.jpg"
+                alt="Serenya Agência de Cuidadores"
+                className="parceira-logo"
+              />
+            </div>
+            <div className="parceira-info">
+              <div className="parceira-badge">
+                <span className="badge badge-success">✅ Parceria Ativa</span>
+                <span className="badge badge-primary">⏰ Atendimento 24h</span>
+              </div>
+              <h3 className="parceira-name">Serenya Agência de Cuidadores</h3>
+              <p className="parceira-desc">
+                Cuidamos de quem você ama como se fosse da nossa família. 
+                Equipe especializada com atendimento domiciliar 24h. 
+                A parceria perfeita para um cuidado completo: <strong>feridas com expertise + cuidadores dedicados</strong>.
+              </p>
+              <div className="parceira-services">
+                <div className="parceira-service-item">👩‍⚕️ Cuidadores especializados</div>
+                <div className="parceira-service-item">🏠 Atendimento domiciliar</div>
+                <div className="parceira-service-item">⏰ Disponível 24 horas</div>
+                <div className="parceira-service-item">❤️ Cuidado humanizado</div>
+              </div>
+              <div className="parceira-actions">
+                <a
+                  href="https://wa.me/5511974995342?text=Olá!%20Vim%20pelo%20site%20da%20Enfermeira%20Feridas%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20cuidados%20domiciliares."
+                  className="btn btn-accent btn-sm"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  💬 WhatsApp Serenya
+                </a>
+                <a
+                  href="https://www.instagram.com/cuidadosserenya/"
+                  className="btn btn-outline btn-sm"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  📸 @cuidadosserenya
+                </a>
+              </div>
+            </div>
+          </div>
+          {/* Card explicativo da parceria */}
+          <div className="parceria-benefit-card card">
+            <div className="pb-icon">🌟</div>
+            <h4 className="pb-title">Por que essa parceria?</h4>
+            <p className="pb-text">
+              Quando seu paciente precisa de <strong>cuidados especializados em feridas</strong> combinados 
+              com <strong>suporte domiciliar completo</strong>, as duas especialistas trabalham juntas 
+              para garantir o melhor resultado.
+            </p>
+            <div className="pb-flow">
+              <div className="pb-step">
+                <span className="pb-step-icon">🩹</span>
+                <span>Enfermeira Feridas cuida das feridas</span>
+              </div>
+              <div className="pb-arrow">+</div>
+              <div className="pb-step">
+                <span className="pb-step-icon">🏠</span>
+                <span>Serenya cuida do paciente 24h</span>
+              </div>
+              <div className="pb-arrow">=</div>
+              <div className="pb-step pb-step-result">
+                <span className="pb-step-icon">❤️</span>
+                <span>Cuidado completo e humanizado</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
