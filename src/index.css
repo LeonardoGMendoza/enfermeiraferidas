@@ -8,44 +8,44 @@
   /* Colors */
   --primary: #0ea5e9;
   --primary-dark: #0284c7;
-  --primary-light: #38bdf8;
-  --primary-glow: rgba(14, 165, 233, 0.3);
+  --primary-light: #0284c7;
+  --primary-glow: rgba(14, 165, 233, 0.2);
 
   --accent: #f97316;
   --accent-dark: #ea580c;
   --accent-light: #fb923c;
-  --accent-glow: rgba(249, 115, 22, 0.3);
+  --accent-glow: rgba(249, 115, 22, 0.2);
 
-  --success: #22c55e;
-  --warning: #eab308;
-  --danger: #ef4444;
-  --info: #8b5cf6;
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger: #dc2626;
+  --info: #7c3aed;
 
-  /* Background */
-  --bg-base: #050b18;
-  --bg-surface: #0c1628;
-  --bg-card: #111e35;
-  --bg-card-hover: #162540;
-  --bg-elevated: #1a2d4a;
-  --bg-input: #0f1d32;
+  /* Background — VERDE MENTA */
+  --bg-base: #ecfdf5;
+  --bg-surface: #d1fae5;
+  --bg-card: #ecfdf5;
+  --bg-card-hover: #a7f3d0;
+  --bg-elevated: #6ee7b7;
+  --bg-input: #ecfdf5;
 
   /* Text */
-  --text-primary: #f0f6ff;
-  --text-secondary: #94a3b8;
-  --text-muted: #475569;
-  --text-accent: #38bdf8;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --text-accent: #0284c7;
 
   /* Borders */
-  --border: rgba(148, 163, 184, 0.08);
-  --border-light: rgba(148, 163, 184, 0.12);
-  --border-active: rgba(14, 165, 233, 0.4);
+  --border: rgba(15, 23, 42, 0.08);
+  --border-light: rgba(15, 23, 42, 0.12);
+  --border-active: rgba(14, 165, 233, 0.5);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.5);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
-  --shadow-glow: 0 0 30px rgba(14, 165, 233, 0.15);
-  --shadow-glow-accent: 0 0 30px rgba(249, 115, 22, 0.15);
+  /* Shadows — mais suaves no light mode */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 30px rgba(14, 165, 233, 0.12);
+  --shadow-glow-accent: 0 0 30px rgba(249, 115, 22, 0.12);
 
   /* Spacing */
   --radius-sm: 8px;
@@ -83,7 +83,7 @@ body {
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-track { background: var(--bg-elevated); }
 ::-webkit-scrollbar-thumb { background: var(--border-light); border-radius: var(--radius-full); }
 ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
 
@@ -92,7 +92,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--font-display); font-weight: 700; line-hei
 
 /* Utilities */
 .glass {
-  background: rgba(17, 30, 53, 0.7);
+  background: rgba(255, 255, 255, 0.80);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--border-light);
