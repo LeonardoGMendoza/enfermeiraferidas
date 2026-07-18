@@ -217,12 +217,12 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-visual">
-          <div className="glass hero-image-wrapper">
+        <div className="hero-visual" style={{ flex: '1.5', minWidth: 0, maxWidth: '50%', display: 'flex', justifyContent: 'flex-end' }}>
+          <div className="glass" style={{ padding: '8px', borderRadius: '24px', overflow: 'hidden', width: '100%', boxSizing: 'border-box', boxShadow: '0 16px 48px rgba(0,0,0,0.12)' }}>
             <img 
               src="/FOTOCAPA.png" 
               alt="Capa Doutor Feridas" 
-              style={{ width: '100%', height: 'auto', borderRadius: '16px', objectFit: 'cover' }} 
+              style={{ display: 'block', width: '100%', height: 'auto', borderRadius: '16px', objectFit: 'cover' }} 
             />
           </div>
         </div>
@@ -417,7 +417,7 @@ export default function LandingPage() {
         <p className="section-sub">
           Trabalhamos em conjunto para oferecer cuidado completo e humanizado ao seu familiar
         </p>
-        <div className="parceiras-grid" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'min(100%, 620px) min(100%, 380px)', gap: '24px', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
           <div className="parceira-card card glass">
             <div className="parceira-logo-wrap">
               <img

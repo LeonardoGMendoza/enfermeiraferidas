@@ -361,19 +361,30 @@
   .nursing-icon-float { display: none !important; }
   .hc-cta-img { display: none !important; }
 
-  /* HERO */
+  /* HERO - foto aparece ABAIXO do texto no celular */
   .hero {
     flex-direction: column !important;
     padding: 90px 20px 48px !important;
-    gap: 24px !important;
+    gap: 32px !important;
     min-height: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
+    align-items: stretch !important;
   }
-  .hero-visual { display: none !important; }
-  .hero-content { max-width: 100% !important; width: 100% !important; flex: none !important; box-sizing: border-box !important; }
+  .hero-visual {
+    display: flex !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    flex: none !important;
+    justify-content: center !important;
+  }
+  .hero-visual > * {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
   .hero-title { font-size: clamp(26px, 7vw, 38px) !important; }
   .hero-subtitle { font-size: 14px !important; max-width: 100% !important; }
   .hero-badge { font-size: 12px !important; padding: 5px 12px !important; }
