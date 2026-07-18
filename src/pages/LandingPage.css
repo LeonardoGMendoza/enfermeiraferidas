@@ -445,17 +445,17 @@
   .lh-logo-name { font-size: 14px; }
 
   /* Parceiras - mobile */
-  .parceiras-grid { grid-template-columns: 1fr; gap: 16px; }
-  .parceira-card { flex-direction: column; gap: 16px; overflow: hidden; }
-  .parceira-logo-wrap { width: 100%; max-width: 200px; margin: 0 auto; }
+  .parceiras-grid { grid-template-columns: 1fr !important; gap: 16px !important; width: 100% !important; max-width: 100% !important; overflow: hidden !important; }
+  .parceira-card { flex-direction: column !important; gap: 16px !important; overflow: hidden !important; width: 100% !important; box-sizing: border-box !important; }
+  .parceira-logo-wrap { width: 100% !important; max-width: 200px; margin: 0 auto; }
   .parceira-services { grid-template-columns: 1fr 1fr; gap: 6px; }
   .parceira-actions { flex-direction: column; }
   .parceira-actions .btn { width: 100%; justify-content: center; }
   .pb-flow { flex-direction: column; gap: 10px; }
   .pb-arrow { transform: rotate(90deg); }
-  .parceria-benefit-card { overflow: hidden; }
-  .pb-text { word-break: break-word; overflow-wrap: break-word; }
-  .pb-item { word-break: break-word; overflow-wrap: break-word; }
+  .parceria-benefit-card { overflow: hidden !important; width: 100% !important; box-sizing: border-box !important; }
+  .pb-text { word-break: break-word; overflow-wrap: break-word; white-space: normal; }
+  .pb-item { word-break: break-word; overflow-wrap: break-word; white-space: normal; }
 }
 
 /* ── PARCEIRAS DE CONFIANÇA ── */
