@@ -349,18 +349,8 @@
     align-items: flex-start;
     overflow: hidden;
   }
-  .hero-visual { 
-    display: flex;
-    width: 100%;
-    max-width: 100%;
-    flex: none;
-    justify-content: center; 
-    margin-top: 8px;
-  }
-  .hero-image-wrapper {
-    max-width: 100%;
-    width: 100%;
-  }
+  /* FOTO: esconde no celular para não criar espaço vazio */
+  .hero-visual { display: none !important; }
   .hero-content {
     max-width: 100%;
     width: 100%;
@@ -456,13 +446,16 @@
 
   /* Parceiras - mobile */
   .parceiras-grid { grid-template-columns: 1fr; gap: 16px; }
-  .parceira-card { flex-direction: column; gap: 16px; }
+  .parceira-card { flex-direction: column; gap: 16px; overflow: hidden; }
   .parceira-logo-wrap { width: 100%; max-width: 200px; margin: 0 auto; }
   .parceira-services { grid-template-columns: 1fr 1fr; gap: 6px; }
   .parceira-actions { flex-direction: column; }
   .parceira-actions .btn { width: 100%; justify-content: center; }
   .pb-flow { flex-direction: column; gap: 10px; }
   .pb-arrow { transform: rotate(90deg); }
+  .parceria-benefit-card { overflow: hidden; }
+  .pb-text { word-break: break-word; overflow-wrap: break-word; }
+  .pb-item { word-break: break-word; overflow-wrap: break-word; }
 }
 
 /* ── PARCEIRAS DE CONFIANÇA ── */
