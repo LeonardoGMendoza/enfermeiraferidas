@@ -159,11 +159,18 @@
   padding: 8px;
   border-radius: 24px;
   overflow: hidden;
-  display: flex;
+  display: block;
   width: 100%;
   max-width: 950px;
   box-shadow: var(--shadow-xl);
   box-sizing: border-box;
+}
+
+.hero-image-wrapper img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: 100%;
 }
 
 .hero-card {
