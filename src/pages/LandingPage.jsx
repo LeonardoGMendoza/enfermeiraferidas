@@ -409,7 +409,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Parceiras de Confiança ── */}
-      <section className="section section-alt" id="parceiras" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
+      <section className="section section-alt" id="parceiras">
         <div className="section-label" style={{ color: 'var(--accent)', background: 'rgba(14,165,233,0.1)' }}>
           🤝 PARCERIA OFICIAL
         </div>
@@ -417,87 +417,89 @@ export default function LandingPage() {
         <p className="section-sub">
           Trabalhamos em conjunto para oferecer cuidado completo e humanizado ao seu familiar
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'min(100%, 620px) min(100%, 380px)', gap: '24px', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
-          <div className="parceira-card card glass">
-            <div className="parceira-logo-wrap">
-              <img
-                src="/serenya-logo.jpg"
-                alt="Serenya Agência de Cuidadores"
-                className="parceira-logo"
-              />
-            </div>
-            <div className="parceira-info">
-              <div className="parceira-badge">
-                <span className="badge badge-success">✅ Parceria Ativa</span>
-                <span className="badge badge-primary">⏰ Atendimento 24h</span>
-              </div>
-              <h3 className="parceira-name">Serenya Agência de Cuidadores</h3>
-              <p className="parceira-desc">
-                Cuidamos de quem você ama como se fosse da nossa família.
-                Equipe especializada com atendimento domiciliar 24h.
-                A parceria perfeita: <strong>feridas com expertise + cuidadores dedicados</strong>.
-              </p>
-              <div className="parceira-services">
-                <div className="parceira-service-item">👩‍⚕️ Cuidadores especializados</div>
-                <div className="parceira-service-item">🏠 Atendimento domiciliar</div>
-                <div className="parceira-service-item">⏰ Disponível 24 horas</div>
-                <div className="parceira-service-item">❤️ Cuidado humanizado</div>
-              </div>
-              <div className="parceira-actions">
-                <a
-                  href="https://wa.me/5511974995342?text=Olá!%20Vim%20pelo%20site%20da%20Enfermeira%20Feridas%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20cuidados%20domiciliares."
-                  className="btn btn-accent btn-sm"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  💬 WhatsApp Serenya
-                </a>
-                <a
-                  href="https://www.instagram.com/cuidadosserenya/"
-                  className="btn btn-outline btn-sm"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  📸 @cuidadosserenya
-                </a>
-                <a
-                  href="https://serenyahomecare.com.br/"
-                  className="btn btn-outline btn-sm"
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ width: '100%', marginTop: '8px', justifyContent: 'center' }}
-                >
-                  🔗 Ver Parceria Completa
-                </a>
-              </div>
-            </div>
+
+        {/* Card principal - Serenya */}
+        <div className="parceira-card card glass" style={{ marginBottom: '20px' }}>
+          <div className="parceira-logo-wrap">
+            <img
+              src="/serenya-logo.jpg"
+              alt="Serenya Agência de Cuidadores"
+              className="parceira-logo"
+            />
           </div>
-          <div className="parceria-benefit-card card">
-            <div className="pb-icon">🌟</div>
-            <h4 className="pb-title">Por que essa parceria?</h4>
-            <p className="pb-text">
-              Quando seu paciente precisa de <strong>cuidados especializados em feridas</strong> combinados
-              com <strong>suporte domiciliar completo</strong>, as duas especialistas trabalham juntas
-              para garantir o melhor resultado.
+          <div className="parceira-info">
+            <div className="parceira-badge">
+              <span className="badge badge-success">✅ Parceria Ativa</span>
+              <span className="badge badge-primary">⏰ Atendimento 24h</span>
+            </div>
+            <h3 className="parceira-name">Serenya Agência de Cuidadores</h3>
+            <p className="parceira-desc">
+              Cuidamos de quem você ama como se fosse da nossa família.
+              Equipe especializada com atendimento domiciliar 24h.
+              A parceria perfeita: <strong>feridas com expertise + cuidadores dedicados</strong>.
             </p>
-            <div className="pb-flow">
-              <div className="pb-step">
-                <span className="pb-step-icon">🩹</span>
-                <span>Enfermeira Feridas cuida das feridas</span>
-              </div>
-              <div className="pb-arrow">+</div>
-              <div className="pb-step">
-                <span className="pb-step-icon">🏠</span>
-                <span>Serenya cuida do paciente 24h</span>
-              </div>
-              <div className="pb-arrow">=</div>
-              <div className="pb-step pb-step-result">
-                <span className="pb-step-icon">❤️</span>
-                <span>Cuidado completo e humanizado</span>
-              </div>
+            <div className="parceira-services">
+              <div className="parceira-service-item">👩‍⚕️ Cuidadores especializados</div>
+              <div className="parceira-service-item">🏠 Atendimento domiciliar</div>
+              <div className="parceira-service-item">⏰ Disponível 24 horas</div>
+              <div className="parceira-service-item">❤️ Cuidado humanizado</div>
+            </div>
+            <div className="parceira-actions">
+              <a
+                href="https://wa.me/5511974995342?text=Olá!%20Vim%20pelo%20site%20da%20Enfermeira%20Feridas%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20cuidados%20domiciliares."
+                className="btn btn-accent btn-sm"
+                target="_blank"
+                rel="noreferrer"
+              >
+                💬 WhatsApp Serenya
+              </a>
+              <a
+                href="https://www.instagram.com/cuidadosserenya/"
+                className="btn btn-outline btn-sm"
+                target="_blank"
+                rel="noreferrer"
+              >
+                📸 @cuidadosserenya
+              </a>
+              <a
+                href="https://serenyahomecare.com.br/"
+                className="btn btn-outline btn-sm"
+                target="_blank"
+                rel="noreferrer"
+              >
+                🔗 Ver Parceria Completa
+              </a>
             </div>
           </div>
         </div>
+
+        {/* Card de benefício */}
+        <div className="parceria-benefit-card card">
+          <div className="pb-icon">🌟</div>
+          <h4 className="pb-title">Por que essa parceria?</h4>
+          <p className="pb-text">
+            Quando seu paciente precisa de <strong>cuidados especializados em feridas</strong> combinados
+            com <strong>suporte domiciliar completo</strong>, as duas especialistas trabalham juntas
+            para garantir o melhor resultado.
+          </p>
+          <div className="pb-flow">
+            <div className="pb-step">
+              <span className="pb-step-icon">🩹</span>
+              <span>Enfermeira Feridas cuida das feridas</span>
+            </div>
+            <div className="pb-arrow">+</div>
+            <div className="pb-step">
+              <span className="pb-step-icon">🏠</span>
+              <span>Serenya cuida do paciente 24h</span>
+            </div>
+            <div className="pb-arrow">=</div>
+            <div className="pb-step pb-step-result">
+              <span className="pb-step-icon">❤️</span>
+              <span>Cuidado completo e humanizado</span>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       {/* ── Redes Sociais ── */}
