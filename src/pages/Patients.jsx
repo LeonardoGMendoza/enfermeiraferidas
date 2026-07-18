@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, MapPin, Phone, Edit2, Trash2, Eye } from 'lucide-react';
-import { getHomecares } from '../data';
+import { getHomecares, savePatient, deletePatient } from '../data';
 import PatientModal from '../components/PatientModal';
 
 const STATUS_MAP = {
@@ -120,7 +120,7 @@ export default function Patients() {
                         <div className="patient-cell-avatar">{p.nome?.[0] || '?'}</div>
                         <div>
                           <div className="patient-cell-name">{p.nome}</div>
-                          <div className="patient-cell-age"><Phone size={11} /> {p.phone}</div>
+                          <div className="patient-cell-age"><Phone size={11} /> {p.telefone || p.phone || '—'}</div>
                         </div>
                       </div>
                     </td>
@@ -136,7 +136,7 @@ export default function Patients() {
                     <td>
                       <span className="meta-cell">{hc ? hc.nome : <span className="text-muted">—</span>}</span>
                     </td>
-                    <td><span className={`badge badge-success`}>Ativo</span></td>
+                    <td><span className={`badge ${st.cls}`}>{st.label}</span></td>
                     <td>
                       <div className="action-btns">
                         <button className="icon-action" title="Ver detalhes" onClick={() => navigate(`/app/pacientes/${p.id}`)}>

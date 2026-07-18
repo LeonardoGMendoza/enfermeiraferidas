@@ -1,7 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Activity, MapPin, Phone, Star, ArrowRight, Shield, Clock, Heart, Cross, Menu, X } from 'lucide-react';
+import { Activity, MapPin, Shield, Clock, Star, Heart, Menu, X } from 'lucide-react';
 import './LandingPage.css';
+
+const WA_NUMBER = '5511989553812';
+const waLink = (msg = 'Olá! Gostaria de agendar uma avaliação de ferida.') =>
+  `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
 const NursingIcons = [
   { id: 'bandaid', size: 80, delay: '0s', duration: '14s', top: '8%', right: '5%',
@@ -23,8 +26,6 @@ const NursingIcons = [
         <rect x="22" y="16" width="20" height="12" rx="3" transform="rotate(45 32 22)" fill="rgba(249,115,22,0.2)" stroke="rgba(249,115,22,0.5)" strokeWidth="1.5"/>
         <circle cx="49" cy="15" r="4" fill="rgba(249,115,22,0.3)" stroke="rgba(249,115,22,0.6)" strokeWidth="1.5"/>
         <line x1="14" y1="50" x2="8" y2="56" stroke="rgba(249,115,22,0.5)" strokeWidth="2" strokeLinecap="round"/>
-        <line x1="30" y1="34" x2="34" y2="30" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5" strokeLinecap="round"/>
-        <line x1="36" y1="28" x2="40" y2="24" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5" strokeLinecap="round"/>
       </svg>
     )
   },
@@ -84,25 +85,35 @@ const NursingIcons = [
         <circle cx="20" cy="18" r="4" fill="rgba(249,115,22,0.2)" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5"/>
         <circle cx="28" cy="14" r="3.5" fill="rgba(249,115,22,0.2)" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5"/>
         <circle cx="36" cy="13" r="3" fill="rgba(249,115,22,0.2)" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5"/>
-        <circle cx="44" cy="15" r="2.5" fill="rgba(249,115,22,0.2)" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5"/>
-        <circle cx="50" cy="18" r="2" fill="rgba(249,115,22,0.2)" stroke="rgba(249,115,22,0.4)" strokeWidth="1.5"/>
       </svg>
     )
   },
 ];
 
+const SERVICES = [
+  { icon: '🩹', title: 'Curativos Avançados', desc: 'Curativos complexos com materiais de última geração para cicatrização acelerada e controle de infecção.' },
+  { icon: '🦶', title: 'Pé Diabético', desc: 'Cuidado especializado para úlceras diabéticas, avaliação vascular e prevenção de complicações.' },
+  { icon: '🛏️', title: 'Úlcera por Pressão', desc: 'Tratamento e prevenção de escaras em pacientes acamados com protocolo completo.' },
+  { icon: '🏥', title: 'Pós-Operatório', desc: 'Acompanhamento de feridas cirúrgicas no domicílio com segurança e conforto.' },
+  { icon: '🦵', title: 'Úlcera Venosa', desc: 'Tratamento de úlceras vasculares com terapia compressiva e curativos especializados.' },
+  { icon: '🤝', title: 'Parcerias Homecare', desc: 'Atendemos pacientes encaminhados por homecares com relatórios periódicos de evolução.' },
+];
+
+const TESTIMONIALS = [
+  { name: 'Família Rodrigues', bairro: 'Itaquera', text: 'Meu pai estava acamado há meses com uma ferida difícil. O atendimento foi incrível, muito cuidadoso e profissional. A ferida cicatrizou muito mais rápido do que esperávamos!', stars: 5 },
+  { name: 'Dona Maria', bairro: 'Zona Leste - SP', text: 'Enfermeira muito atenciosa e pontual. Passou segurança para toda a família sobre como cuidar do meu marido. Recomendo demais!', stars: 5 },
+  { name: 'Sr. Carlos', bairro: 'São Paulo - SP', text: 'Serviço de altíssima qualidade. Veio até minha casa, explicou tudo direitinho e o curativo foi feito com muito cuidado. Parabéns pelo trabalho!', stars: 5 },
+];
+
+const AREA_BAIRROS = [
+  'Itaquera', 'Guaianazes', 'São Mateus', 'Cidade Tiradentes',
+  'Arthur Alvim', 'Penha', 'Vila Carrão', 'Tatuapé',
+  'Mooca', 'Belém', 'São Miguel', 'Ermelino Matarazzo',
+];
+
 export default function LandingPage() {
-  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [showOrcamentoModal, setShowOrcamentoModal] = useState(false);
-  const [selectedService, setSelectedService] = useState('');
-  const [formData, setFormData] = useState({ nome: '', phone: '', email: '', password: '' });
-
   const closeMenu = () => setMobileMenuOpen(false);
-
-  const handleOpenOrcamento = (servico = '') => {
-    navigate(`/orcamento?servico=${encodeURIComponent(servico)}`);
-  };
 
   return (
     <div className="landing">
@@ -120,11 +131,18 @@ export default function LandingPage() {
         <nav className="lh-nav-desktop">
           <a href="#servicos">Serviços</a>
           <a href="#sobre">Sobre</a>
+          <a href="#area">Área de Atuação</a>
           <a href="#parceiras" className="nav-parceiras-link">🤝 Parceiras</a>
           <a href="#contato">Contato</a>
-          <button className="btn btn-primary btn-sm" onClick={() => navigate('/paciente/login')}>
-            Área do Paciente
-          </button>
+          <a
+            href={waLink('Olá! Gostaria de agendar uma avaliação.')}
+            className="btn btn-accent btn-sm"
+            target="_blank"
+            rel="noreferrer"
+            id="cta-header-whatsapp"
+          >
+            💬 Falar no WhatsApp
+          </a>
         </nav>
 
         {/* Botão hambúrguer */}
@@ -143,23 +161,23 @@ export default function LandingPage() {
           <div className="mobile-menu-overlay" onClick={closeMenu} />
           <div className="mobile-dropdown-menu">
             <div className="mobile-dropdown-body">
-              <a href="#servicos" className="md-item" onClick={closeMenu}>
-                Serviços
-              </a>
-              <a href="#sobre" className="md-item" onClick={closeMenu}>
-                Sobre
-              </a>
-              <a href="#parceiras" className="md-item" onClick={closeMenu}>
-                🤝 Parceiras
-              </a>
-              <a href="#contato" className="md-item" onClick={closeMenu}>
-                Contato
-              </a>
+              <a href="#servicos" className="md-item" onClick={closeMenu}>Serviços</a>
+              <a href="#sobre" className="md-item" onClick={closeMenu}>Sobre</a>
+              <a href="#area" className="md-item" onClick={closeMenu}>Área de Atuação</a>
+              <a href="#parceiras" className="md-item" onClick={closeMenu}>🤝 Parceiras</a>
+              <a href="#contato" className="md-item" onClick={closeMenu}>Contato</a>
             </div>
             <div className="mobile-dropdown-footer">
-              <button className="btn btn-primary" onClick={() => { navigate('/paciente/login'); closeMenu(); }} style={{ marginBottom: '8px' }}>
-                Área do Paciente
-              </button>
+              <a
+                href={waLink('Olá! Gostaria de agendar uma avaliação.')}
+                className="btn btn-accent"
+                target="_blank"
+                rel="noreferrer"
+                onClick={closeMenu}
+                style={{ marginBottom: '8px', display: 'block', textAlign: 'center' }}
+              >
+                💬 Falar no WhatsApp
+              </a>
             </div>
           </div>
         </>
@@ -193,7 +211,7 @@ export default function LandingPage() {
         <div className="hero-content">
           <div className="hero-badge">
             <Shield size={14} />
-            Especialista Certificada em Cuidados de Feridas
+            Especialista Certificada em Cuidados de Feridas — Doutor Feridas
           </div>
           <h1 className="hero-title">
             Cuidado especializado<br />
@@ -201,14 +219,15 @@ export default function LandingPage() {
           </h1>
           <p className="hero-subtitle">
             Enfermeira especialista em tratamento de feridas complexas, úlceras e curativos avançados.
-            Atendimento domiciliar em toda São Paulo com qualidade hospitalar.
+            Atendimento domiciliar na Zona Leste de São Paulo — Itaquera e região.
           </p>
           <div className="hero-actions">
             <a
-              href="https://wa.me/5511989553812?text=Olá!%20Gostaria%20de%20agendar%20uma%20avaliação%20de%20ferida."
+              href={waLink('Olá! Gostaria de agendar uma avaliação de ferida.')}
               className="btn btn-accent btn-lg"
               target="_blank"
               rel="noreferrer"
+              id="cta-hero-whatsapp"
             >
               💬 Agendar via WhatsApp
             </a>
@@ -225,8 +244,8 @@ export default function LandingPage() {
             </div>
             <div className="hero-stat-divider" />
             <div className="hero-stat">
-              <span className="hero-stat-num">SP</span>
-              <span className="hero-stat-label">Toda São Paulo</span>
+              <span className="hero-stat-num">ZL</span>
+              <span className="hero-stat-label">Zona Leste SP</span>
             </div>
           </div>
         </div>
@@ -260,7 +279,7 @@ export default function LandingPage() {
           </div>
           <div className="hero-float-card glass">
             <MapPin size={16} className="text-accent" />
-            <span>Moema, São Paulo</span>
+            <span>Itaquera, São Paulo</span>
           </div>
           <div className="hero-float-card hero-float-card-2 glass">
             <Heart size={16} className="text-danger" />
@@ -275,24 +294,21 @@ export default function LandingPage() {
         <h2 className="section-title">Serviços Especializados</h2>
         <p className="section-sub">Tratamentos avançados com protocolo clínico de excelência</p>
         <div className="services-grid">
-          {[
-            { icon: '🩹', title: 'Curativos Avançados', desc: 'Curativos complexos com materiais de última geração para cicatrização acelerada e controle de infecção.' },
-            { icon: '🦶', title: 'Pé Diabético', desc: 'Cuidado especializado para úlceras diabéticas, avaliação vascular e prevenção de complicações.' },
-            { icon: '🛏️', title: 'Úlcera por Pressão', desc: 'Tratamento e prevenção de escaras em pacientes acamados com protocolo completo de reposicionamento.' },
-            { icon: '🏥', title: 'Pós-Operatório', desc: 'Acompanhamento e cuidado de feridas cirúrgicas no domicílio com segurança e conforto.' },
-            { icon: '🦵', title: 'Úlcera Venosa', desc: 'Tratamento de úlceras vasculares com terapia compressiva e curativos especializados.' },
-            { icon: '🤝', title: 'Parcerias Homecare', desc: 'Atendemos pacientes encaminhados por empresas de homecare com relatórios periódicos.' },
-          ].map((s, i) => (
+          {SERVICES.map((s, i) => (
             <div key={i} className="service-card card animate-fadeIn" style={{animationDelay:`${i*0.1}s`}}>
               <div className="service-icon">{s.icon}</div>
               <h3 className="service-title">{s.title}</h3>
               <p className="service-desc">{s.desc}</p>
-              <button 
-                className="btn btn-primary btn-sm mt-4 w-full"
-                onClick={() => handleOpenOrcamento(s.title)}
+              <a
+                href={waLink(`Olá! Tenho interesse no serviço: ${s.title}. Pode me ajudar?`)}
+                className="btn btn-accent btn-sm"
+                style={{ marginTop: '16px', width: '100%', display: 'block', textAlign: 'center' }}
+                target="_blank"
+                rel="noreferrer"
+                id={`cta-servico-${i}`}
               >
-                Solicitar Orçamento
-              </button>
+                💬 Falar no WhatsApp
+              </a>
             </div>
           ))}
         </div>
@@ -305,7 +321,7 @@ export default function LandingPage() {
             <div className="about-badge-grid">
               {[
                 { icon: '🎓', label: 'Curso de Feridas', sub: 'Especialização' },
-                { icon: '🏥', label: 'Homecares', sub: 'Parcerias Ativas' },
+                { icon: '🏥', label: 'Doutor Feridas', sub: 'Franquia Oficial' },
                 { icon: '📋', label: 'Relatórios', sub: 'Mensais' },
                 { icon: '🚗', label: 'Atendimento', sub: 'Domiciliar SP' },
               ].map((b, i) => (
@@ -323,13 +339,13 @@ export default function LandingPage() {
               Dedicação e expertise<br />no cuidado de feridas
             </h2>
             <p className="about-text">
-              Sou enfermeira com especialização em cuidados de feridas complexas. Minha missão é
-              proporcionar tratamento de qualidade hospitalar no conforto do lar, com atenção
-              humanizada e protocolos clínicos atualizados.
+              Sou enfermeira com especialização em cuidados de feridas complexas, atuando como
+              franqueada da rede <strong>Doutor Feridas</strong> na Zona Leste de São Paulo — Itaquera e região.
+              Minha missão é proporcionar tratamento de qualidade hospitalar no conforto do lar.
             </p>
             <p className="about-text">
-              Atendo pacientes encaminhados por empresas de homecare em toda São Paulo,
-              oferecendo relatórios periódicos de evolução e comunicação constante com as equipes.
+              Atendo pacientes com feridas agudas e crônicas, úlceras vasculares, pé diabético e
+              pós-operatório, com atenção humanizada e protocolos clínicos atualizados.
             </p>
             <div className="about-highlights">
               {[
@@ -343,18 +359,90 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={() => handleOpenOrcamento()}
+            <a
+              href={waLink('Olá! Gostaria de conhecer mais sobre os serviços e agendar uma avaliação.')}
+              className="btn btn-accent btn-lg"
+              target="_blank"
+              rel="noreferrer"
+              id="cta-sobre-whatsapp"
             >
-              Cadastre-se e faça seu Orçamento
-            </button>
+              💬 Entrar em Contato
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ── PARCERIAS: Redes de Farmácias e Clínicas (CORRIGIDO) ── */}
-      <section className="section section-alt" id="parcerias-redes">
+      {/* ── Área de Atuação ── */}
+      <section className="section" id="area">
+        <div className="section-label" style={{ color: 'var(--success)', background: 'rgba(22,163,74,0.1)' }}>
+          📍 ONDE ATENDEMOS
+        </div>
+        <h2 className="section-title">Área de Atuação</h2>
+        <p className="section-sub">
+          Atendimento domiciliar especializado na <strong>Zona Leste de São Paulo</strong>
+        </p>
+        <div className="area-wrapper">
+          <div className="area-highlight-card card glass">
+            <div className="area-highlight-icon">🏙️</div>
+            <h3 className="area-highlight-title">Itaquera e Zona Leste</h3>
+            <p className="area-highlight-desc">
+              Somos a unidade franqueada <strong>Doutor Feridas</strong> oficial para atendimento domiciliar
+              na Zona Leste de São Paulo. Você não precisa se deslocar — <strong>nós vamos até você!</strong>
+            </p>
+            <a
+              href={waLink('Olá! Quero verificar se vocês atendem no meu bairro.')}
+              className="btn btn-accent btn-lg"
+              target="_blank"
+              rel="noreferrer"
+              id="cta-area-whatsapp"
+              style={{ marginTop: '16px' }}
+            >
+              💬 Verificar meu bairro
+            </a>
+          </div>
+          <div className="area-bairros-card card">
+            <h4 className="area-bairros-title">Bairros Atendidos</h4>
+            <div className="area-bairros-grid">
+              {AREA_BAIRROS.map((b, i) => (
+                <div key={i} className="area-bairro-item">
+                  <span className="area-bairro-dot" />
+                  {b}
+                </div>
+              ))}
+            </div>
+            <p className="area-bairros-note">
+              * Não encontrou seu bairro? <a href={waLink('Olá! Gostaria de verificar se atendem na minha região.')} target="_blank" rel="noreferrer">Consulte pelo WhatsApp</a>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Depoimentos ── */}
+      <section className="section section-alt" id="depoimentos">
+        <div className="section-label">O que dizem nossos pacientes</div>
+        <h2 className="section-title">Depoimentos</h2>
+        <p className="section-sub">A satisfação de nossos pacientes é nossa maior recompensa</p>
+        <div className="testimonials-grid">
+          {TESTIMONIALS.map((t, i) => (
+            <div key={i} className="testimonial-card card glass">
+              <div className="testimonial-stars">
+                {'★'.repeat(t.stars)}
+              </div>
+              <p className="testimonial-text">"{t.text}"</p>
+              <div className="testimonial-author">
+                <div className="testimonial-avatar">{t.name.charAt(0)}</div>
+                <div>
+                  <div className="testimonial-name">{t.name}</div>
+                  <div className="testimonial-bairro">📍 {t.bairro}</div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── PARCERIAS B2B ── */}
+      <section className="section" id="parcerias-redes">
         <div className="hc-cta">
           <div className="hc-cta-content">
             <div className="section-label" style={{ color: 'var(--info)', background: 'rgba(139,92,246,0.1)' }}>
@@ -362,8 +450,8 @@ export default function LandingPage() {
             </div>
             <h2 className="hc-cta-title">Redes de Farmácias e Clínicas</h2>
             <p className="hc-cta-text">
-              Ampliamos o atendimento aos seus clientes! Estabelecemos parcerias com grandes redes
-              de farmácias, plataformas de saúde (como Nomad) e clínicas especializadas.
+              Ampliamos o atendimento aos seus clientes! Estabelecemos parcerias com homecares,
+              farmácias e clínicas especializadas na Zona Leste.
             </p>
             <div className="hc-cta-benefits">
               <div className="hc-benefit">
@@ -376,21 +464,24 @@ export default function LandingPage() {
               </div>
               <div className="hc-benefit">
                 <span className="hc-benefit-dot" style={{background: 'var(--info)'}} />
-                Atendimento complementar a clínicas e homecares
+                Relatórios periódicos de evolução clínica
               </div>
             </div>
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={() => handleOpenOrcamento('Parcerias B2B / Homecare')}
+            <a
+              href={waLink('Olá! Tenho interesse em uma parceria B2B. Podemos conversar?')}
+              className="btn btn-accent btn-lg"
+              target="_blank"
+              rel="noreferrer"
+              id="cta-b2b-whatsapp"
             >
-              🤝 Cadastrar Parceria B2B
-            </button>
+              🤝 Falar sobre Parceria
+            </a>
           </div>
         </div>
       </section>
 
       {/* ── Parceiras de Confiança ── */}
-      <section className="section" id="parceiras">
+      <section className="section section-alt" id="parceiras">
         <div className="section-label" style={{ color: 'var(--accent)', background: 'rgba(14,165,233,0.1)' }}>
           🤝 PARCERIA OFICIAL
         </div>
@@ -414,9 +505,9 @@ export default function LandingPage() {
               </div>
               <h3 className="parceira-name">Serenya Agência de Cuidadores</h3>
               <p className="parceira-desc">
-                Cuidamos de quem você ama como se fosse da nossa família. 
-                Equipe especializada com atendimento domiciliar 24h. 
-                A parceria perfeita para um cuidado completo: <strong>feridas com expertise + cuidadores dedicados</strong>.
+                Cuidamos de quem você ama como se fosse da nossa família.
+                Equipe especializada com atendimento domiciliar 24h.
+                A parceria perfeita: <strong>feridas com expertise + cuidadores dedicados</strong>.
               </p>
               <div className="parceira-services">
                 <div className="parceira-service-item">👩‍⚕️ Cuidadores especializados</div>
@@ -444,13 +535,12 @@ export default function LandingPage() {
               </div>
             </div>
           </div>
-          {/* Card explicativo da parceria */}
           <div className="parceria-benefit-card card">
             <div className="pb-icon">🌟</div>
             <h4 className="pb-title">Por que essa parceria?</h4>
             <p className="pb-text">
-              Quando seu paciente precisa de <strong>cuidados especializados em feridas</strong> combinados 
-              com <strong>suporte domiciliar completo</strong>, as duas especialistas trabalham juntas 
+              Quando seu paciente precisa de <strong>cuidados especializados em feridas</strong> combinados
+              com <strong>suporte domiciliar completo</strong>, as duas especialistas trabalham juntas
               para garantir o melhor resultado.
             </p>
             <div className="pb-flow">
@@ -477,33 +567,33 @@ export default function LandingPage() {
       <section className="section social-section" id="redes">
         <div className="section-label">Redes Sociais</div>
         <h2 className="section-title">Acompanhe Nosso Trabalho</h2>
-        <p className="section-sub">Dicas de cuidados, evolução de pacientes e muito mais</p>
+        <p className="section-sub">Dicas de cuidados, evolução de pacientes e muito mais — em breve!</p>
         <div className="social-grid">
-          <a href="https://www.instagram.com/sandra.luciane.58/" className="social-card glass social-insta" target="_blank" rel="noreferrer">
+          <div className="social-card glass social-insta">
             <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
               <circle cx="12" cy="12" r="4"/>
               <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
             </svg>
             <span>Instagram</span>
-            <span className="social-handle">@sandra.luciane.58</span>
-          </a>
-          <a href="https://www.facebook.com/sandra.luciane.58" className="social-card glass social-fb" target="_blank" rel="noreferrer">
+            <span className="social-handle">Em breve</span>
+          </div>
+          <div className="social-card glass social-fb">
             <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
             </svg>
             <span>Facebook</span>
-            <span className="social-handle">Sandra Luciane</span>
-          </a>
-          <a href="https://www.linkedin.com/in/sandralucianefonseca-enf/" className="social-card glass social-li" target="_blank" rel="noreferrer">
+            <span className="social-handle">Em breve</span>
+          </div>
+          <div className="social-card glass social-li">
             <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
               <rect x="2" y="9" width="4" height="12"/>
               <circle cx="4" cy="4" r="2"/>
             </svg>
             <span>LinkedIn</span>
-            <span className="social-handle">Sandra Luciane Fonseca</span>
-          </a>
+            <span className="social-handle">Em breve</span>
+          </div>
         </div>
       </section>
 
@@ -511,11 +601,11 @@ export default function LandingPage() {
       <section className="section section-alt" id="contato">
         <div className="section-label">Contato</div>
         <h2 className="section-title">Agende sua Avaliação</h2>
-        <p className="section-sub">Atendemos em toda a região de São Paulo</p>
+        <p className="section-sub">Atendemos em toda a Zona Leste de São Paulo — Itaquera e região</p>
         <div className="contact-grid">
           {[
-            { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora', action: 'Enviar mensagem', href: 'https://wa.me/5511989553812' },
-            { icon: '📍', title: 'Área de Atendimento', desc: 'Toda cidade de São Paulo e Grande SP', action: null },
+            { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora', action: 'Enviar mensagem', href: waLink('Olá! Gostaria de agendar uma avaliação de ferida.') },
+            { icon: '📍', title: 'Área de Atendimento', desc: 'Zona Leste SP — Itaquera, Guaianazes, Penha e região', action: null },
             { icon: '⏰', title: 'Horários', desc: 'Segunda a Sábado, 7h às 19h. Emergências: consultar', action: null },
           ].map((c, i) => (
             <div key={i} className="contact-card card">
@@ -523,7 +613,7 @@ export default function LandingPage() {
               <h3 className="contact-title">{c.title}</h3>
               <p className="contact-desc">{c.desc}</p>
               {c.action && (
-                <a href={c.href} className="btn btn-primary btn-sm" target="_blank" rel="noreferrer">
+                <a href={c.href} className="btn btn-accent btn-sm" target="_blank" rel="noreferrer" id="cta-contato-whatsapp">
                   {c.action}
                 </a>
               )}
@@ -539,10 +629,26 @@ export default function LandingPage() {
             <div className="lh-logo-icon"><Activity size={18} /></div>
             <span className="lh-logo-name">Enfermeira Feridas</span>
           </div>
-          <p className="footer-text">Especialista em cuidados de feridas — São Paulo</p>
+          <p className="footer-text">Especialista em cuidados de feridas — Zona Leste São Paulo</p>
+          <p className="footer-text" style={{ fontSize: '12px', opacity: 0.6 }}>Franqueada Oficial Doutor Feridas</p>
           <p className="footer-copy">© {new Date().getFullYear()} Todos os direitos reservados</p>
         </div>
       </footer>
+
+      {/* ── Floating WhatsApp Button ── */}
+      <a
+        href={waLink('Olá! Vim pelo site e gostaria de mais informações.')}
+        className="whatsapp-float"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Falar no WhatsApp"
+        id="cta-float-whatsapp"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        <span>Como posso te ajudar?</span>
+      </a>
     </div>
   );
 }

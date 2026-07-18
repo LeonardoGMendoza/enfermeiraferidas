@@ -652,3 +652,176 @@
   color: var(--primary-dark) !important;
 }
 
+/* ── Área de Atuação ── */
+.area-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 40px;
+  align-items: start;
+}
+.area-highlight-card {
+  text-align: center;
+  padding: 40px 32px;
+}
+.area-highlight-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+.area-highlight-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+}
+.area-highlight-desc {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.area-bairros-card {
+  padding: 32px;
+}
+.area-bairros-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.area-bairros-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.area-bairro-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}
+.area-bairro-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  flex-shrink: 0;
+}
+.area-bairros-note {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.area-bairros-note a {
+  color: var(--primary);
+  text-decoration: underline;
+}
+@media (max-width: 768px) {
+  .area-wrapper { grid-template-columns: 1fr; }
+}
+
+/* ── Depoimentos ── */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.testimonial-card {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.testimonial-stars {
+  color: #f59e0b;
+  font-size: 18px;
+  letter-spacing: 2px;
+}
+.testimonial-text {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-style: italic;
+  flex: 1;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.testimonial-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+.testimonial-bairro {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+@media (max-width: 900px) {
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
+@media (min-width: 600px) and (max-width: 900px) {
+  .testimonials-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Social cards como divs (não links) ── */
+.social-card {
+  cursor: default;
+}
+.social-card.social-insta,
+.social-card.social-fb,
+.social-card.social-li {
+  opacity: 0.75;
+}
+
+/* ── Floating WhatsApp Button ── */
+.whatsapp-float {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #25D366;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: var(--font-body);
+}
+.whatsapp-float:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 8px 28px rgba(37, 211, 102, 0.65);
+  color: white;
+  text-decoration: none;
+}
+@media (max-width: 480px) {
+  .whatsapp-float span { display: none; }
+  .whatsapp-float { padding: 16px; border-radius: 50%; }
+}
+

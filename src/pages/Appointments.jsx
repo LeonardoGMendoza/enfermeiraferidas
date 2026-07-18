@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, User, CheckCircle, XCircle, Activity } from 'lucide-react';
-import './Dashboard.css';
+import './Appointments.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
