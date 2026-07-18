@@ -409,7 +409,7 @@ export default function LandingPage() {
       </section>
 
       {/* ── Parceiras de Confiança ── */}
-      <section className="section section-alt" id="parceiras">
+      <section className="section section-alt" id="parceiras" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
         <div className="section-label" style={{ color: 'var(--accent)', background: 'rgba(14,165,233,0.1)' }}>
           🤝 PARCERIA OFICIAL
         </div>
@@ -417,7 +417,7 @@ export default function LandingPage() {
         <p className="section-sub">
           Trabalhamos em conjunto para oferecer cuidado completo e humanizado ao seu familiar
         </p>
-        <div className="parceiras-grid">
+        <div className="parceiras-grid" style={{ overflow: 'hidden', width: '100%', boxSizing: 'border-box' }}>
           <div className="parceira-card card glass">
             <div className="parceira-logo-wrap">
               <img
