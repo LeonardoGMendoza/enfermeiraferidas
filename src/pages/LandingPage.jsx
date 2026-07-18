@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Activity, MapPin, Shield, Clock, Star, Heart, Menu, X } from 'lucide-react';
 import './LandingPage.css';
 
@@ -113,7 +113,19 @@ const AREA_BAIRROS = [
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mapQuery, setMapQuery] = useState('');
+  const [mapSrc, setMapSrc] = useState(
+    'https://maps.google.com/maps?q=Itaquera+S%C3%A3o+Paulo+SP&output=embed&hl=pt-BR&z=13'
+  );
+  const [showCoverageMessage, setShowCoverageMessage] = useState(false);
+
   const closeMenu = () => setMobileMenuOpen(false);
+  const handleMapSearch = () => {
+    if (!mapQuery.trim()) return;
+    const q = encodeURIComponent(mapQuery.trim() + ', São Paulo SP');
+    setMapSrc(`https://maps.google.com/maps?q=${q}&output=embed&hl=pt-BR&z=15`);
+    setShowCoverageMessage(true);
+  };
 
   return (
     <div className="landing">
@@ -134,15 +146,6 @@ export default function LandingPage() {
           <a href="#area">Área de Atuação</a>
           <a href="#parceiras" className="nav-parceiras-link">🤝 Parceiras</a>
           <a href="#contato">Contato</a>
-          <a
-            href={waLink('Olá! Gostaria de agendar uma avaliação.')}
-            className="btn btn-accent btn-sm"
-            target="_blank"
-            rel="noreferrer"
-            id="cta-header-whatsapp"
-          >
-            💬 Falar no WhatsApp
-          </a>
         </nav>
 
         {/* Botão hambúrguer */}
@@ -168,15 +171,8 @@ export default function LandingPage() {
               <a href="#contato" className="md-item" onClick={closeMenu}>Contato</a>
             </div>
             <div className="mobile-dropdown-footer">
-              <a
-                href={waLink('Olá! Gostaria de agendar uma avaliação.')}
-                className="btn btn-accent"
-                target="_blank"
-                rel="noreferrer"
-                onClick={closeMenu}
-                style={{ marginBottom: '8px', display: 'block', textAlign: 'center' }}
-              >
-                💬 Falar no WhatsApp
+              <a href="#contato" className="btn btn-accent" onClick={closeMenu} style={{ display: 'block', textAlign: 'center' }}>
+                📞 Contato
               </a>
             </div>
           </div>
@@ -188,24 +184,6 @@ export default function LandingPage() {
         <div className="hero-bg">
           <div className="hero-grid" />
           <div className="hero-glow" />
-          {NursingIcons.map((icon) => (
-            <div
-              key={icon.id}
-              className="nursing-icon-float"
-              style={{
-                width: icon.size,
-                height: icon.size,
-                animationDelay: icon.delay,
-                animationDuration: icon.duration,
-                top: icon.top,
-                left: icon.left,
-                right: icon.right,
-                bottom: icon.bottom,
-              }}
-            >
-              {icon.svg}
-            </div>
-          ))}
         </div>
 
         <div className="hero-content">
@@ -221,17 +199,6 @@ export default function LandingPage() {
             Enfermeira especialista em tratamento de feridas complexas, úlceras e curativos avançados.
             Atendimento domiciliar na Zona Leste de São Paulo — Itaquera e região.
           </p>
-          <div className="hero-actions">
-            <a
-              href={waLink('Olá! Gostaria de agendar uma avaliação de ferida.')}
-              className="btn btn-accent btn-lg"
-              target="_blank"
-              rel="noreferrer"
-              id="cta-hero-whatsapp"
-            >
-              💬 Agendar via WhatsApp
-            </a>
-          </div>
           <div className="hero-stats">
             <div className="hero-stat">
               <span className="hero-stat-num">200+</span>
@@ -250,40 +217,13 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-visual">
-          <div className="hero-card glass">
-            <div className="hcard-header">
-              <div className="hcard-pulse"><span /></div>
-              <span>Atendimento em andamento</span>
-            </div>
-            <div className="hcard-patient">
-              <div className="hcard-avatar">👴</div>
-              <div>
-                <div className="hcard-name">José Carlos, 72 anos</div>
-                <div className="hcard-type">Úlcera por Pressão — Grau III</div>
-              </div>
-            </div>
-            <div className="hcard-progress">
-              <div className="hcard-progress-label">
-                <span>Evolução do Tratamento</span>
-                <span className="text-success">78%</span>
-              </div>
-              <div className="hcard-progress-bar">
-                <div className="hcard-progress-fill" style={{width:'78%'}} />
-              </div>
-            </div>
-            <div className="hcard-tags">
-              <span className="badge badge-success">Curativo Trocado</span>
-              <span className="badge badge-primary">Visita 12 de 15</span>
-            </div>
-          </div>
-          <div className="hero-float-card glass">
-            <MapPin size={16} className="text-accent" />
-            <span>Itaquera, São Paulo</span>
-          </div>
-          <div className="hero-float-card hero-float-card-2 glass">
-            <Heart size={16} className="text-danger" />
-            <span>Próxima visita: Hoje 14h</span>
+        <div className="hero-visual" style={{ flex: 1.5 }}>
+          <div className="glass" style={{ padding: '8px', borderRadius: '24px', overflow: 'hidden', display: 'flex', width: '100%', maxWidth: '950px', boxShadow: 'var(--shadow-xl)' }}>
+            <img 
+              src="/FOTOCAPA.png" 
+              alt="Capa Doutor Feridas" 
+              style={{ width: '100%', height: 'auto', borderRadius: '16px', objectFit: 'cover' }} 
+            />
           </div>
         </div>
       </section>
@@ -299,16 +239,6 @@ export default function LandingPage() {
               <div className="service-icon">{s.icon}</div>
               <h3 className="service-title">{s.title}</h3>
               <p className="service-desc">{s.desc}</p>
-              <a
-                href={waLink(`Olá! Tenho interesse no serviço: ${s.title}. Pode me ajudar?`)}
-                className="btn btn-accent btn-sm"
-                style={{ marginTop: '16px', width: '100%', display: 'block', textAlign: 'center' }}
-                target="_blank"
-                rel="noreferrer"
-                id={`cta-servico-${i}`}
-              >
-                💬 Falar no WhatsApp
-              </a>
             </div>
           ))}
         </div>
@@ -359,15 +289,7 @@ export default function LandingPage() {
                 </div>
               ))}
             </div>
-            <a
-              href={waLink('Olá! Gostaria de conhecer mais sobre os serviços e agendar uma avaliação.')}
-              className="btn btn-accent btn-lg"
-              target="_blank"
-              rel="noreferrer"
-              id="cta-sobre-whatsapp"
-            >
-              💬 Entrar em Contato
-            </a>
+
           </div>
         </div>
       </section>
@@ -382,23 +304,37 @@ export default function LandingPage() {
           Atendimento domiciliar especializado na <strong>Zona Leste de São Paulo</strong>
         </p>
         <div className="area-wrapper">
-          <div className="area-highlight-card card glass">
-            <div className="area-highlight-icon">🏙️</div>
-            <h3 className="area-highlight-title">Itaquera e Zona Leste</h3>
-            <p className="area-highlight-desc">
-              Somos a unidade franqueada <strong>Doutor Feridas</strong> oficial para atendimento domiciliar
-              na Zona Leste de São Paulo. Você não precisa se deslocar — <strong>nós vamos até você!</strong>
-            </p>
-            <a
-              href={waLink('Olá! Quero verificar se vocês atendem no meu bairro.')}
-              className="btn btn-accent btn-lg"
-              target="_blank"
-              rel="noreferrer"
-              id="cta-area-whatsapp"
-              style={{ marginTop: '16px' }}
-            >
-              💬 Verificar meu bairro
-            </a>
+          <div className="area-map-card card">
+            <h3 className="area-map-title">📍 Verifique seu endereço</h3>
+            <p className="area-map-desc">Digite seu endereço e veja no mapa se atendemos na sua região:</p>
+            <div className="area-map-search">
+              <input
+                type="text"
+                className="area-map-input"
+                placeholder="Ex: Rua das Flores, 123 - Itaquera"
+                value={mapQuery}
+                onChange={e => setMapQuery(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleMapSearch()}
+              />
+              <button className="btn btn-accent" onClick={handleMapSearch}>
+                🔍 Buscar
+              </button>
+            </div>
+            {showCoverageMessage && (
+              <div className="coverage-success-msg animate-fadeIn" style={{ padding: '12px', backgroundColor: 'var(--success)', color: 'white', borderRadius: '8px', textAlign: 'center', fontWeight: 'bold' }}>
+                ✅ Sim! Nós atendemos nesta região.
+              </div>
+            )}
+            <div className="area-map-frame">
+              <iframe
+                src={mapSrc}
+                title="Área de atendimento — Itaquera SP"
+                frameBorder="0"
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
           <div className="area-bairros-card card">
             <h4 className="area-bairros-title">Bairros Atendidos</h4>
@@ -411,7 +347,7 @@ export default function LandingPage() {
               ))}
             </div>
             <p className="area-bairros-note">
-              * Não encontrou seu bairro? <a href={waLink('Olá! Gostaria de verificar se atendem na minha região.')} target="_blank" rel="noreferrer">Consulte pelo WhatsApp</a>
+              * Não encontrou seu bairro? Fale conosco pelo botão WhatsApp abaixo! 👇
             </p>
           </div>
         </div>
@@ -467,15 +403,7 @@ export default function LandingPage() {
                 Relatórios periódicos de evolução clínica
               </div>
             </div>
-            <a
-              href={waLink('Olá! Tenho interesse em uma parceria B2B. Podemos conversar?')}
-              className="btn btn-accent btn-lg"
-              target="_blank"
-              rel="noreferrer"
-              id="cta-b2b-whatsapp"
-            >
-              🤝 Falar sobre Parceria
-            </a>
+
           </div>
         </div>
       </section>
@@ -531,6 +459,15 @@ export default function LandingPage() {
                   rel="noreferrer"
                 >
                   📸 @cuidadosserenya
+                </a>
+                <a
+                  href="https://serenyahomecare.com.br/"
+                  className="btn btn-outline btn-sm"
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{ width: '100%', marginTop: '8px', justifyContent: 'center' }}
+                >
+                  🔗 Ver Parceria Completa
                 </a>
               </div>
             </div>
@@ -604,19 +541,14 @@ export default function LandingPage() {
         <p className="section-sub">Atendemos em toda a Zona Leste de São Paulo — Itaquera e região</p>
         <div className="contact-grid">
           {[
-            { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora', action: 'Enviar mensagem', href: waLink('Olá! Gostaria de agendar uma avaliação de ferida.') },
-            { icon: '📍', title: 'Área de Atendimento', desc: 'Zona Leste SP — Itaquera, Guaianazes, Penha e região', action: null },
-            { icon: '⏰', title: 'Horários', desc: 'Segunda a Sábado, 7h às 19h. Emergências: consultar', action: null },
+            { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora' },
+            { icon: '📍', title: 'Área de Atendimento', desc: 'Zona Leste SP — Itaquera, Guaianazes, Penha e região' },
+            { icon: '⏰', title: 'Horários', desc: 'Segunda a Sábado, 7h às 19h. Emergências: consultar' },
           ].map((c, i) => (
             <div key={i} className="contact-card card">
               <div className="contact-icon">{c.icon}</div>
               <h3 className="contact-title">{c.title}</h3>
               <p className="contact-desc">{c.desc}</p>
-              {c.action && (
-                <a href={c.href} className="btn btn-accent btn-sm" target="_blank" rel="noreferrer" id="cta-contato-whatsapp">
-                  {c.action}
-                </a>
-              )}
             </div>
           ))}
         </div>
