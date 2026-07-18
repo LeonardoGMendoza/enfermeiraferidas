@@ -217,8 +217,8 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="hero-visual" style={{ flex: 1.5 }}>
-          <div className="glass" style={{ padding: '8px', borderRadius: '24px', overflow: 'hidden', display: 'flex', width: '100%', maxWidth: '950px', boxShadow: 'var(--shadow-xl)' }}>
+        <div className="hero-visual">
+          <div className="glass hero-image-wrapper">
             <img 
               src="/FOTOCAPA.png" 
               alt="Capa Doutor Feridas" 

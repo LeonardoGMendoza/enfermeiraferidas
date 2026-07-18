@@ -154,7 +154,17 @@
 .hero-stat-label { font-size: 12px; color: var(--text-muted); }
 .hero-stat-divider { width: 1px; height: 40px; background: var(--border-light); }
 
-.hero-visual { flex: 1; position: relative; z-index: 1; display: flex; justify-content: flex-end; }
+.hero-visual { flex: 1.5; position: relative; z-index: 1; display: flex; justify-content: flex-end; min-width: 0; }
+.hero-image-wrapper {
+  padding: 8px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  width: 100%;
+  max-width: 950px;
+  box-shadow: var(--shadow-xl);
+  box-sizing: border-box;
+}
 
 .hero-card {
   border-radius: var(--radius-xl); padding: 24px;
