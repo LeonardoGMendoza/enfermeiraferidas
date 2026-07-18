@@ -296,7 +296,7 @@
   .mobile-menu-btn { display: flex; }
 
   .hero { flex-direction: column; padding: 100px 32px 60px; gap: 40px; }
-  .hero-visual { flex: none; width: 100%; max-width: 420px; margin: 0 auto; }
+  .hero-visual { flex: none; width: 100%; max-width: 100%; margin: 0 auto; justify-content: center; }
   .services-grid, .contact-grid { grid-template-columns: 1fr 1fr; }
   .about-wrapper { flex-direction: column; gap: 40px; }
   .about-visual { flex: none; width: 100%; }
@@ -322,12 +322,17 @@
     flex-direction: column;
     padding: 90px 20px 48px;
     gap: 24px;
-    min-height: 100svh;
+    min-height: auto;
     width: 100%;
     box-sizing: border-box;
     align-items: flex-start;
   }
-  .hero-visual { display: none; }
+  .hero-visual { 
+    display: flex; 
+    width: 100%; 
+    justify-content: center; 
+    margin-top: 16px; 
+  }
   .hero-content {
     max-width: 100%;
     width: 100%;
