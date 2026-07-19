@@ -883,3 +883,13 @@
   .area-map-frame { height: 240px; }
 }
 
+/* ── Neon Glow Effects para Cards ── */
+.service-card, .about-badge-card, .testimonial-card {
+  transition: all 0.3s ease;
+}
+
+.service-card:hover, .about-badge-card:hover, .testimonial-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(14, 165, 233, 0.6) !important;
+  box-shadow: 0 8px 32px rgba(14, 165, 233, 0.35) !important;
+}

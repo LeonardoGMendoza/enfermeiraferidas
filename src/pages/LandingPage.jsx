@@ -107,8 +107,9 @@ const TESTIMONIALS = [
 
 const AREA_BAIRROS = [
   'Itaquera', 'Guaianazes', 'São Mateus', 'Cidade Tiradentes',
-  'Arthur Alvim', 'Penha', 'Vila Carrão', 'Tatuapé',
+  'Arthur Alvim', 'Penha', 'Vila Carrão', 'Patriarca',
   'Mooca', 'Belém', 'São Miguel', 'Ermelino Matarazzo',
+  'Vila Guilhermina', 'Vila Matilde',
 ];
 
 export default function LandingPage() {
@@ -184,6 +185,20 @@ export default function LandingPage() {
         <div className="hero-bg">
           <div className="hero-grid" />
           <div className="hero-glow" />
+          {NursingIcons.map(icon => (
+            <div
+              key={icon.id}
+              className="nursing-icon-float"
+              style={{
+                top: icon.top, bottom: icon.bottom,
+                left: icon.left, right: icon.right,
+                animationDelay: icon.delay, animationDuration: icon.duration,
+                width: `${icon.size}px`, height: `${icon.size}px`
+              }}
+            >
+              {icon.svg}
+            </div>
+          ))}
         </div>
 
         <div className="hero-content">
@@ -444,6 +459,7 @@ export default function LandingPage() {
                 <div className="parceira-service-item">❤️ Cuidado humanizado</div>
               </div>
               <div className="parceira-actions">
+                {/* 
                 <a
                   href="https://wa.me/5511974995342?text=Olá!%20Vim%20pelo%20site%20da%20Enfermeira%20Feridas%20e%20gostaria%20de%20saber%20mais%20sobre%20os%20cuidados%20domiciliares."
                   className="btn btn-accent btn-sm"
@@ -451,7 +467,8 @@ export default function LandingPage() {
                   rel="noreferrer"
                 >
                   💬 WhatsApp Serenya
-                </a>
+                </a> 
+                */}
                 <a
                   href="https://www.instagram.com/cuidadosserenya/"
                   className="btn btn-outline btn-sm"
@@ -460,6 +477,7 @@ export default function LandingPage() {
                 >
                   📸 @cuidadosserenya
                 </a>
+                {/* 
                 <a
                   href="https://serenyahomecare.com.br/"
                   className="btn btn-outline btn-sm"
@@ -469,6 +487,7 @@ export default function LandingPage() {
                 >
                   🔗 Ver Parceria Completa
                 </a>
+                */}
               </div>
             </div>
           </div>
