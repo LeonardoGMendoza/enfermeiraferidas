@@ -425,16 +425,6 @@
 
   .landing-footer { padding: 28px 16px; }
   .lh-logo-name { font-size: 14px; }
-
-  /* Parceiras - mobile */
-  .parceiras-grid { grid-template-columns: 1fr; gap: 16px; }
-  .parceira-card { flex-direction: column; gap: 16px; }
-  .parceira-logo-wrap { width: 100%; max-width: 200px; margin: 0 auto; }
-  .parceira-services { grid-template-columns: 1fr 1fr; gap: 6px; }
-  .parceira-actions { flex-direction: column; }
-  .parceira-actions .btn { width: 100%; justify-content: center; }
-  .pb-flow { flex-direction: column; gap: 10px; }
-  .pb-arrow { transform: rotate(90deg); }
 }
 
 /* ── PARCEIRAS DE CONFIANÇA ── */
@@ -892,4 +882,62 @@
   transform: translateY(-8px);
   border-color: rgba(14, 165, 233, 0.6) !important;
   box-shadow: 0 8px 32px rgba(14, 165, 233, 0.35) !important;
+}
+
+/* =============================================
+   PARCEIRAS / FARMÁCIAS — CORREÇÃO MOBILE
+   (movido para o final do arquivo de propósito:
+   precisa vir DEPOIS das regras base .parceiras-grid,
+   .parceira-card, .pb-flow etc. definidas acima,
+   senão a cascata do CSS ignora estas regras)
+   ============================================= */
+@media (max-width: 768px) {
+  .parceiras-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 4px;
+    box-sizing: border-box;
+  }
+  .parceira-card {
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .parceira-logo-wrap {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+  .parceira-name { font-size: 19px; }
+  .parceira-desc {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .parceira-services {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+  .parceira-actions { flex-direction: column; }
+  .parceira-actions .btn { width: 100%; justify-content: center; }
+
+  .parceria-benefit-card {
+    padding: 24px 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .pb-text {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .pb-flow { flex-direction: column; gap: 10px; }
+  .pb-step {
+    width: 100%;
+    box-sizing: border-box;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+  }
+  .pb-arrow { transform: rotate(90deg); }
 }
