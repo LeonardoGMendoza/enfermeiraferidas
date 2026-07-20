@@ -295,7 +295,7 @@ export default function LandingPage() {
             <div className="about-highlights">
               {[
                 { icon: <Shield size={16} />, text: 'COREN ativo e regularizado' },
-                { icon: <Clock size={16} />, text: 'Disponível 7 dias por semana' },
+                { icon: <Clock size={16} />, text: 'Disponível 6 dias por semana' },
                 { icon: <Star size={16} />, text: 'Especialização em feridas complexas' },
               ].map((h, i) => (
                 <div key={i} className="about-highlight">
