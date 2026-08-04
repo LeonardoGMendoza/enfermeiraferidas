@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Post / Placa de Fachada - Enfermeira em Home Care</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #9d174d;
+      --primary-dark: #831843;
+      --accent: #be185d;
+      --accent-light: #fbcfe8;
+      --bg-cream: #fff5f7;
+      --text-dark: #1f2937;
+      --green-wa: #25d366;
+      --green-wa-dark: #128c7e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0f172a;
+      color: #334155;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    /* Controls Bar */
+    .controls {
+      background: #1e293b;
+      padding: 16px 24px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      max-width: 1000px;
+      width: 100%;
+      border: 1px solid #334155;
+    }
+
+    .controls h1 {
+      color: #f8fafc;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-right: auto;
+    }
+
+    .btn {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      font-size: 0.95rem;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-green {
+      background: #10b981;
+    }
+    .btn-green:hover {
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #64748b;
+      color: #cbd5e1;
+    }
+    .btn-outline:hover {
+      background: #334155;
+      color: white;
+    }
+
+    /* Container do Poster */
+    .poster-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* POSTER HORIZONTAL (FAIXA) */
+    .poster-card {
+      background: white;
+      width: 1000px;
+      min-height: 520px;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 12px solid #fff;
+    }
+
+    .poster-card.vertical {
+      width: 650px;
+      min-height: 920px;
+    }
+
+    /* Visual Background Elements */
+    .bg-shape-1 {
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 380px;
+      height: 380px;
+      background: linear-gradient(135deg, rgba(251, 207, 232, 0.6), rgba(157, 23, 77, 0.15));
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .bg-shape-2 {
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(131, 24, 67, 0.05));
+      border-radius: 50%;
+      z-index: 0;
+    }
+
+    .header-bar {
+      background: linear-gradient(135deg, #831843 0%, #9d174d 50%, #be185d 100%);
+      color: white;
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 4px 15px rgba(157, 23, 77, 0.25);
+    }
+
+    .brand-title {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo-icon {
+      width: 54px;
+      height: 54px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    .brand-logo-icon svg {
+      width: 32px;
+      height: 32px;
+      fill: #9d174d;
+    }
+
+    .brand-text h2 {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 1.05rem;
+      color: #fbcfe8;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-atendimento {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      padding: 8px 18px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .body-content {
+      padding: 32px 40px;
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .vertical .body-content {
+      grid-template-columns: 1fr;
+      text-align: center;
+      gap: 24px;
+    }
+
+    .headline-box h3 {
+      color: #831843;
+      font-size: 2.2rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+
+    .headline-box p.subtitle {
+      font-size: 1.25rem;
+      color: #4b5563;
+      font-weight: 600;
+      margin-bottom: 24px;
+      line-height: 1.4;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .vertical .services-grid {
+      grid-template-columns: 1fr;
+      max-width: 450px;
+      margin: 0 auto;
+    }
+
+    .service-item {
+      background: #fdf2f8;
+      border: 2px solid #fbcfe8;
+      padding: 12px 16px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #831843;
+    }
+
+    .service-icon {
+      font-size: 1.4rem;
+    }
+
+    /* WhatsApp Call To Action Box */
+    .wa-cta-box {
+      background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+      border-radius: 24px;
+      padding: 24px;
+      color: white;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(16, 185, 129, 0.35);
+      border: 4px solid #ecfdf5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wa-badge {
+      background: rgba(255, 255, 255, 0.25);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .wa-icon-large {
+      width: 56px;
+      height: 56px;
+      margin-bottom: 8px;
+    }
+
+    .wa-number {
+      font-size: 2.2rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      margin: 6px 0;
+      white-space: nowrap;
+    }
+
+    .vertical .wa-number {
+      font-size: 2.5rem;
+    }
+
+    .wa-subtext {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #d1fae5;
+    }
+
+    .qr-container {
+      margin-top: 14px;
+      background: white;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .qr-container img {
+      width: 110px;
+      height: 110px;
+    }
+
+    .qr-label {
+      font-size: 0.75rem;
+      color: #065f46;
+      font-weight: 800;
+      margin-top: 4px;
+      text-transform: uppercase;
+    }
+
+    .footer-bar {
+      background: #831843;
+      color: #fbcfe8;
+      text-align: center;
+      padding: 14px;
+      font-weight: 700;
+      font-size: 1.05rem;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.5px;
+    }
+
+    /* Print Styles & Color Adjust */
+    @page {
+      size: auto;
+      margin: 0mm;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    @media print {
+      html, body {
+        background: white;
+        margin: 0 !important;
+        padding: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .controls {
+        display: none !important;
+      }
+      .poster-wrapper {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .poster-card {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        border-radius: 0 !important;
+        page-break-inside: avoid;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      .header-bar, .wa-cta-box, .footer-bar, .service-item, .bg-shape-1, .bg-shape-2 {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Controls -->
+  <div class="controls">
+    <h1>📍 Modelo de Placa / Faixa para Fachada</h1>
+    <button class="btn btn-outline" onclick="toggleOrientation()">
+      🔄 Alternar (Horizontal / Vertical)
+    </button>
+    <button class="btn btn-green" onclick="window.print()">
+      🖨️ Imprimir / Salvar PDF
+    </button>
+  </div>
+
+  <div class="poster-wrapper">
+    <div class="poster-card" id="posterCard">
+      <!-- Decorative Backgrounds -->
+      <div class="bg-shape-1"></div>
+      <div class="bg-shape-2"></div>
+
+      <!-- Header -->
+      <div class="header-bar">
+        <div class="brand-title">
+          <div class="brand-logo-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 10.5h-5.5V5c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v5.5H5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5h5.5V19c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5v-5.5H19c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5z"/>
+            </svg>
+          </div>
+          <div class="brand-text">
+            <h2>Enfermeira em Home Care</h2>
+            <p>Especialista em Cuidados de Feridas</p>
+          </div>
+        </div>
+        <div class="badge-atendimento">
+          <span>🏠 Nós Vamos Até Você</span>
+        </div>
+      </div>
+
+      <!-- Body Content -->
+      <div class="body-content">
+        <div class="headline-box">
+          <h3>Cuidado especializado no conforto do seu lar</h3>
+          <p class="subtitle">Tratamento avançado com segurança, empatia e alívio das dores.</p>
+
+          <div class="services-grid">
+            <div class="service-item">
+              <span class="service-icon">🩹</span>
+              <span>Curativos Avançados</span>
+            </div>
+            <div class="service-item">
+              <span class="service-icon">🦶</span>
+              <span>Tratamento de Pé Diabético</span>
+            </div>
+            <div class="service-item">
+              <span class="service-icon">🛏️</span>
+              <span>Úlceras por Pressão (Escaras)</span>
+            </div>
+            <div class="service-item">
+              <span class="service-icon">🏥</span>
+              <span>Pós-Operatório & Retirada de Pontos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WhatsApp Box -->
+        <div class="wa-cta-box">
+          <div class="wa-badge">CHAME NO WHATSAPP</div>
+          <svg class="wa-icon-large" viewBox="0 0 24 24" fill="white">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.84 9.84 0 0 0 12.04 2zm.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.19 8.19 0 0 1-5.83 2.42c-1.47 0-2.91-.39-4.17-1.13l-.3-.18-3.1 0.81 0.83-3.02-.2-.31a8.21 8.21 0 0 1-1.26-4.41c0-4.54 3.7-8.24 8.24-8.24zm4.52 10.15c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.66.81-.81.98-.15.17-.3.19-.55.06-.25-.13-1.06-.39-2.02-1.25-.74-.66-1.24-1.47-1.39-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.17.04-.32-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.23.89 2.42 1.02 2.59.13.17 1.76 2.68 4.26 3.76.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.16-.48-.29z"/>
+          </svg>
+          <div class="wa-number">(11) 91433-9705</div>
+          <div class="wa-subtext">Agendamento & Avaliação</div>
+
+          <div class="qr-container">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/5511914339705?text=Ola!%20Gostaria%20de%20agendar%20uma%20avaliacao." alt="QR Code WhatsApp">
+            <div class="qr-label">Aponta a câmera para falar agora</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="footer-bar">
+        📍 Atendimento Domiciliar Zona Leste — Itaquera e Região | Cuidados Humanizados com Excelência
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleOrientation() {
+      const poster = document.getElementById('posterCard');
+      poster.classList.toggle('vertical');
+    }
+  </script>
+</body>
+</html>

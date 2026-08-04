@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Activity, MapPin, Shield, Clock, Star, Heart, Menu, X } from 'lucide-react';
 import './LandingPage.css';
 
-const WA_NUMBER = '5511989553812';
+const WA_NUMBER = '5511914339705';
 const waLink = (msg = 'Olá! Gostaria de agendar uma avaliação de ferida.') =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
 
