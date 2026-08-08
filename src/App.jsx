@@ -28,6 +28,7 @@ export default function App() {
     <Routes>
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/dashboard" element={<Navigate to="/app/dashboard" replace />} />
       <Route path="/app" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
         <Route index element={<Navigate to="/app/dashboard" replace />} />
         <Route path="dashboard" element={<Dashboard />} />
@@ -40,6 +41,7 @@ export default function App() {
       <Route path="/paciente/login" element={<LoginPaciente />} />
       <Route path="/paciente/dashboard" element={<PacienteDashboard />} />
       <Route path="/orcamento" element={<Orcamento />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
