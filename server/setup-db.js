@@ -100,7 +100,7 @@ async function setupDB() {
     await pool.query(`
       INSERT INTO admin_users (nome, email, password_hash, role)
       VALUES 
-        ('Sandra Nakata', 'sandra.nakata92@gmail.com', $1, 'admin')
+        ('Sandra Nakata', 'lidermotiva23@outlook.com', $1, 'admin')
       ON CONFLICT (email) DO NOTHING
     `, [hashAdmin]);
 
