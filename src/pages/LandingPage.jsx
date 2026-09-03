@@ -398,7 +398,7 @@ export default function LandingPage() {
             Sua opinião é muito importante. Ajude outras pessoas a encontrarem um cuidado humanizado e especializado.
           </p>
           <a 
-            href="https://g.page/r/sua-url-de-avaliacao-do-google" 
+            href="https://g.page/r/CdR8uWI63QTYEBM/review" 
             target="_blank" 
             rel="noreferrer" 
             className="btn btn-accent"
