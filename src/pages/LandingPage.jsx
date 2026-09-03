@@ -390,6 +390,23 @@ export default function LandingPage() {
             </div>
           ))}
         </div>
+        
+        {/* Chamada para Avaliação */}
+        <div style={{ marginTop: '40px', textAlign: 'center', background: 'rgba(14,165,233,0.05)', padding: '30px', borderRadius: '16px', border: '1px solid rgba(14,165,233,0.1)' }}>
+          <h3 style={{ fontSize: '20px', marginBottom: '10px', color: 'var(--text-primary)' }}>Já foi atendido por nós?</h3>
+          <p style={{ color: 'var(--text-secondary)', marginBottom: '20px' }}>
+            Sua opinião é muito importante. Ajude outras pessoas a encontrarem um cuidado humanizado e especializado.
+          </p>
+          <a 
+            href="https://g.page/r/sua-url-de-avaliacao-do-google" 
+            target="_blank" 
+            rel="noreferrer" 
+            className="btn btn-accent"
+            style={{ display: 'inline-flex', padding: '12px 24px', fontSize: '16px' }}
+          >
+            ⭐ Deixe sua avaliação no Google
+          </a>
+        </div>
       </section>
 
       {/* ── PARCERIAS B2B ── */}
