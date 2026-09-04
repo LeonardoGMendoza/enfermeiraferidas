@@ -542,14 +542,14 @@ export default function LandingPage() {
         <h2 className="section-title">Acompanhe Nosso Trabalho</h2>
         <p className="section-sub">Dicas de cuidados, evolução de pacientes e muito mais — em breve!</p>
         <div className="social-grid">
-          <a href="https://www.instagram.com/enfermeiraferidas2026/" target="_blank" rel="noreferrer" className="social-card glass social-insta" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <a href="https://www.instagram.com/doutorferidas.itaquera/" target="_blank" rel="noreferrer" className="social-card glass social-insta" style={{ textDecoration: 'none', color: 'inherit' }}>
             <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
               <circle cx="12" cy="12" r="4"/>
               <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
             </svg>
             <span>Instagram</span>
-            <span className="social-handle">@enfermeiraferidas2026</span>
+            <span className="social-handle">@doutorferidas.itaquera</span>
           </a>
           <a href="https://www.facebook.com/enfermeiraferidas/" target="_blank" rel="noreferrer" className="social-card glass social-fb" style={{ textDecoration: 'none', color: 'inherit' }}>
             <svg className="social-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
