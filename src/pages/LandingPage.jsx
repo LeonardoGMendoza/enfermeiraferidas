@@ -101,7 +101,7 @@ const SERVICES = [
 
 const TESTIMONIALS = [
   { name: 'Amigo de paciente', bairro: 'Vila Verde', text: 'Melhor especialista em feridas aqui da zona leste eu moro na vila verde ela atendeu um amigo e a ferida melhorou e cicatrizou obrigado enfermeira feridas pela ajuda.', stars: 5 },
-  { name: 'Dona Maria', bairro: 'Zona Leste - SP', text: 'Enfermeira muito atenciosa e pontual. Passou segurança para toda a família sobre como cuidar do meu marido. Recomendo demais!', stars: 5 },
+  { name: 'Rosecler Santos', bairro: 'São Paulo - SP', text: 'Profissional excelente, muito cuidadosa, atenciosa e comprometida. Demonstrou muita paciência para explicar todos os cuidados e nos deixou muito mais tranquilos e seguros. Foi pontual e tratou minha avó com muito amor e carinho. Super recomendo!', stars: 5 },
   { name: 'Sr. Carlos', bairro: 'São Paulo - SP', text: 'Serviço de altíssima qualidade. Veio até minha casa, explicou tudo direitinho e o curativo foi feito com muito cuidado. Parabéns pelo trabalho!', stars: 5 },
 ];
 
