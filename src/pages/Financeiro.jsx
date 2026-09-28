@@ -136,7 +136,7 @@ export default function Financeiro() {
               <LineChart data={chartData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} tickFormatter={(value) => \`R$ \${value}\`} />
+                <YAxis axisLine={false} tickLine={false} tick={{fill: '#64748b', fontSize: 12}} tickFormatter={(value) => `R$ ${value}`} />
                 <Tooltip formatter={(value) => formatCurrency(value)} contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }} />
                 <Legend />
                 <Line type="monotone" dataKey="Entradas" stroke="#10b981" strokeWidth={3} dot={{r: 4, strokeWidth: 2}} activeDot={{r: 6}} />
@@ -157,7 +157,7 @@ export default function Financeiro() {
                 <PieChart>
                   <Pie data={pieData} cx="50%" cy="50%" innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="value">
                     {pieData.map((entry, index) => (
-                      <Cell key={\`cell-\${index}\`} fill={COLORS[index % COLORS.length]} />
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value) => formatCurrency(value)} />
@@ -195,7 +195,7 @@ export default function Financeiro() {
                     <td style={{ color: m.entrada > 0 ? 'var(--success)' : 'inherit', fontWeight: '500' }}>{m.entrada > 0 ? formatCurrency(m.entrada) : '-'}</td>
                     <td style={{ color: m.saida > 0 ? 'var(--error)' : 'inherit', fontWeight: '500' }}>{m.saida > 0 ? formatCurrency(m.saida) : '-'}</td>
                     <td>
-                      <span className={\`badge \${m.status === 'Pago' ? 'badge-success' : 'badge-warning'}\`}>
+                      <span className={`badge ${m.status === 'Pago' ? 'badge-success' : 'badge-warning'}`}>
                         {m.status || 'Pendente'}
                       </span>
                     </td>

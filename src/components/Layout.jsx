@@ -93,10 +93,10 @@ export default function Layout() {
             </button>
             <button
               className="btn btn-ghost btn-sm text-danger"
-              onClick={() => { localStorage.removeItem('ef_token'); navigate('/login'); }}
-              title="Sair do Sistema"
+              onClick={() => { localStorage.clear(); navigate('/login'); }}
+              title="Sair do Sistema e Limpar Dados"
             >
-              {sidebarOpen ? 'Sair' : 'X'}
+              {sidebarOpen ? 'Sair e Zerar Banco' : 'X'}
             </button>
           </div>
         </div>

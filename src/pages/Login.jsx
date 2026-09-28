@@ -16,16 +16,6 @@ export default function Login() {
     setLoading(true);
 
     try {
-      // BYPASS LOCAL: Se estiver rodando no localhost, entra direto sem checar o banco
-      if (window.location.hostname === 'localhost') {
-        setTimeout(() => {
-          localStorage.setItem('ef_token', 'local-dev-token');
-          localStorage.setItem('ef_user', JSON.stringify({ nome: 'Sandra Nakata (Local)', role: 'admin' }));
-          navigate('/app');
-        }, 500);
-        return;
-      }
-
       const response = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
