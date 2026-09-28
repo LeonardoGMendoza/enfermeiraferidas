@@ -11,7 +11,7 @@ export default function PatientDetail() {
   const [homecare, setHomecare] = useState(null);
   const [evolutions, setEvolutions] = useState([]);
   const [showAddEvo, setShowAddEvo] = useState(false);
-  const [newEvo, setNewEvo] = useState({ desc: '', foto: '' });
+  const [newEvo, setNewEvo] = useState({ desc: '', foto: '', materialUsado: '', custoMaterial: '', valorCobrado: '', pago: 'Pendente' });
 
   const load = () => {
     const p = getPatientById(id);
@@ -35,9 +35,13 @@ export default function PatientDetail() {
     saveEvolution({
       patientId: id,
       desc: newEvo.desc,
-      foto: newEvo.foto // in a real app this would be an uploaded URL
+      foto: newEvo.foto,
+      materialUsado: newEvo.materialUsado,
+      custoMaterial: newEvo.custoMaterial,
+      valorCobrado: newEvo.valorCobrado,
+      pago: newEvo.pago
     });
-    setNewEvo({ desc: '', foto: '' });
+    setNewEvo({ desc: '', foto: '', materialUsado: '', custoMaterial: '', valorCobrado: '', pago: 'Pendente' });
     setShowAddEvo(false);
     load();
   };
@@ -116,28 +120,64 @@ export default function PatientDetail() {
             {showAddEvo && (
               <form className="evo-form animate-slideIn" onSubmit={handleAddEvo}>
                 <div className="form-group mb-3">
-                  <label className="form-label">Descrição da Evolução / Curativo</label>
+                  <label className="form-label">Descrição da Evolução / Tratamento</label>
                   <textarea 
                     required 
                     className="form-textarea" 
-                    placeholder="Descreva o aspecto da ferida, exsudato, bordas, tecido de granulação..."
+                    placeholder="Ex: Limpeza com soro, curativo com alginato..."
                     value={newEvo.desc}
                     onChange={e => setNewEvo({...newEvo, desc: e.target.value})}
                   />
                 </div>
-                <div className="form-group mb-4">
-                  <label className="form-label"><Camera size={14} style={{display:'inline', marginRight:'4px'}}/> URL da Foto (Opcional - Simulação)</label>
-                  <input 
-                    type="url" 
-                    className="form-input" 
-                    placeholder="https://exemplo.com/foto.jpg"
-                    value={newEvo.foto}
-                    onChange={e => setNewEvo({...newEvo, foto: e.target.value})}
+                
+                <div className="form-group mb-3">
+                  <label className="form-label">Materiais Usados</label>
+                  <textarea 
+                    className="form-textarea" 
+                    style={{ minHeight: '60px' }}
+                    placeholder="Ex: 2 gazes, 1 atadura, pomada cicatrizante..."
+                    value={newEvo.materialUsado || ''}
+                    onChange={e => setNewEvo({...newEvo, materialUsado: e.target.value})}
                   />
                 </div>
+
+                <div className="pd-details-grid mb-3">
+                  <div className="form-group">
+                    <label className="form-label">Custo do Material (R$)</label>
+                    <input 
+                      type="number" step="0.01" 
+                      className="form-input" 
+                      placeholder="Ex: 30.00"
+                      value={newEvo.custoMaterial || ''}
+                      onChange={e => setNewEvo({...newEvo, custoMaterial: e.target.value})}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Valor Cobrado (R$)</label>
+                    <input 
+                      type="number" step="0.01" 
+                      className="form-input" 
+                      placeholder="Ex: 150.00"
+                      value={newEvo.valorCobrado || ''}
+                      onChange={e => setNewEvo({...newEvo, valorCobrado: e.target.value})}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label">Status</label>
+                    <select 
+                      className="form-input" 
+                      value={newEvo.pago || 'Pendente'}
+                      onChange={e => setNewEvo({...newEvo, pago: e.target.value})}
+                    >
+                      <option value="Pendente">Pendente</option>
+                      <option value="Pago">Pago</option>
+                    </select>
+                  </div>
+                </div>
+
                 <div className="flex-end gap-2">
                   <button type="button" className="btn btn-ghost btn-sm" onClick={() => setShowAddEvo(false)}>Cancelar</button>
-                  <button type="submit" className="btn btn-primary btn-sm">Salvar Evolução</button>
+                  <button type="submit" className="btn btn-primary btn-sm">Salvar Registro</button>
                 </div>
               </form>
             )}
@@ -147,22 +187,57 @@ export default function PatientDetail() {
                 <div className="empty-state">
                   <div className="empty-state-icon">📋</div>
                   <h3>Nenhuma evolução registrada</h3>
-                  <p>Adicione a primeira evolução para acompanhar o tratamento.</p>
+                  <p>Adicione o primeiro atendimento para acompanhar o tratamento e lucros.</p>
                 </div>
               ) : (
                 evolutions.map((evo, i) => {
                   const d = new Date(evo.createdAt);
+                  const cobrado = parseFloat(evo.valorCobrado) || 0;
+                  const custo = parseFloat(evo.custoMaterial) || 0;
+                  const lucro = cobrado - custo;
+                  
                   return (
                     <div key={evo.id} className="evo-item">
                       <div className="evo-marker" />
                       <div className="evo-content">
                         <div className="evo-header">
-                          <span className="evo-date">{d.toLocaleDateString('pt-BR')}</span>
-                          <span className="evo-time">{d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</span>
+                          <div>
+                            <span className="evo-date">{d.toLocaleDateString('pt-BR')}</span>
+                            <span className="evo-time">{d.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</span>
+                          </div>
+                          {evo.pago === 'Pago' ? (
+                            <span className="badge badge-success">Pago</span>
+                          ) : (
+                            <span className="badge badge-warning">Pendente</span>
+                          )}
                         </div>
-                        <div className="evo-desc">{evo.desc}</div>
+                        <div className="evo-desc"><strong>Tratamento:</strong> {evo.desc}</div>
+                        
+                        {evo.materialUsado && (
+                          <div className="evo-desc" style={{ marginTop: '8px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                            <strong>Materiais:</strong> {evo.materialUsado}
+                          </div>
+                        )}
+
+                        {(cobrado > 0 || custo > 0) && (
+                          <div style={{ marginTop: '12px', padding: '12px', background: '#f8fafc', borderRadius: '8px', display: 'flex', gap: '20px', fontSize: '13px' }}>
+                            <div>
+                              <span style={{color: 'var(--text-secondary)'}}>Cobrado:</span>
+                              <strong style={{display: 'block', color: 'var(--text-primary)'}}>R$ {cobrado.toFixed(2)}</strong>
+                            </div>
+                            <div>
+                              <span style={{color: 'var(--text-secondary)'}}>Custo Mat.:</span>
+                              <strong style={{display: 'block', color: 'var(--text-error)'}}>- R$ {custo.toFixed(2)}</strong>
+                            </div>
+                            <div style={{borderLeft: '1px solid #e2e8f0', paddingLeft: '20px'}}>
+                              <span style={{color: 'var(--text-secondary)'}}>Lucro Real:</span>
+                              <strong style={{display: 'block', color: 'var(--primary)', fontSize: '15px'}}>R$ {lucro.toFixed(2)}</strong>
+                            </div>
+                          </div>
+                        )}
+
                         {evo.foto && (
-                          <div className="evo-photo">
+                          <div className="evo-photo" style={{ marginTop: '12px' }}>
                             <img src={evo.foto} alt="Evolução" onError={(e) => e.target.style.display='none'} />
                           </div>
                         )}

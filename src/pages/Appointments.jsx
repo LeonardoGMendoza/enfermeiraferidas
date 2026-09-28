@@ -1,16 +1,19 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, User, CheckCircle, XCircle, Activity } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, User, CheckCircle, XCircle } from 'lucide-react';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import './Appointments.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Appointments() {
   const [appointments, setAppointments] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [loading, setLoading] = useState(true);
 
+  // Fetch real appointments (no mocks!)
   useEffect(() => {
-    // Buscar agendamentos reais do backend no futuro
-    // Por enquanto, usaremos mock se o backend falhar
     const fetchAppointments = async () => {
       try {
         const res = await fetch(`${API_BASE_URL}/api/agendamentos`);
@@ -18,82 +21,129 @@ export default function Appointments() {
           const data = await res.json();
           setAppointments(data);
         } else {
-          // Fallback mock
-          setAppointments([
-            { id: 1, paciente: 'José Carlos Silva', data: new Date().toISOString().split('T')[0], hora: '14:00', status: 'confirmado', servico: 'Troca de Curativo', endereco: 'Moema, SP' },
-            { id: 2, paciente: 'Maria Aparecida Souza', data: new Date().toISOString().split('T')[0], hora: '16:30', status: 'pendente', servico: 'Avaliação de Ferida', endereco: 'Bela Vista, SP' }
-          ]);
+          setAppointments([]);
         }
       } catch (err) {
-        setAppointments([
-          { id: 1, paciente: 'José Carlos Silva', data: new Date().toISOString().split('T')[0], hora: '14:00', status: 'confirmado', servico: 'Troca de Curativo', endereco: 'Moema, SP' },
-          { id: 2, paciente: 'Maria Aparecida Souza', data: new Date().toISOString().split('T')[0], hora: '16:30', status: 'pendente', servico: 'Avaliação de Ferida', endereco: 'Bela Vista, SP' }
-        ]);
+        // Sem mock, array vazio em caso de falha de conexão
+        setAppointments([]);
       } finally {
         setLoading(false);
       }
     };
-    
     fetchAppointments();
-  }, []);
+  }, [currentDate]);
 
-  return (
-    <div className="dashboard animate-fadeIn">
-      <div className="page-header">
-        <div>
-          <h1 className="page-title">Agendamentos</h1>
-          <p className="page-subtitle">Gerencie suas visitas e consultas</p>
-        </div>
-        <button className="btn btn-primary">
-          <Calendar size={16} /> Novo Agendamento
-        </button>
-      </div>
+  const nextMonth = () => setCurrentDate(addMonths(currentDate, 1));
+  const prevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+  const onDateClick = day => setSelectedDate(day);
 
-      <div className="card dash-card" style={{ padding: '24px' }}>
-        <h2 className="section-title mb-4">Próximas Visitas</h2>
-        
-        {loading ? (
-          <p>Carregando agendamentos...</p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {appointments.map(appt => (
-              <div key={appt.id} className="card p-4 border border-slate-700 bg-slate-800">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="font-bold text-lg flex items-center gap-2">
-                    <User size={18} className="text-primary" /> {appt.paciente}
-                  </h3>
-                  <span className={`badge ${appt.status === 'confirmado' ? 'badge-success' : 'badge-warning'}`}>
-                    {appt.status.toUpperCase()}
-                  </span>
-                </div>
-                
-                <div className="text-sm text-gray-400 space-y-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <Calendar size={14} /> {appt.data}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock size={14} /> {appt.hora}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Activity size={14} /> {appt.servico}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin size={14} /> {appt.endereco}
-                  </div>
-                </div>
+  // Calendar rendering logic
+  const monthStart = startOfMonth(currentDate);
+  const monthEnd = endOfMonth(monthStart);
+  const startDate = startOfWeek(monthStart);
+  const endDate = endOfWeek(monthEnd);
+  
+  const dateFormat = 'dd';
+  const rows = [];
+  let days = [];
+  let day = startDate;
+  let formattedDate = '';
 
-                <div className="flex gap-2">
-                  <button className="btn btn-success flex-1 py-1 text-sm flex justify-center items-center gap-1">
-                    <CheckCircle size={14} /> Concluir
-                  </button>
-                  <button className="btn btn-danger flex-1 py-1 text-sm flex justify-center items-center gap-1">
-                    <XCircle size={14} /> Cancelar
-                  </button>
-                </div>
+  while (day <= endDate) {
+    for (let i = 0; i < 7; i++) {
+      formattedDate = format(day, dateFormat);
+      const cloneDay = day;
+      
+      // Filter appointments for this day
+      const dayAppts = appointments.filter(a => a.data && isSameDay(parseISO(a.data), cloneDay));
+
+      days.push(
+        <div
+          className={`cal-cell ${!isSameMonth(day, monthStart) ? 'disabled' : isSameDay(day, selectedDate) ? 'selected' : ''}`}
+          key={day}
+          onClick={() => onDateClick(parseISO(cloneDay.toISOString()))}
+        >
+          <span className="cal-number">{formattedDate}</span>
+          <div className="cal-events">
+            {dayAppts.map(a => (
+              <div key={a.id} className={`cal-event-pill ${a.status === 'confirmado' ? 'bg-success' : 'bg-warning'}`} title={`${a.hora} - ${a.paciente}`}>
+                {a.hora} {a.paciente?.split(' ')[0]}
               </div>
             ))}
           </div>
-        )}
+        </div>
+      );
+      day = addDays(day, 1);
+    }
+    rows.push(<div className="cal-row" key={day}>{days}</div>);
+    days = [];
+  }
+
+  const selectedAppts = appointments.filter(a => a.data && isSameDay(parseISO(a.data), selectedDate));
+
+  return (
+    <div className="appointments-page animate-fadeIn">
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Agenda</h1>
+          <p className="page-subtitle">Planejamento de Visitas e Plantões</p>
+        </div>
+        <button className="btn btn-primary">
+          <CalendarIcon size={16} /> Novo Agendamento
+        </button>
+      </div>
+
+      <div className="agenda-layout">
+        <div className="card cal-container">
+          <div className="cal-header">
+            <button className="icon-btn" onClick={prevMonth}><ChevronLeft size={20}/></button>
+            <h2 className="cal-month">{format(currentDate, 'MMMM yyyy', { locale: ptBR })}</h2>
+            <button className="icon-btn" onClick={nextMonth}><ChevronRight size={20}/></button>
+          </div>
+          
+          <div className="cal-days-header">
+            {['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(d => (
+              <div key={d} className="cal-day-name">{d}</div>
+            ))}
+          </div>
+          
+          <div className="cal-body">
+            {rows}
+          </div>
+        </div>
+
+        <div className="card cal-details">
+          <h3 className="cal-details-title">
+            <CalendarIcon size={16} style={{display:'inline', marginRight:'8px'}}/>
+            {format(selectedDate, "dd 'de' MMMM", { locale: ptBR })}
+          </h3>
+          
+          <div className="cal-details-list">
+            {loading ? (
+               <p className="text-muted">Carregando...</p>
+            ) : selectedAppts.length === 0 ? (
+              <div className="empty-state">
+                <p>Nenhum paciente agendado para este dia.</p>
+              </div>
+            ) : (
+              selectedAppts.map(appt => (
+                <div key={appt.id} className="appt-card">
+                  <div className="appt-card-header">
+                    <span className="appt-time"><Clock size={14}/> {appt.hora}</span>
+                    <span className={`badge ${appt.status === 'confirmado' ? 'badge-success' : 'badge-warning'}`}>{appt.status}</span>
+                  </div>
+                  <div className="appt-patient"><User size={14}/> {appt.paciente}</div>
+                  <div className="appt-service">{appt.servico}</div>
+                  
+                  <div className="appt-actions">
+                    <button className="btn btn-success btn-sm"><CheckCircle size={14}/> Concluir</button>
+                    <button className="btn btn-danger btn-sm"><XCircle size={14}/> Cancelar</button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

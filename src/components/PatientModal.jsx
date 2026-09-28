@@ -48,20 +48,13 @@ export default function PatientModal({ patient, homecares, onSave, onClose }) {
               <label className="form-label">Endereço Completo</label>
               <input required name="endereco" className="form-input" value={formData.endereco} onChange={handleChange} />
             </div>
-            <div className="form-group">
+            <div className="form-group" style={{ gridColumn: 'span 2' }}>
               <label className="form-label">Bairro</label>
               <input required name="bairro" className="form-input" value={formData.bairro} onChange={handleChange} />
             </div>
-            <div className="grid-2">
-              <div className="form-group">
-                <label className="form-label">Lat (Mapa)</label>
-                <input name="lat" type="number" step="any" className="form-input" placeholder="-23.5505" value={formData.lat} onChange={handleChange} />
-              </div>
-              <div className="form-group">
-                <label className="form-label">Lng (Mapa)</label>
-                <input name="lng" type="number" step="any" className="form-input" placeholder="-46.6333" value={formData.lng} onChange={handleChange} />
-              </div>
-            </div>
+            {/* LAT e LNG estão ocultos, são gerados automaticamente pelo sistema de rotas no futuro */}
+            <input type="hidden" name="lat" value={formData.lat} />
+            <input type="hidden" name="lng" value={formData.lng} />
           </div>
 
           <hr style={{ border: 'none', borderTop: '1px solid var(--border)', margin: '24px 0' }} />

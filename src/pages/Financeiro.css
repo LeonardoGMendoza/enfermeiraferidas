@@ -1,0 +1,143 @@
+.financeiro-page {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.fin-header {
+  margin-bottom: 24px;
+}
+
+.fin-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.fin-subtitle {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* Cards */
+.fin-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.fin-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.fin-card.predictive {
+  background: #1e1b4b; /* Dark purple like Serenya */
+  border: none;
+  color: white;
+}
+
+.fin-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.fin-card.predictive .fin-card-header {
+  color: #a5b4fc;
+}
+
+.fin-card-value {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.fin-card-value.success { color: var(--success); }
+.fin-card-value.error { color: var(--error); }
+.fin-card-value.primary { color: var(--primary); }
+.fin-card.predictive .fin-card-value { color: #f472b6; /* Pink text */ }
+
+.fin-card-sub {
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--text-muted);
+}
+.fin-card.predictive .fin-card-sub {
+  color: #a5b4fc;
+}
+
+/* Charts Grid */
+.fin-charts-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.fin-chart-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.fin-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* Table */
+.fin-table-wrapper {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.fin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.fin-table th, .fin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+}
+
+.fin-table th {
+  background: var(--bg-secondary);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.fin-table tr:last-child td {
+  border-bottom: none;
+}
+
+@media (max-width: 1024px) {
+  .fin-cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .fin-charts-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .fin-cards-grid { grid-template-columns: 1fr; }
+}

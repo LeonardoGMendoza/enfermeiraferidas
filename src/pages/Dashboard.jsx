@@ -4,7 +4,7 @@ import { Users, Building2, Calendar, TrendingUp, Clock, MapPin, ChevronRight, Ac
 import { getPatients, getHomecares, getAppointments } from '../data';
 import './Dashboard.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
 export default function Dashboard() {
   const [patients, setPatients] = useState([]);
