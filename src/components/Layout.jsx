@@ -94,9 +94,9 @@ export default function Layout() {
             <button
               className="btn btn-ghost btn-sm text-danger"
               onClick={() => { localStorage.clear(); navigate('/login'); }}
-              title="Sair do Sistema e Limpar Dados"
+              title="Sair do Sistema"
             >
-              {sidebarOpen ? 'Sair e Zerar Banco' : 'X'}
+              {sidebarOpen ? 'Sair' : 'X'}
             </button>
           </div>
         </div>
