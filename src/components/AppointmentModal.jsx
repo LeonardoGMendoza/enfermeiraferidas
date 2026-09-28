@@ -1,48 +1,43 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Save } from 'lucide-react';
 
-export default function AppointmentModal({ appointment, patients, onSave, onClose }) {
+export default function AppointmentModal({ selectedDate, onClose, onSave, patients }) {
   const [formData, setFormData] = useState({
-    patientId: '', data: '', hora: '', tipo: 'Curativo', status: 'agendado'
+    paciente: '',
+    data: selectedDate ? selectedDate.toISOString().split('T')[0] : '',
+    hora: '',
+    servico: 'Avaliação',
+    endereco: '',
+    status: 'pendente'
   });
-
-  useEffect(() => {
-    if (appointment) setFormData({ ...appointment });
-  }, [appointment]);
 
   const handleChange = (e) => setFormData(p => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const p = patients.find(pat => pat.id === formData.patientId);
-    if (!p) return alert('Selecione um paciente');
-
-    onSave({
-      ...formData,
-      patientNome: p.nome,
-      bairro: p.bairro
-    });
+    onSave(formData);
   };
 
   return (
     <div className="modal-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className="modal">
         <div className="modal-header">
-          <h2 className="modal-title">{appointment ? 'Editar Agendamento' : 'Novo Agendamento'}</h2>
+          <h2 className="modal-title">Novo Agendamento</h2>
           <button className="modal-close" onClick={onClose}><X size={20} /></button>
         </div>
         <form onSubmit={handleSubmit}>
-          <div className="form-group" style={{ marginBottom: '16px' }}>
+          <div className="form-group mb-4">
             <label className="form-label">Paciente</label>
-            <select required name="patientId" className="form-select" value={formData.patientId} onChange={handleChange}>
-              <option value="">Selecione...</option>
-              {patients.filter(p => p.status === 'ativo').map(p => (
-                <option key={p.id} value={p.id}>{p.nome} — {p.bairro}</option>
+            <select required name="paciente" className="form-select" value={formData.paciente} onChange={handleChange}>
+              <option value="">Selecione o paciente...</option>
+              {patients && patients.map(p => (
+                <option key={p.id} value={p.nome}>{p.nome}</option>
               ))}
+              <option value="Outro (Não cadastrado)">Outro (Não cadastrado)</option>
             </select>
           </div>
           
-          <div className="grid-2" style={{ marginBottom: '16px' }}>
+          <div className="grid-2 mb-4">
             <div className="form-group">
               <label className="form-label">Data</label>
               <input type="date" required name="data" className="form-input" value={formData.data} onChange={handleChange} />
@@ -53,28 +48,19 @@ export default function AppointmentModal({ appointment, patients, onSave, onClos
             </div>
           </div>
 
-          <div className="grid-2" style={{ marginBottom: '16px' }}>
-            <div className="form-group">
-              <label className="form-label">Tipo de Visita</label>
-              <select required name="tipo" className="form-select" value={formData.tipo} onChange={handleChange}>
-                <option value="Curativo">Curativo</option>
-                <option value="Avaliação Inicial">Avaliação Inicial</option>
-                <option value="Acompanhamento">Acompanhamento</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Status</label>
-              <select name="status" className="form-select" value={formData.status} onChange={handleChange}>
-                <option value="agendado">Agendado</option>
-                <option value="realizado">Realizado</option>
-                <option value="cancelado">Cancelado</option>
-              </select>
-            </div>
+          <div className="form-group mb-4">
+            <label className="form-label">Serviço / Procedimento</label>
+            <input required name="servico" className="form-input" placeholder="Ex: Troca de Curativo, Avaliação" value={formData.servico} onChange={handleChange} />
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '32px' }}>
+          <div className="form-group mb-4">
+            <label className="form-label">Endereço da Visita</label>
+            <input required name="endereco" className="form-input" placeholder="Ex: Rua das Flores, 123" value={formData.endereco} onChange={handleChange} />
+          </div>
+
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
             <button type="button" className="btn btn-ghost" onClick={onClose}>Cancelar</button>
-            <button type="submit" className="btn btn-primary"><Save size={16} /> Salvar</button>
+            <button type="submit" className="btn btn-primary"><Save size={16} /> Agendar Visita</button>
           </div>
         </form>
       </div>
