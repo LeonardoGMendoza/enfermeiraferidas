@@ -100,9 +100,11 @@ function blocoCanal({ info, ontem, m }) {
 
 function textoNumeros(hoje, canais) {
   const mostrar = canais.filter(ativo);
-  const lista = mostrar.length ? mostrar : canais.slice(0, 1);
   const partes = [`📊 *Enfermeira Feridas — Anúncios* (${dataBR(hoje)})`, ''];
-  lista.forEach((c, i) => { if (i) partes.push(''); partes.push(blocoCanal(c)); });
+  canais.forEach((c, i) => {
+    if (i) partes.push('');
+    partes.push(ativo(c) ? blocoCanal(c) : `*${c.info.nome}*\nAinda sem visitas nem investimento lançado nos últimos 30 dias.`);
+  });
   if (mostrar.length > 1) {
     const inv = mostrar.reduce((s, c) => s + Number(c.m.investido || 0), 0);
     const cont = mostrar.reduce((s, c) => s + c.m.contatos, 0);
