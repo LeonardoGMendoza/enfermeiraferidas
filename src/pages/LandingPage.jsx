@@ -107,7 +107,7 @@ const TESTIMONIALS = [
 
 const AREA_BAIRROS = [
   'São Paulo — Zona Leste', 'São Paulo — Itaquera', 'São Paulo — Penha', 'São Paulo — Mooca',
-  'Foz do Iguaçu — Centro', 'Foz do Iguaçu — Vila A', 'Foz do Iguaçu — Jardim América', 'Foz do Iguaçu — Três Lagoas',
+  'Foz do Iguaçu — em breve',
 ];
 
 export default function LandingPage() {
@@ -210,7 +210,7 @@ export default function LandingPage() {
           </h1>
           <p className="hero-subtitle">
             Enfermeira especialista em tratamento de feridas complexas, úlceras e curativos avançados.
-            Atendimento domiciliar em São Paulo e Foz do Iguaçu.
+            Atendimento domiciliar em São Paulo · Em breve em Foz do Iguaçu.
           </p>
           <div className="hero-stats">
             <div className="hero-stat">
@@ -224,8 +224,8 @@ export default function LandingPage() {
             </div>
             <div className="hero-stat-divider" />
             <div className="hero-stat">
-              <span className="hero-stat-num">SP · Foz</span>
-              <span className="hero-stat-label">São Paulo e Foz do Iguaçu</span>
+              <span className="hero-stat-num">SP</span>
+              <span className="hero-stat-label">Em breve em Foz</span>
             </div>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function LandingPage() {
             <div className="about-badge-grid">
               {[
                 { icon: '🎓', label: 'Curso de Feridas', sub: 'Especialização' },
-                { icon: '🌎', label: 'São Paulo', sub: 'e Foz do Iguaçu' },
+                { icon: '🌎', label: 'São Paulo', sub: 'Em breve em Foz' },
                 { icon: '📋', label: 'Relatórios', sub: 'Mensais' },
                 { icon: '🚗', label: 'Atendimento', sub: 'Domiciliar' },
               ].map((b, i) => (
@@ -283,7 +283,7 @@ export default function LandingPage() {
             </h2>
             <p className="about-text">
               Sou enfermeira com especialização em cuidados de feridas complexas, com atendimento
-              domiciliar em <strong>São Paulo</strong> e <strong>Foz do Iguaçu</strong>.
+              domiciliar em <strong>São Paulo</strong> — e em breve também em <strong>Foz do Iguaçu</strong>.
               Minha missão é proporcionar tratamento de qualidade hospitalar no conforto do lar.
             </p>
             <p className="about-text">
@@ -314,7 +314,7 @@ export default function LandingPage() {
         </div>
         <h2 className="section-title">Área de Atuação</h2>
         <p className="section-sub">
-          Atendimento domiciliar especializado em <strong>São Paulo</strong> e <strong>Foz do Iguaçu</strong>
+          Atendimento domiciliar especializado em <strong>São Paulo</strong> · Em breve em <strong>Foz do Iguaçu</strong>
         </p>
         <div className="area-wrapper">
           <div className="area-map-card card">
@@ -324,7 +324,7 @@ export default function LandingPage() {
               <input
                 type="text"
                 className="area-map-input"
-                placeholder="Ex: Rua das Flores, 123 - São Paulo ou Foz do Iguaçu"
+                placeholder="Ex: Rua das Flores, 123 - São Paulo"
                 value={mapQuery}
                 onChange={e => setMapQuery(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleMapSearch()}
@@ -335,13 +335,13 @@ export default function LandingPage() {
             </div>
             {showCoverageMessage && (
               <div className="coverage-success-msg animate-fadeIn" style={{ padding: '12px', backgroundColor: 'var(--success)', color: 'white', borderRadius: '8px', textAlign: 'center', fontWeight: 'bold' }}>
-                ✅ Sim! Nós atendemos nesta região.
+                📍 Endereço encontrado! Fale conosco pelo WhatsApp para confirmar o atendimento.
               </div>
             )}
             <div className="area-map-frame">
               <iframe
                 src={mapSrc}
-                title="Área de atendimento — São Paulo e Foz do Iguaçu"
+                title="Área de atendimento — São Paulo"
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
@@ -417,7 +417,7 @@ export default function LandingPage() {
             <h2 className="hc-cta-title">Redes de Farmácias e Clínicas</h2>
             <p className="hc-cta-text">
               Ampliamos o atendimento aos seus clientes! Estabelecemos parcerias com homecares,
-              farmácias e clínicas especializadas em São Paulo e Foz do Iguaçu.
+              farmácias e clínicas especializadas em São Paulo — e em breve em Foz do Iguaçu.
             </p>
             <div className="hc-cta-benefits">
               <div className="hc-benefit">
@@ -572,11 +572,11 @@ export default function LandingPage() {
       <section className="section section-alt" id="contato">
         <div className="section-label">Contato</div>
         <h2 className="section-title">Agende sua Avaliação</h2>
-        <p className="section-sub">Atendemos em São Paulo e Foz do Iguaçu</p>
+        <p className="section-sub">Atendimento em São Paulo · Em breve em Foz do Iguaçu</p>
         <div className="contact-grid">
           {[
             { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora' },
-            { icon: '📍', title: 'Área de Atendimento', desc: 'São Paulo (SP) e Foz do Iguaçu (PR)' },
+            { icon: '📍', title: 'Área de Atendimento', desc: 'São Paulo (SP) · Em breve em Foz do Iguaçu (PR)' },
             { icon: '⏰', title: 'Horários', desc: 'Segunda a Sábado, 7h às 19h. Emergências: consultar' },
           ].map((c, i) => (
             <div key={i} className="contact-card card">
@@ -595,7 +595,7 @@ export default function LandingPage() {
             <div className="lh-logo-icon"><Activity size={18} /></div>
             <span className="lh-logo-name">Enfermeira Feridas</span>
           </div>
-          <p className="footer-text">Especialista em cuidados de feridas — São Paulo e Foz do Iguaçu</p>
+          <p className="footer-text">Especialista em cuidados de feridas — Atendimento em São Paulo · Em breve em Foz do Iguaçu</p>
           <p className="footer-copy">© {new Date().getFullYear()} Todos os direitos reservados</p>
         </div>
       </footer>
