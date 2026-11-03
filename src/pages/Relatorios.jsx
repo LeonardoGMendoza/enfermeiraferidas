@@ -140,7 +140,7 @@ function Rosca({ titulo, dados, unidade }) {
             <ResponsiveContainer width="100%" height={190}>
               <PieChart>
                 <Pie data={dados} dataKey="total" nameKey="nome" innerRadius="62%" outerRadius="92%"
-                     startAngle={90} endAngle={-270} stroke="#ffffff" strokeWidth={2} isAnimationActive={false}>
+                     startAngle={90} endAngle={-270} stroke="#ffffff" strokeWidth={dados.length > 1 ? 2 : 0} isAnimationActive={false}>
                   {dados.map(d => <Cell key={d.nome} fill={d.cor} />)}
                 </Pie>
                 <Tooltip content={<TooltipPizza />} />
@@ -217,7 +217,7 @@ function Contatos({ t }) {
             <div key={i.nome} className="bi-barra-linha" title={`${i.nome}: ${num(i.valor)}`}>
               <span className="bi-barra-nome">{i.nome}</span>
               <div className="bi-barra-trilho">
-                <div className="bi-barra" style={{ width: `${(i.valor / max) * 100}%` }} />
+                {i.valor > 0 && <div className="bi-barra" style={{ width: `${(i.valor / max) * 100}%` }} />}
               </div>
               <strong className="bi-barra-valor">{num(i.valor)}</strong>
             </div>
