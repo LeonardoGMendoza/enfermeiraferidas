@@ -162,21 +162,6 @@ app.post('/api/paciente/avisar-pix', async (req, res) => {
   }
 });
 
-// Create initial admin user (for testing purposes, run once)
-app.post('/api/setup-admin', async (req, res) => {
-  try {
-    const { email, password, nome } = req.body;
-    const hash = await bcrypt.hash(password, 10);
-    await pool.query(
-      'INSERT INTO admin_users (email, password_hash, nome) VALUES ($1, $2, $3)',
-      [email, hash, nome]
-    );
-    res.json({ message: 'Admin criado com sucesso' });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro ao criar admin ou usuário já existe' });
-  }
-});
-
 // ==========================================
 // WHATSAPP & N8N WEBHOOKS
 // ==========================================
