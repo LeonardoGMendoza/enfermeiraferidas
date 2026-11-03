@@ -1,10 +1,10 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, useContext, createContext } from 'react';
 import {
-  ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell,
+  ResponsiveContainer, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell,
 } from 'recharts';
 import {
   BarChart3, MousePointerClick, MessageCircle, Percent, UserCheck, Wallet, TrendingUp,
-  ArrowUpRight, ArrowDownRight, Minus, Table2, RefreshCw,
+  ArrowUpRight, ArrowDownRight, Minus, Table2, RefreshCw, Moon, Sun, Maximize2, Minimize2, Target, Pencil,
 } from 'lucide-react';
 import { authFetch } from '../api';
 import './Relatorios.css';
@@ -15,13 +15,29 @@ const OUTROS = '#a3a29c';
 const SEQ = ['#cde2fb', '#9ec5f4', '#6da7ec', '#3987e5', '#256abf', '#184f95', '#0d366b'];
 const FUNIL = ['#86b6ef', '#5598e7', '#2a78d6', '#1c5cab', '#0d366b'];
 
+// tema escuro: mesmas 5 cores, nos tons validados para o fundo azul-marinho #111a2e
+// (validador: contraste >= 3:1, daltonismo ΔE 8,4, visão normal ΔE 19,3 — tudo passa)
+const TEMAS = {
+  claro: {
+    serie: SERIE, outros: OUTROS, seq: SEQ, funil: FUNIL.slice(1),
+    celulaVazia: '#f4f4f1', grade: '#ecebe7', eixo: '#6b6a65', cursor: '#b9b8b2', superficie: '#ffffff', trilho: '#f4f4f1',
+  },
+  escuro: {
+    serie: ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181'], outros: '#8a8f99',
+    seq: ['#184f95', '#1c5cab', '#256abf', '#3987e5', '#5598e7', '#86b6ef', '#cde2fb'],
+    funil: ['#86b6ef', '#5598e7', '#3987e5', '#256abf'],
+    celulaVazia: '#1a2540', grade: 'rgba(148,170,220,0.10)', eixo: '#9aa3b5', cursor: '#4a5878', superficie: '#111a2e', trilho: '#1a2540',
+  },
+};
+const TemaCtx = createContext(TEMAS.claro);
+
 // cada origem tem cor FIXA (a cor segue a origem, não a posição)
 const ORIGEM = {
-  google: { label: 'Google Ads', cor: SERIE[0], ordem: 0 },
-  direto: { label: 'Direto', cor: SERIE[1], ordem: 1 },
-  google_organico: { label: 'Google (busca)', cor: SERIE[2], ordem: 2 },
-  indicacao: { label: 'Indicação', cor: SERIE[3], ordem: 3 },
-  facebook: { label: 'Facebook', cor: SERIE[4], ordem: 4 },
+  google: { label: 'Google Ads', slot: 0, ordem: 0 },
+  direto: { label: 'Direto', slot: 1, ordem: 1 },
+  google_organico: { label: 'Google (busca)', slot: 2, ordem: 2 },
+  indicacao: { label: 'Indicação', slot: 3, ordem: 3 },
+  facebook: { label: 'Facebook', slot: 4, ordem: 4 },
 };
 const NOMES_OUTROS = {
   instagram: 'Instagram', site: 'Site', whatsapp: 'WhatsApp', outro: 'Outro', nao_informado: 'Não informado',
@@ -44,11 +60,11 @@ function derivados(t) {
   };
 }
 
-function agruparOrigens(linhas) {
-  const fixas = [], outros = { nome: 'Outros', total: 0, cor: OUTROS, detalhe: [] };
+function agruparOrigens(linhas, tema = TEMAS.claro) {
+  const fixas = [], outros = { nome: 'Outros', total: 0, cor: tema.outros, detalhe: [] };
   for (const r of linhas || []) {
     const o = ORIGEM[r.origem];
-    if (o) fixas.push({ nome: o.label, total: r.total, cor: o.cor, ordem: o.ordem });
+    if (o) fixas.push({ nome: o.label, total: r.total, cor: tema.serie[o.slot], ordem: o.ordem });
     else { outros.total += r.total; outros.detalhe.push(NOMES_OUTROS[r.origem] || r.origem); }
   }
   fixas.sort((a, b) => a.ordem - b.ordem);
@@ -130,6 +146,7 @@ function TooltipPizza({ active, payload }) {
 }
 
 function Rosca({ titulo, dados, unidade }) {
+  const tema = useContext(TemaCtx);
   const total = dados.reduce((s, d) => s + d.total, 0);
   return (
     <div className="bi-card">
@@ -140,7 +157,7 @@ function Rosca({ titulo, dados, unidade }) {
             <ResponsiveContainer width="100%" height={190}>
               <PieChart>
                 <Pie data={dados} dataKey="total" nameKey="nome" innerRadius="62%" outerRadius="92%"
-                     startAngle={90} endAngle={-270} stroke="#ffffff" strokeWidth={dados.length > 1 ? 2 : 0} isAnimationActive={false}>
+                     startAngle={90} endAngle={-270} stroke={tema.superficie} strokeWidth={dados.length > 1 ? 2 : 0} isAnimationActive={false}>
                   {dados.map(d => <Cell key={d.nome} fill={d.cor} />)}
                 </Pie>
                 <Tooltip content={<TooltipPizza />} />
@@ -167,6 +184,7 @@ function Rosca({ titulo, dados, unidade }) {
 }
 
 function Funil({ t }) {
+  const tema = useContext(TemaCtx);
   const etapas = [
     { nome: 'Visitas no site', valor: t.visitas },
     { nome: 'Contatos', valor: t.contatos },
@@ -188,7 +206,7 @@ function Funil({ t }) {
                   <strong>{num(e.valor)}</strong>
                 </div>
                 <div className="bi-funil-trilho">
-                  <div className="bi-funil-barra" style={{ width: `${Math.max((e.valor / max) * 100, e.valor ? 2 : 0)}%`, background: FUNIL[i + 1] }}
+                  <div className="bi-funil-barra" style={{ width: `${Math.max((e.valor / max) * 100, e.valor ? 2 : 0)}%`, background: tema.funil[i] }}
                        title={`${e.nome}: ${num(e.valor)}`} />
                 </div>
                 {conv !== null && <div className="bi-funil-conv">{pct(conv)} da etapa anterior</div>}
@@ -202,6 +220,7 @@ function Funil({ t }) {
 }
 
 function Contatos({ t }) {
+  const tema = useContext(TemaCtx);
   const itens = [
     { nome: 'WhatsApp', valor: t.whatsapp },
     { nome: 'Ligação', valor: t.telefone },
@@ -217,7 +236,7 @@ function Contatos({ t }) {
             <div key={i.nome} className="bi-barra-linha" title={`${i.nome}: ${num(i.valor)}`}>
               <span className="bi-barra-nome">{i.nome}</span>
               <div className="bi-barra-trilho">
-                {i.valor > 0 && <div className="bi-barra" style={{ width: `${(i.valor / max) * 100}%` }} />}
+                {i.valor > 0 && <div className="bi-barra" style={{ width: `${(i.valor / max) * 100}%`, background: tema.serie[0] }} />}
               </div>
               <strong className="bi-barra-valor">{num(i.valor)}</strong>
             </div>
@@ -229,6 +248,8 @@ function Contatos({ t }) {
 }
 
 function MapaCalor({ linhas }) {
+  const tema = useContext(TemaCtx);
+  const SEQ = tema.seq;
   const mapa = useMemo(() => {
     const m = {};
     for (const r of linhas || []) m[`${r.dow}-${r.hora}`] = r.total;
@@ -237,7 +258,7 @@ function MapaCalor({ linhas }) {
   const max = Math.max(0, ...Object.values(mapa));
   const [foco, setFoco] = useState(null);
   const horas = Array.from({ length: 24 }, (_, h) => h);
-  const cor = (v) => (!v ? '#f4f4f1' : SEQ[Math.min(SEQ.length - 1, Math.floor((v / max) * (SEQ.length - 1) + 0.0001))]);
+  const cor = (v) => (!v ? tema.celulaVazia : SEQ[Math.min(SEQ.length - 1, Math.floor((v / max) * (SEQ.length - 1) + 0.0001))]);
   return (
     <div className="bi-card bi-card-largo">
       <div className="bi-card-titulo">
@@ -274,6 +295,53 @@ function MapaCalor({ linhas }) {
   );
 }
 
+// medidor tipo velocímetro: contatos do período contra a meta
+function Medidor({ valor }) {
+  const tema = useContext(TemaCtx);
+  const [meta, setMeta] = useState(() => {
+    try { return parseInt(localStorage.getItem('ef_meta_contatos'), 10) || 10; } catch { return 10; }
+  });
+  const [editando, setEditando] = useState(false);
+  const salvarMeta = (v) => {
+    const n = Math.max(1, parseInt(v, 10) || 1);
+    setMeta(n);
+    try { localStorage.setItem('ef_meta_contatos', String(n)); } catch { /* navegador sem armazenamento */ }
+  };
+  const feito = Math.min(valor, meta);
+  const pctMeta = meta ? Math.round((valor / meta) * 100) : 0;
+  const fatias = [{ nome: 'feito', v: feito }, { nome: 'falta', v: Math.max(meta - feito, 0) }];
+  return (
+    <div className="bi-card bi-medidor">
+      <div className="bi-card-titulo">
+        <span><Target size={14} /> Meta de contatos</span>
+        <button type="button" className="bi-meta-editar" onClick={() => setEditando(e => !e)} title="Mudar a meta">
+          <Pencil size={12} /> meta {meta}
+        </button>
+      </div>
+      {editando && (
+        <input className="bi-meta-input" type="number" min="1" defaultValue={meta} autoFocus
+               onBlur={(e) => { salvarMeta(e.target.value); setEditando(false); }}
+               onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }} />
+      )}
+      <div className="bi-medidor-grafico">
+        <ResponsiveContainer width="100%" height={150}>
+          <PieChart>
+            <Pie data={fatias} dataKey="v" startAngle={180} endAngle={0} cx="50%" cy="88%"
+                 innerRadius={84} outerRadius={108} stroke="none" isAnimationActive={false} cornerRadius={4}>
+              <Cell fill={tema.serie[0]} />
+              <Cell fill={tema.trilho} />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+        <div className="bi-medidor-centro">
+          <strong>{num(valor)}<span>/{num(meta)}</span></strong>
+          <em>{pctMeta}% da meta</em>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ---------- página ----------
 export default function Relatorios() {
   const [dias, setDias] = useState(30);
@@ -282,6 +350,28 @@ export default function Relatorios() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(false);
   const [tabela, setTabela] = useState(false);
+  const [escuro, setEscuro] = useState(() => {
+    try { return localStorage.getItem('ef_bi_tema') !== 'claro'; } catch { return true; }
+  });
+  const [telaCheia, setTelaCheia] = useState(false);
+  const raiz = useRef(null);
+  const tema = escuro ? TEMAS.escuro : TEMAS.claro;
+
+  const trocarTema = () => {
+    setEscuro(e => {
+      try { localStorage.setItem('ef_bi_tema', e ? 'claro' : 'escuro'); } catch { /* sem armazenamento */ }
+      return !e;
+    });
+  };
+  const alternarTelaCheia = () => {
+    if (document.fullscreenElement) document.exitFullscreen?.();
+    else raiz.current?.requestFullscreen?.();
+  };
+  useEffect(() => {
+    const aoMudar = () => setTelaCheia(Boolean(document.fullscreenElement));
+    document.addEventListener('fullscreenchange', aoMudar);
+    return () => document.removeEventListener('fullscreenchange', aoMudar);
+  }, []);
 
   const carregar = useCallback(async () => {
     setCarregando(true);
@@ -301,13 +391,16 @@ export default function Relatorios() {
 
   const a = dados ? derivados(dados.atual) : null;
   const b = dados ? derivados(dados.anterior) : null;
-  const origensVisitas = useMemo(() => agruparOrigens(dados?.origens_visitas), [dados]);
-  const origensPacientes = useMemo(() => agruparOrigens(dados?.origens_pacientes), [dados]);
+  const origensVisitas = useMemo(() => agruparOrigens(dados?.origens_visitas, tema), [dados, tema]);
+  const origensPacientes = useMemo(() => agruparOrigens(dados?.origens_pacientes, tema), [dados, tema]);
   const nomeCanal = canal === 'todos' ? 'todas as origens' : canal === 'facebook' ? 'Facebook' : 'Google Ads';
   const temSerie = dados?.serie?.some(d => d.visitas || d.contatos);
 
+  const SERIE = tema.serie;
+
   return (
-    <div className="bi animate-fadeIn">
+    <TemaCtx.Provider value={tema}>
+    <div ref={raiz} className={`bi animate-fadeIn ${escuro ? 'bi-escuro' : ''}`}>
       <div className="page-header">
         <div>
           <h1 className="page-title">Relatórios</h1>
@@ -330,6 +423,12 @@ export default function Relatorios() {
         <div className="bi-filtros-fim">
           <button className="btn btn-ghost btn-sm" onClick={() => setTabela(t => !t)}>
             <Table2 size={14} /> {tabela ? 'Ver gráficos' : 'Ver tabela'}
+          </button>
+          <button className="btn btn-ghost btn-sm" onClick={trocarTema} title={escuro ? 'Modo claro' : 'Modo escuro'}>
+            {escuro ? <Sun size={14} /> : <Moon size={14} />} {escuro ? 'Claro' : 'Escuro'}
+          </button>
+          <button className="btn btn-ghost btn-sm" onClick={alternarTelaCheia} title="Tela cheia">
+            {telaCheia ? <Minimize2 size={14} /> : <Maximize2 size={14} />}
           </button>
           <button className="btn btn-ghost btn-sm" onClick={carregar} disabled={carregando} title="Atualizar">
             <RefreshCw size={14} className={carregando ? 'bi-girando' : ''} />
@@ -395,24 +494,35 @@ export default function Relatorios() {
                   </div>
                   {!temSerie ? <Vazio /> : (
                     <ResponsiveContainer width="100%" height={260}>
-                      <LineChart data={dados.serie} margin={{ top: 10, right: 16, bottom: 0, left: -18 }}>
-                        <CartesianGrid stroke="#ecebe7" vertical={false} />
-                        <XAxis dataKey="dia" tickFormatter={diaCurto} tick={{ fill: '#6b6a65', fontSize: 11 }} axisLine={false} tickLine={false}
+                      <AreaChart data={dados.serie} margin={{ top: 10, right: 16, bottom: 0, left: -18 }}>
+                        <defs>
+                          <linearGradient id="biGradVisitas" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={SERIE[0]} stopOpacity={escuro ? 0.45 : 0.22} />
+                            <stop offset="100%" stopColor={SERIE[0]} stopOpacity={0} />
+                          </linearGradient>
+                          <linearGradient id="biGradContatos" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="0%" stopColor={SERIE[1]} stopOpacity={escuro ? 0.40 : 0.18} />
+                            <stop offset="100%" stopColor={SERIE[1]} stopOpacity={0} />
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid stroke={tema.grade} vertical={false} />
+                        <XAxis dataKey="dia" tickFormatter={diaCurto} tick={{ fill: tema.eixo, fontSize: 11 }} axisLine={false} tickLine={false}
                                minTickGap={24} />
-                        <YAxis allowDecimals={false} tick={{ fill: '#6b6a65', fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <Tooltip content={<TooltipLinha />} cursor={{ stroke: '#b9b8b2', strokeWidth: 1 }} />
-                        <Line type="monotone" dataKey="visitas" name="Visitas" stroke={SERIE[0]} strokeWidth={2} dot={false}
-                              activeDot={{ r: 4, stroke: '#fff', strokeWidth: 2 }} isAnimationActive={false} />
-                        <Line type="monotone" dataKey="contatos" name="Contatos" stroke={SERIE[1]} strokeWidth={2} dot={false}
-                              activeDot={{ r: 4, stroke: '#fff', strokeWidth: 2 }} isAnimationActive={false} />
-                      </LineChart>
+                        <YAxis allowDecimals={false} tick={{ fill: tema.eixo, fontSize: 11 }} axisLine={false} tickLine={false} />
+                        <Tooltip content={<TooltipLinha />} cursor={{ stroke: tema.cursor, strokeWidth: 1 }} />
+                        <Area type="monotone" dataKey="visitas" name="Visitas" stroke={SERIE[0]} strokeWidth={2} fill="url(#biGradVisitas)"
+                              dot={false} activeDot={{ r: 4, stroke: tema.superficie, strokeWidth: 2 }} isAnimationActive={false} />
+                        <Area type="monotone" dataKey="contatos" name="Contatos" stroke={SERIE[1]} strokeWidth={2} fill="url(#biGradContatos)"
+                              dot={false} activeDot={{ r: 4, stroke: tema.superficie, strokeWidth: 2 }} isAnimationActive={false} />
+                      </AreaChart>
                     </ResponsiveContainer>
                   )}
                 </div>
                 <Funil t={a} />
               </div>
 
-              <div className="bi-linha bi-linha-3">
+              <div className="bi-linha bi-linha-4">
+                <Medidor valor={a.contatos} />
                 <Rosca titulo="De onde vêm as visitas" dados={origensVisitas} unidade="visitas" />
                 <Rosca titulo="Origem dos pacientes" dados={origensPacientes} unidade="pacientes" />
                 <Contatos t={a} />
@@ -443,5 +553,6 @@ export default function Relatorios() {
         </>
       )}
     </div>
+    </TemaCtx.Provider>
   );
 }
