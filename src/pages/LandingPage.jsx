@@ -106,24 +106,22 @@ const TESTIMONIALS = [
 ];
 
 const AREA_BAIRROS = [
-  'Itaquera', 'Guaianazes', 'São Mateus', 'Cidade Tiradentes',
-  'Arthur Alvim', 'Penha', 'Vila Carrão', 'Patriarca',
-  'Mooca', 'Belém', 'São Miguel', 'Ermelino Matarazzo',
-  'Vila Guilhermina', 'Vila Matilde',
+  'São Paulo — Zona Leste', 'São Paulo — Itaquera', 'São Paulo — Penha', 'São Paulo — Mooca',
+  'Foz do Iguaçu — Centro', 'Foz do Iguaçu — Vila A', 'Foz do Iguaçu — Jardim América', 'Foz do Iguaçu — Três Lagoas',
 ];
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [mapQuery, setMapQuery] = useState('');
   const [mapSrc, setMapSrc] = useState(
-    'https://maps.google.com/maps?q=Itaquera+S%C3%A3o+Paulo+SP&output=embed&hl=pt-BR&z=13'
+    'https://maps.google.com/maps?q=S%C3%A3o+Paulo+SP&output=embed&hl=pt-BR&z=11'
   );
   const [showCoverageMessage, setShowCoverageMessage] = useState(false);
 
   const closeMenu = () => setMobileMenuOpen(false);
   const handleMapSearch = () => {
     if (!mapQuery.trim()) return;
-    const q = encodeURIComponent(mapQuery.trim() + ', São Paulo SP');
+    const q = encodeURIComponent(mapQuery.trim() + ', Brasil');
     setMapSrc(`https://maps.google.com/maps?q=${q}&output=embed&hl=pt-BR&z=15`);
     setShowCoverageMessage(true);
   };
@@ -204,7 +202,7 @@ export default function LandingPage() {
         <div className="hero-content">
           <div className="hero-badge">
             <Shield size={14} />
-            Especialista Certificada em Cuidados de Feridas — Doutor Feridas
+            Especialista Certificada em Cuidados de Feridas
           </div>
           <h1 className="hero-title">
             Cuidado especializado<br />
@@ -212,7 +210,7 @@ export default function LandingPage() {
           </h1>
           <p className="hero-subtitle">
             Enfermeira especialista em tratamento de feridas complexas, úlceras e curativos avançados.
-            Atendimento domiciliar na Zona Leste de São Paulo — Itaquera e região.
+            Atendimento domiciliar em São Paulo e Foz do Iguaçu.
           </p>
           <div className="hero-stats">
             <div className="hero-stat">
@@ -226,8 +224,8 @@ export default function LandingPage() {
             </div>
             <div className="hero-stat-divider" />
             <div className="hero-stat">
-              <span className="hero-stat-num">ZL</span>
-              <span className="hero-stat-label">Zona Leste SP</span>
+              <span className="hero-stat-num">SP · Foz</span>
+              <span className="hero-stat-label">São Paulo e Foz do Iguaçu</span>
             </div>
           </div>
         </div>
@@ -236,7 +234,7 @@ export default function LandingPage() {
           <div className="glass" style={{ padding: '8px', borderRadius: '24px', overflow: 'hidden', display: 'flex', width: '100%', maxWidth: '950px', boxShadow: 'var(--shadow-xl)' }}>
             <img 
               src="/FOTOCAPA.png" 
-              alt="Capa Doutor Feridas" 
+              alt="Capa Enfermeira Feridas" 
               style={{ width: '100%', height: 'auto', borderRadius: '16px', objectFit: 'cover' }} 
             />
           </div>
@@ -266,9 +264,9 @@ export default function LandingPage() {
             <div className="about-badge-grid">
               {[
                 { icon: '🎓', label: 'Curso de Feridas', sub: 'Especialização' },
-                { icon: '🏥', label: 'Doutor Feridas', sub: 'Franquia Oficial' },
+                { icon: '🌎', label: 'São Paulo', sub: 'e Foz do Iguaçu' },
                 { icon: '📋', label: 'Relatórios', sub: 'Mensais' },
-                { icon: '🚗', label: 'Atendimento', sub: 'Domiciliar SP' },
+                { icon: '🚗', label: 'Atendimento', sub: 'Domiciliar' },
               ].map((b, i) => (
                 <div key={i} className="about-badge-card glass">
                   <span className="about-badge-icon">{b.icon}</span>
@@ -284,8 +282,8 @@ export default function LandingPage() {
               Dedicação e expertise<br />no cuidado de feridas
             </h2>
             <p className="about-text">
-              Sou enfermeira com especialização em cuidados de feridas complexas, atuando como
-              franqueada da rede <strong>Doutor Feridas</strong> na Zona Leste de São Paulo — Itaquera e região.
+              Sou enfermeira com especialização em cuidados de feridas complexas, com atendimento
+              domiciliar em <strong>São Paulo</strong> e <strong>Foz do Iguaçu</strong>.
               Minha missão é proporcionar tratamento de qualidade hospitalar no conforto do lar.
             </p>
             <p className="about-text">
@@ -316,7 +314,7 @@ export default function LandingPage() {
         </div>
         <h2 className="section-title">Área de Atuação</h2>
         <p className="section-sub">
-          Atendimento domiciliar especializado na <strong>Zona Leste de São Paulo</strong>
+          Atendimento domiciliar especializado em <strong>São Paulo</strong> e <strong>Foz do Iguaçu</strong>
         </p>
         <div className="area-wrapper">
           <div className="area-map-card card">
@@ -326,7 +324,7 @@ export default function LandingPage() {
               <input
                 type="text"
                 className="area-map-input"
-                placeholder="Ex: Rua das Flores, 123 - Itaquera"
+                placeholder="Ex: Rua das Flores, 123 - São Paulo ou Foz do Iguaçu"
                 value={mapQuery}
                 onChange={e => setMapQuery(e.target.value)}
                 onKeyDown={e => e.key === 'Enter' && handleMapSearch()}
@@ -343,7 +341,7 @@ export default function LandingPage() {
             <div className="area-map-frame">
               <iframe
                 src={mapSrc}
-                title="Área de atendimento — Itaquera SP"
+                title="Área de atendimento — São Paulo e Foz do Iguaçu"
                 frameBorder="0"
                 allowFullScreen
                 loading="lazy"
@@ -419,7 +417,7 @@ export default function LandingPage() {
             <h2 className="hc-cta-title">Redes de Farmácias e Clínicas</h2>
             <p className="hc-cta-text">
               Ampliamos o atendimento aos seus clientes! Estabelecemos parcerias com homecares,
-              farmácias e clínicas especializadas na Zona Leste.
+              farmácias e clínicas especializadas em São Paulo e Foz do Iguaçu.
             </p>
             <div className="hc-cta-benefits">
               <div className="hc-benefit">
@@ -574,11 +572,11 @@ export default function LandingPage() {
       <section className="section section-alt" id="contato">
         <div className="section-label">Contato</div>
         <h2 className="section-title">Agende sua Avaliação</h2>
-        <p className="section-sub">Atendemos em toda a Zona Leste de São Paulo — Itaquera e região</p>
+        <p className="section-sub">Atendemos em São Paulo e Foz do Iguaçu</p>
         <div className="contact-grid">
           {[
             { icon: '💬', title: 'WhatsApp', desc: 'Resposta em até 1 hora' },
-            { icon: '📍', title: 'Área de Atendimento', desc: 'Zona Leste SP — Itaquera, Guaianazes, Penha e região' },
+            { icon: '📍', title: 'Área de Atendimento', desc: 'São Paulo (SP) e Foz do Iguaçu (PR)' },
             { icon: '⏰', title: 'Horários', desc: 'Segunda a Sábado, 7h às 19h. Emergências: consultar' },
           ].map((c, i) => (
             <div key={i} className="contact-card card">
@@ -597,8 +595,7 @@ export default function LandingPage() {
             <div className="lh-logo-icon"><Activity size={18} /></div>
             <span className="lh-logo-name">Enfermeira Feridas</span>
           </div>
-          <p className="footer-text">Especialista em cuidados de feridas — Zona Leste São Paulo</p>
-          <p className="footer-text" style={{ fontSize: '12px', opacity: 0.6 }}>Franqueada Oficial Doutor Feridas</p>
+          <p className="footer-text">Especialista em cuidados de feridas — São Paulo e Foz do Iguaçu</p>
           <p className="footer-copy">© {new Date().getFullYear()} Todos os direitos reservados</p>
         </div>
       </footer>
