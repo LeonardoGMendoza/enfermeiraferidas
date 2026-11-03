@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Target, MousePointerClick, MessageCircle, UserCheck, Wallet, TrendingUp, Plus, Trash2 } from 'lucide-react';
+import { Target, MousePointerClick, MessageCircle, UserCheck, Wallet, TrendingUp, Plus, Trash2, Bot, Send } from 'lucide-react';
 import { authFetch } from '../api';
 import './GoogleAdsCard.css';
 
@@ -23,6 +23,8 @@ export default function GoogleAdsCard() {
   const [valor, setValor] = useState('');
   const [descricao, setDescricao] = useState('');
   const [salvando, setSalvando] = useState(false);
+  const [previa, setPrevia] = useState(null);
+  const [carregandoIA, setCarregandoIA] = useState(false);
 
   const carregar = useCallback(async () => {
     try {
@@ -64,6 +66,38 @@ export default function GoogleAdsCard() {
     if (!confirm('Excluir este lançamento?')) return;
     await authFetch(`/api/marketing/investimentos/${id}`, { method: 'DELETE' });
     carregar();
+  };
+
+  const verPrevia = async () => {
+    setCarregandoIA(true);
+    try {
+      const res = await authFetch('/api/marketing/resumo/previa');
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Erro');
+      setPrevia(d);
+    } catch (err) {
+      alert('Não foi possível gerar a análise: ' + err.message);
+    } finally {
+      setCarregandoIA(false);
+    }
+  };
+
+  const enviarAgora = async () => {
+    if (!confirm('Enviar este resumo agora para o WhatsApp do Leonardo e da Sandra?')) return;
+    setCarregandoIA(true);
+    try {
+      const res = await authFetch('/api/marketing/resumo/enviar', { method: 'POST' });
+      const d = await res.json();
+      if (!res.ok) throw new Error(d.error || 'Erro');
+      setPrevia(p => ({ ...(p || {}), texto: d.texto, ia: d.ia }));
+      alert(d.enviados?.length
+        ? `Enviado para ${d.enviados.length} número(s).` + (d.falhas?.length ? `\nFalhou: ${d.falhas.join('; ')}` : '')
+        : `Não enviou: ${d.falhas?.join('; ') || 'sem números configurados'}`);
+    } catch (err) {
+      alert('Não foi possível enviar: ' + err.message);
+    } finally {
+      setCarregandoIA(false);
+    }
   };
 
   const veredito = () => {
@@ -155,6 +189,29 @@ export default function GoogleAdsCard() {
               </ul>
             </details>
           )}
+
+          <div className="gads-ia">
+            <div className="gads-ia-botoes">
+              <button type="button" className="btn btn-ghost btn-sm" onClick={verPrevia} disabled={carregandoIA}>
+                <Bot size={14} /> {carregandoIA ? 'Analisando…' : 'Ver análise da IA'}
+              </button>
+              <button type="button" className="btn btn-ghost btn-sm" onClick={enviarAgora} disabled={carregandoIA}>
+                <Send size={14} /> Enviar no WhatsApp agora
+              </button>
+            </div>
+            {previa && (
+              <>
+                <pre className="gads-previa">{previa.texto}</pre>
+                {previa.ia !== 'ok' && (
+                  <p className="gads-nota">
+                    {previa.oci === false || previa.ia === 'sem-ia'
+                      ? 'A IA da Oracle ainda não está configurada no servidor — por enquanto vão só os números.'
+                      : 'A IA da Oracle não respondeu agora — a mensagem vai só com os números.'}
+                  </p>
+                )}
+              </>
+            )}
+          </div>
 
           <p className="gads-nota">
             Visitas e cliques são contados no site. Ligações feitas direto pelo botão do anúncio aparecem só no Google Ads.

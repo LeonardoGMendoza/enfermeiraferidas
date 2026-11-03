@@ -48,3 +48,11 @@
   .gads-grid { grid-template-columns: repeat(2, 1fr); }
   .gads-form { grid-template-columns: 1fr; }
 }
+
+.gads-ia { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
+.gads-ia-botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+.gads-previa {
+  margin-top: 10px; padding: 12px 14px; border-radius: 10px; white-space: pre-wrap; word-break: break-word;
+  font-family: inherit; font-size: 13px; line-height: 1.5;
+  background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.3);
+}

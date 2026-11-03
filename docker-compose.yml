@@ -23,6 +23,24 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=${DB_PORT}
       - JWT_SECRET=${JWT_SECRET}
+      # Analista de IA (mesmas variáveis do VinaCare/Omni)
+      - OCI_USER=${OCI_USER:-}
+      - OCI_FINGERPRINT=${OCI_FINGERPRINT:-}
+      - OCI_TENANCY=${OCI_TENANCY:-}
+      - OCI_REGION=${OCI_REGION:-}
+      - OCI_COMPARTMENT_ID=${OCI_COMPARTMENT_ID:-}
+      - OCI_KEY_B64=${OCI_KEY_B64:-}
+      # Resumo diário no WhatsApp
+      - RESUMO_ATIVO=${RESUMO_ATIVO:-0}
+      - RESUMO_HORA=${RESUMO_HORA:-8}
+      - RESUMO_WHATSAPP=${RESUMO_WHATSAPP:-}
+      - WHATSAPP_PROVIDER=${WHATSAPP_PROVIDER:-waha}
+      - WAHA_URL=${WAHA_URL:-}
+      - WAHA_API_KEY=${WAHA_API_KEY:-}
+      - WAHA_SESSION=${WAHA_SESSION:-default}
+      - ZAPI_INSTANCE=${ZAPI_INSTANCE:-}
+      - ZAPI_TOKEN=${ZAPI_TOKEN:-}
+      - ZAPI_CLIENT_TOKEN=${ZAPI_CLIENT_TOKEN:-}
       - PORT=3000
     extra_hosts:
       - "host.docker.internal:host-gateway"

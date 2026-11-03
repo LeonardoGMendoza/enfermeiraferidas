@@ -4,6 +4,7 @@ import pkg from 'pg';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import { iniciarAnalista, montarResumo, enviarResumo, destinatarios, ociConfigurado } from './analista.js';
 
 dotenv.config();
 
@@ -85,7 +86,7 @@ async function ensureMarketingSchema() {
     console.error('Erro ao preparar tabelas de marketing:', err.message);
   }
 }
-ensureMarketingSchema();
+ensureMarketingSchema().then(() => iniciarAnalista(pool, resumoMarketing)).catch(e => console.error('Analista:', e.message));
 
 const TIPOS_EVENTO = ['visita', 'whatsapp', 'telefone', 'orcamento'];
 const ORIGENS = ['google', 'google_organico', 'facebook', 'instagram', 'indicacao', 'site', 'whatsapp', 'outro', 'direto'];
@@ -207,6 +208,27 @@ app.delete('/api/marketing/investimentos/:id', requireAdmin, async (req, res) =>
     res.sendStatus(204);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao excluir' });
+  }
+});
+
+// Analista de IA: prévia (não envia) e envio manual para o WhatsApp
+app.get('/api/marketing/resumo/previa', requireAdmin, async (req, res) => {
+  try {
+    const r = await montarResumo(pool, resumoMarketing);
+    res.json({ texto: r.texto, ia: r.ia, oci: ociConfigurado(), numeros: destinatarios().length });
+  } catch (error) {
+    console.error('Erro na prévia do resumo:', error.message);
+    res.status(500).json({ error: 'Erro ao montar resumo' });
+  }
+});
+
+app.post('/api/marketing/resumo/enviar', requireAdmin, async (req, res) => {
+  try {
+    const r = await enviarResumo(pool, resumoMarketing, { forcar: true });
+    res.json({ texto: r.texto, ia: r.ia, enviados: r.enviados, falhas: r.falhas });
+  } catch (error) {
+    console.error('Erro ao enviar resumo:', error.message);
+    res.status(400).json({ error: error.message });
   }
 });
 
