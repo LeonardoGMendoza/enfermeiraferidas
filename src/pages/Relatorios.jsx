@@ -74,7 +74,7 @@ function Variacao({ atual, anterior, melhorMenor = false }) {
 }
 
 function Sparkline({ dados, chave, cor }) {
-  if (!dados?.length) return null;
+  if (!dados?.some(d => d[chave])) return null; // sem movimento: não desenha linha reta no zero
   return (
     <div className="bi-spark" aria-hidden="true">
       <ResponsiveContainer width="100%" height={34}>
