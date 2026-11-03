@@ -10,6 +10,7 @@ import MapView from './pages/MapView';
 import Homecares from './pages/Homecares';
 import Appointments from './pages/Appointments';
 import Financeiro from './pages/Financeiro';
+import Relatorios from './pages/Relatorios';
 import Login from './pages/Login';
 import LoginPaciente from './pages/LoginPaciente';
 import PacienteDashboard from './pages/PacienteDashboard';
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="homecares" element={<Homecares />} />
         <Route path="agendamentos" element={<Appointments />} />
         <Route path="financeiro" element={<Financeiro />} />
+        <Route path="relatorios" element={<Relatorios />} />
       </Route>
       <Route path="/paciente/login" element={<LoginPaciente />} />
       <Route path="/paciente/dashboard" element={<PacienteDashboard />} />

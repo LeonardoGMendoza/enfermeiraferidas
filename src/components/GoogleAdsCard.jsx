@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Target, MousePointerClick, MessageCircle, UserCheck, Wallet, TrendingUp, Plus, Trash2, Bot, Send } from 'lucide-react';
 import { authFetch } from '../api';
+import { useNavigate } from 'react-router-dom';
 import './GoogleAdsCard.css';
 
 const brl = (v) =>
@@ -25,6 +26,7 @@ export default function GoogleAdsCard() {
   const [salvando, setSalvando] = useState(false);
   const [previa, setPrevia] = useState(null);
   const [carregandoIA, setCarregandoIA] = useState(false);
+  const navigate = useNavigate();
 
   const carregar = useCallback(async () => {
     try {
@@ -137,6 +139,9 @@ export default function GoogleAdsCard() {
               </button>
             ))}
           </div>
+          <button className="btn btn-ghost btn-sm" onClick={() => navigate('/app/relatorios')}>
+            Relatório completo
+          </button>
           <button className="btn btn-primary btn-sm" onClick={() => setMostrarForm(s => !s)}>
             <Plus size={14} /> Lançar investimento
           </button>

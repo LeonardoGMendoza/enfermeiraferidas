@@ -211,6 +211,97 @@ app.delete('/api/marketing/investimentos/:id', requireAdmin, async (req, res) =>
   }
 });
 
+// Relatório BI de marketing (página Relatórios)
+const TZ_SQL = "(created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/Sao_Paulo')";
+async function biMarketing(dias, canal) {
+  dias = Math.min(Math.max(parseInt(dias) || 30, 7), 365);
+  const todos = canal === 'todos';
+  const org = todos ? null : (ORIGENS.includes(canal) ? canal : 'google');
+  const filtro = (alias = '') => (todos ? 'TRUE' : `${alias}origem = $2`);
+  const params = todos ? [dias] : [dias, org];
+
+  // janela atual: [hoje-dias+1, hoje]; anterior: os 'dias' antes disso
+  const janela = (desloc) => `${TZ_SQL}::date BETWEEN (NOW() AT TIME ZONE 'America/Sao_Paulo')::date - ($1::int * ${desloc + 1}) + 1
+                                             AND (NOW() AT TIME ZONE 'America/Sao_Paulo')::date - ($1::int * ${desloc})`;
+
+  const totais = async (desloc) => {
+    const ev = await pool.query(
+      `SELECT tipo, COUNT(*)::int AS total FROM site_eventos WHERE ${filtro()} AND ${janela(desloc)} GROUP BY tipo`, params);
+    const t = Object.fromEntries(ev.rows.map(r => [r.tipo, r.total]));
+    const pac = await pool.query(
+      `SELECT COUNT(*)::int AS total FROM pacientes WHERE ${filtro()} AND ${janela(desloc)}`, params);
+    const pagos = await pool.query(
+      `SELECT COUNT(DISTINCT p.id)::int AS pacientes, COALESCE(SUM(a.valor),0)::float AS recebido
+         FROM alertas_dashboard a JOIN pacientes p ON p.phone = a.phone
+        WHERE ${todos ? 'TRUE' : 'p.origem = $2'} AND a.status_pagamento = 'confirmado'
+          AND ${janela(desloc).replaceAll('created_at', 'a.created_at')}`, params);
+    const inv = await pool.query(
+      `SELECT COALESCE(SUM(valor),0)::float AS total FROM marketing_investimentos
+        WHERE ${todos ? 'TRUE' : 'canal = $2'}
+          AND data BETWEEN (NOW() AT TIME ZONE 'America/Sao_Paulo')::date - ($1::int * ${desloc + 1}) + 1
+                       AND (NOW() AT TIME ZONE 'America/Sao_Paulo')::date - ($1::int * ${desloc})`, params);
+    return {
+      visitas: t.visita || 0,
+      whatsapp: t.whatsapp || 0,
+      telefone: t.telefone || 0,
+      orcamentos: t.orcamento || 0,
+      contatos: (t.whatsapp || 0) + (t.telefone || 0) + (t.orcamento || 0),
+      pacientes: pac.rows[0].total,
+      pagos: pagos.rows[0].pacientes,
+      recebido: pagos.rows[0].recebido,
+      investido: inv.rows[0].total,
+    };
+  };
+
+  const [atual, anterior] = await Promise.all([totais(0), totais(1)]);
+
+  const serie = await pool.query(`
+    WITH dias AS (
+      SELECT generate_series((NOW() AT TIME ZONE 'America/Sao_Paulo')::date - $1::int + 1,
+                             (NOW() AT TIME ZONE 'America/Sao_Paulo')::date, '1 day')::date AS dia
+    ), ev AS (
+      SELECT ${TZ_SQL}::date AS dia,
+             COUNT(*) FILTER (WHERE tipo = 'visita')::int AS visitas,
+             COUNT(*) FILTER (WHERE tipo <> 'visita')::int AS contatos
+        FROM site_eventos WHERE ${filtro()} AND ${janela(0)} GROUP BY 1
+    )
+    SELECT to_char(d.dia, 'YYYY-MM-DD') AS dia, COALESCE(ev.visitas,0) AS visitas, COALESCE(ev.contatos,0) AS contatos
+      FROM dias d LEFT JOIN ev ON ev.dia = d.dia ORDER BY d.dia`, params);
+
+  const origensVisitas = await pool.query(
+    `SELECT origem, COUNT(*)::int AS total FROM site_eventos
+      WHERE tipo = 'visita' AND ${janela(0)} GROUP BY origem ORDER BY total DESC`, [dias]);
+  const origensPacientes = await pool.query(
+    `SELECT COALESCE(origem, 'nao_informado') AS origem, COUNT(*)::int AS total FROM pacientes
+      WHERE ${janela(0)} GROUP BY 1 ORDER BY total DESC`, [dias]);
+  const calor = await pool.query(
+    `SELECT EXTRACT(ISODOW FROM ${TZ_SQL})::int AS dow, EXTRACT(HOUR FROM ${TZ_SQL})::int AS hora, COUNT(*)::int AS total
+       FROM site_eventos WHERE ${filtro()} AND ${janela(0)} GROUP BY 1, 2`, params);
+  const termos = await pool.query(
+    `SELECT termo, COUNT(*) FILTER (WHERE tipo = 'visita')::int AS visitas,
+            COUNT(*) FILTER (WHERE tipo <> 'visita')::int AS contatos
+       FROM site_eventos WHERE ${filtro()} AND termo IS NOT NULL AND ${janela(0)}
+      GROUP BY termo ORDER BY visitas DESC LIMIT 8`, params);
+
+  return {
+    dias, canal: todos ? 'todos' : org, atual, anterior,
+    serie: serie.rows,
+    origens_visitas: origensVisitas.rows,
+    origens_pacientes: origensPacientes.rows,
+    calor: calor.rows,
+    termos: termos.rows,
+  };
+}
+
+app.get('/api/marketing/bi', requireAdmin, async (req, res) => {
+  try {
+    res.json(await biMarketing(req.query.dias, req.query.canal || 'google'));
+  } catch (error) {
+    console.error('Erro no relatório BI:', error.message);
+    res.status(500).json({ error: 'Erro ao gerar relatório' });
+  }
+});
+
 // Analista de IA: prévia (não envia) e envio manual para o WhatsApp
 app.get('/api/marketing/resumo/previa', requireAdmin, async (req, res) => {
   try {

@@ -6,7 +6,7 @@ import {
 } from 'lucide-react';
 import './Layout.css';
 
-import { DollarSign } from 'lucide-react';
+import { DollarSign, BarChart3 } from 'lucide-react';
 
 const navItems = [
   { to: '/app/dashboard',    icon: LayoutDashboard, label: 'Dashboard' },
@@ -15,6 +15,7 @@ const navItems = [
   { to: '/app/agendamentos', icon: Calendar,        label: 'Agendamentos' },
   { to: '/app/homecares',    icon: Building2,       label: 'Homecares' },
   { to: '/app/financeiro',   icon: DollarSign,      label: 'Financeiro' },
+  { to: '/app/relatorios',   icon: BarChart3,       label: 'Relatórios' },
 ];
 
 export default function Layout() {
