@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Activity, ArrowLeft } from 'lucide-react';
 import './Orcamento.css';
+import { getOrigem, track } from '../tracking';
 
 export default function Orcamento() {
   const navigate = useNavigate();
@@ -28,13 +29,14 @@ export default function Orcamento() {
       const response = await fetch('/api/orcamento', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, servico: selectedService })
+        body: JSON.stringify({ ...formData, servico: selectedService, origem: getOrigem().origem })
       });
       
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || 'Erro ao solicitar orçamento');
       }
+      track('orcamento');
       setIsSubmitted(true);
     } catch (err) {
       alert('Erro: ' + err.message);

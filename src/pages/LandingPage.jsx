@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { initTracking } from '../tracking';
 import { Activity, MapPin, Shield, Clock, Star, Heart, Menu, X } from 'lucide-react';
 import './LandingPage.css';
 
@@ -117,6 +118,8 @@ export default function LandingPage() {
     'https://maps.google.com/maps?q=S%C3%A3o+Paulo+SP&output=embed&hl=pt-BR&z=11'
   );
   const [showCoverageMessage, setShowCoverageMessage] = useState(false);
+
+  useEffect(() => { initTracking(); }, []);
 
   const closeMenu = () => setMobileMenuOpen(false);
   const handleMapSearch = () => {

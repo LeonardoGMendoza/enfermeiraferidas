@@ -3,6 +3,19 @@ import { useNavigate } from 'react-router-dom';
 import { Plus, Search, Filter, MapPin, Phone, Edit2, Trash2, Eye } from 'lucide-react';
 import { getHomecares, savePatient, deletePatient } from '../data';
 import PatientModal from '../components/PatientModal';
+import { authFetch } from '../api';
+
+const ORIGEM_OPCOES = [
+  { v: '', label: '— Não informado' },
+  { v: 'google', label: 'Google Ads' },
+  { v: 'google_organico', label: 'Google (busca)' },
+  { v: 'indicacao', label: 'Indicação' },
+  { v: 'instagram', label: 'Instagram' },
+  { v: 'facebook', label: 'Facebook' },
+  { v: 'whatsapp', label: 'WhatsApp' },
+  { v: 'site', label: 'Site' },
+  { v: 'outro', label: 'Outro' },
+];
 
 const STATUS_MAP = {
   ativo:    { label: 'Ativo',    cls: 'badge-success' },
@@ -23,7 +36,7 @@ export default function Patients() {
 
   const load = async () => { 
     try {
-      const res = await fetch('/api/pacientes');
+      const res = await authFetch('/api/pacientes');
       if (res.ok) {
         const data = await res.json();
         setPatients(data);
@@ -57,6 +70,22 @@ export default function Patients() {
 
   const handleDelete = (id) => {
     if (confirm('Excluir este paciente?')) { deletePatient(id); load(); }
+  };
+
+  const changeOrigem = async (p, origem) => {
+    const valor = origem || null;
+    setPatients(prev => prev.map(x => x.id === p.id ? { ...x, origem: valor } : x));
+    try {
+      const res = await authFetch(`/api/pacientes/${p.id}/origem`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ origem: valor }),
+      });
+      if (!res.ok) throw new Error();
+    } catch {
+      alert('Não foi possível salvar a origem. Tente de novo.');
+      load();
+    }
   };
 
   const openEdit = (p) => { setEditing(p); setShowModal(true); };
@@ -105,6 +134,7 @@ export default function Patients() {
                 <th>Tipo de Ferida</th>
                 <th>Bairro</th>
                 <th>Homecare</th>
+                <th>Origem</th>
                 <th>Status</th>
                 <th>Ações</th>
               </tr>
@@ -135,6 +165,17 @@ export default function Patients() {
                     </td>
                     <td>
                       <span className="meta-cell">{hc ? hc.nome : <span className="text-muted">—</span>}</span>
+                    </td>
+                    <td>
+                      <select
+                        className="form-input"
+                        style={{ padding: '4px 8px', fontSize: '12px', minWidth: '120px' }}
+                        value={p.origem || ''}
+                        onChange={e => changeOrigem(p, e.target.value)}
+                        title="Como o paciente conheceu"
+                      >
+                        {ORIGEM_OPCOES.map(o => <option key={o.v} value={o.v}>{o.label}</option>)}
+                      </select>
                     </td>
                     <td><span className={`badge ${st.cls}`}>{st.label}</span></td>
                     <td>

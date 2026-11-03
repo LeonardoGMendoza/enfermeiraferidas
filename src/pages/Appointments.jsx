@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { authFetch } from '../api';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Clock, User, CheckCircle, XCircle } from 'lucide-react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, startOfWeek, endOfWeek, isSameMonth, isSameDay, addDays, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
@@ -35,7 +36,7 @@ export default function Appointments() {
     
     const fetchPatients = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/pacientes`);
+        const res = await authFetch(`${API_BASE_URL}/api/pacientes`);
         if (res.ok) {
           const data = await res.json();
           setPatients(data);

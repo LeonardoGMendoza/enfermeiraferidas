@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Users, Building2, Calendar, TrendingUp, Clock, MapPin, ChevronRight, Activity, Bell, Check, X } from 'lucide-react';
 import { getPatients, getHomecares, getAppointments } from '../data';
 import './Dashboard.css';
+import { authFetch } from '../api';
+import GoogleAdsCard from '../components/GoogleAdsCard';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
 
@@ -22,7 +24,7 @@ export default function Dashboard() {
     // Fetch alertas from backend
     const fetchAlertas = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/alertas`);
+        const res = await authFetch(`${API_BASE_URL}/api/alertas`);
         if (res.ok) {
           const data = await res.json();
           setAlertas(data);
@@ -39,7 +41,7 @@ export default function Dashboard() {
 
   const handleConfirmPix = async (id) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/alertas/${id}/confirmar`, { 
+      const res = await authFetch(`${API_BASE_URL}/api/alertas/${id}/confirmar`, { 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ data_agendamento: scheduleDates[id] || 'A combinar' })
@@ -56,7 +58,7 @@ export default function Dashboard() {
 
   const handleRejectPix = async (id) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/alertas/${id}/rejeitar`, { method: 'POST' });
+      const res = await authFetch(`${API_BASE_URL}/api/alertas/${id}/rejeitar`, { method: 'POST' });
       if (res.ok) {
         setAlertas(alertas.filter(a => a.id !== id));
       }
@@ -108,6 +110,8 @@ export default function Dashboard() {
           </div>
         ))}
       </div>
+
+      <GoogleAdsCard />
 
       {/* Alertas PIX Pendentes */}
       {alertas.length > 0 && (

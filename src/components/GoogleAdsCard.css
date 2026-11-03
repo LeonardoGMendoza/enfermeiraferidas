@@ -1,0 +1,50 @@
+.gads-card { padding: 20px; margin-bottom: 24px; }
+
+.gads-header {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.gads-title { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 16px; }
+.gads-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+.gads-periodos { display: flex; background: var(--bg-secondary, rgba(0,0,0,0.04)); border-radius: 999px; padding: 3px; }
+.gads-periodo {
+  border: none; background: transparent; padding: 5px 12px; border-radius: 999px;
+  font-size: 12px; font-weight: 600; color: var(--text-secondary); cursor: pointer;
+}
+.gads-periodo.ativo { background: var(--primary); color: #fff; }
+
+.gads-form { display: grid; grid-template-columns: 160px 1fr auto; gap: 10px; margin-bottom: 16px; }
+
+.gads-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.gads-metric {
+  border: 1px solid var(--border); border-radius: var(--radius-md, 12px); padding: 14px;
+  background: var(--bg-card, transparent);
+}
+.gads-metric-label { display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.gads-metric-value { font-family: var(--font-display); font-size: 24px; font-weight: 800; margin-top: 6px; line-height: 1.1; }
+.gads-metric-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+.gads-veredito { margin-top: 14px; padding: 12px 14px; border-radius: 10px; font-weight: 600; font-size: 14px; }
+.gads-veredito.bom { background: rgba(34,197,94,0.12); color: #15803d; border: 1px solid rgba(34,197,94,0.35); }
+.gads-veredito.atencao { background: rgba(234,179,8,0.12); color: #a16207; border: 1px solid rgba(234,179,8,0.35); }
+.gads-veredito.neutro { background: rgba(14,165,233,0.10); color: var(--primary); border: 1px solid rgba(14,165,233,0.3); }
+
+.gads-termos { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; font-size: 12px; color: var(--text-secondary); }
+
+.gads-lancamentos { margin-top: 12px; font-size: 13px; }
+.gads-lancamentos summary { cursor: pointer; color: var(--text-secondary); font-weight: 600; }
+.gads-lancamentos ul { list-style: none; padding: 0; margin: 8px 0 0; }
+.gads-lancamentos li {
+  display: grid; grid-template-columns: 90px 1fr auto auto; gap: 10px; align-items: center;
+  padding: 6px 0; border-bottom: 1px dashed var(--border);
+}
+
+.gads-erro { color: #dc2626; font-size: 13px; }
+.gads-nota { margin-top: 12px; font-size: 11px; color: var(--text-muted); }
+
+@media (max-width: 1100px) { .gads-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) {
+  .gads-grid { grid-template-columns: repeat(2, 1fr); }
+  .gads-form { grid-template-columns: 1fr; }
+}
