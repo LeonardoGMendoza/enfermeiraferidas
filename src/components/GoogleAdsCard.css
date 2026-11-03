@@ -56,3 +56,6 @@
   font-family: inherit; font-size: 13px; line-height: 1.5;
   background: rgba(37, 211, 102, 0.08); border: 1px solid rgba(37, 211, 102, 0.3);
 }
+
+.gads-canais { margin-left: 10px; }
+.gads-title { flex-wrap: wrap; }

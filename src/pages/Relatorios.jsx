@@ -21,10 +21,10 @@ const ORIGEM = {
   direto: { label: 'Direto', cor: SERIE[1], ordem: 1 },
   google_organico: { label: 'Google (busca)', cor: SERIE[2], ordem: 2 },
   indicacao: { label: 'Indicação', cor: SERIE[3], ordem: 3 },
-  instagram: { label: 'Instagram', cor: SERIE[4], ordem: 4 },
+  facebook: { label: 'Facebook', cor: SERIE[4], ordem: 4 },
 };
 const NOMES_OUTROS = {
-  facebook: 'Facebook', site: 'Site', whatsapp: 'WhatsApp', outro: 'Outro', nao_informado: 'Não informado',
+  instagram: 'Instagram', site: 'Site', whatsapp: 'WhatsApp', outro: 'Outro', nao_informado: 'Não informado',
 };
 
 const PERIODOS = [7, 30, 90];
@@ -303,7 +303,7 @@ export default function Relatorios() {
   const b = dados ? derivados(dados.anterior) : null;
   const origensVisitas = useMemo(() => agruparOrigens(dados?.origens_visitas), [dados]);
   const origensPacientes = useMemo(() => agruparOrigens(dados?.origens_pacientes), [dados]);
-  const nomeCanal = canal === 'todos' ? 'todas as origens' : 'Google Ads';
+  const nomeCanal = canal === 'todos' ? 'todas as origens' : canal === 'facebook' ? 'Facebook' : 'Google Ads';
   const temSerie = dados?.serie?.some(d => d.visitas || d.contatos);
 
   return (
@@ -324,6 +324,7 @@ export default function Relatorios() {
         </div>
         <div className="bi-segmento" role="group" aria-label="Origem">
           <button className={canal === 'google' ? 'ativo' : ''} onClick={() => setCanal('google')}>Google Ads</button>
+          <button className={canal === 'facebook' ? 'ativo' : ''} onClick={() => setCanal('facebook')}>Facebook</button>
           <button className={canal === 'todos' ? 'ativo' : ''} onClick={() => setCanal('todos')}>Todas as origens</button>
         </div>
         <div className="bi-filtros-fim">

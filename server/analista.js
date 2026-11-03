@@ -59,12 +59,17 @@ async function perguntarOracle(prompt) {
 }
 
 // ---------- números ----------
-async function numerosDeOntem(pool) {
+const CANAIS = [
+  { id: 'google', nome: 'Google Ads', curto: 'Google' },
+  { id: 'facebook', nome: 'Facebook', curto: 'Facebook' },
+];
+
+async function numerosDeOntem(pool, canal) {
   const r = await pool.query(`
     SELECT tipo, COUNT(*)::int AS total FROM site_eventos
-     WHERE origem = 'google'
+     WHERE origem = $1
        AND (created_at AT TIME ZONE 'UTC' AT TIME ZONE '${FUSO}')::date = (NOW() AT TIME ZONE '${FUSO}')::date - 1
-     GROUP BY tipo`);
+     GROUP BY tipo`, [canal]);
   const t = Object.fromEntries(r.rows.map(x => [x.tipo, x.total]));
   return {
     visitas: t.visita || 0,
@@ -75,52 +80,71 @@ async function numerosDeOntem(pool) {
   };
 }
 
-function textoNumeros(hoje, ontem, m) {
+const ativo = (c) => c.m.visitas > 0 || c.m.contatos > 0 || c.m.investido > 0 || c.ontem.visitas > 0;
+
+function blocoCanal({ info, ontem, m }) {
   const linhas = [
-    `📊 *Enfermeira Feridas — Google Ads* (${dataBR(hoje)})`,
-    '',
-    `*Ontem:* ${ontem.visitas} visita(s) · ${ontem.contatos} contato(s)` +
+    `*${info.nome}*`,
+    `Ontem: ${ontem.visitas} visita(s) · ${ontem.contatos} contato(s)` +
       (ontem.contatos ? ` (${ontem.whatsapp} WhatsApp, ${ontem.telefone} ligação, ${ontem.orcamento} orçamento)` : ''),
-    '',
-    `*Últimos ${m.dias} dias:*`,
-    `• Visitas do Google: ${m.visitas}`,
+    `Últimos ${m.dias} dias:`,
+    `• Visitas: ${m.visitas}`,
     `• Contatos: ${m.contatos}` + (m.taxa_contato !== null ? ` (${String(m.taxa_contato).replace('.', ',')}% das visitas)` : ''),
-    `• Pacientes do Google: ${m.pacientes}`,
+    `• Pacientes: ${m.pacientes}`,
     `• Investido: ${brl(m.investido)}` + (m.custo_por_contato !== null ? ` · ${brl(m.custo_por_contato)} por contato` : ''),
     `• Recebido: ${brl(m.recebido)}` + (m.retorno !== null && m.recebido ? ` · retorno ${String(m.retorno).replace('.', ',')}x` : ''),
   ];
-  if (m.termos?.length) linhas.push(`• Palavras que mais trouxeram visitas: ${m.termos.map(t => t.termo).join(', ')}`);
+  if (m.termos?.length && info.id === 'google') linhas.push(`• Palavras que mais trouxeram visitas: ${m.termos.map(t => t.termo).join(', ')}`);
   return linhas.join('\n');
 }
 
-function promptAnalista(ontem, m) {
+function textoNumeros(hoje, canais) {
+  const mostrar = canais.filter(ativo);
+  const lista = mostrar.length ? mostrar : canais.slice(0, 1);
+  const partes = [`📊 *Enfermeira Feridas — Anúncios* (${dataBR(hoje)})`, ''];
+  lista.forEach((c, i) => { if (i) partes.push(''); partes.push(blocoCanal(c)); });
+  if (mostrar.length > 1) {
+    const inv = mostrar.reduce((s, c) => s + Number(c.m.investido || 0), 0);
+    const cont = mostrar.reduce((s, c) => s + c.m.contatos, 0);
+    partes.push('', `*Total:* ${brl(inv)} investido · ${cont} contato(s)` + (cont && inv ? ` · ${brl(inv / cont)} por contato` : ''));
+  }
+  return partes.join('\n');
+}
+
+function promptAnalista(canais) {
+  const dados = canais.filter(ativo).map(({ info, ontem, m }) => ({
+    canal: info.nome, ontem,
+    periodo_dias: m.dias, visitas: m.visitas, contatos: m.contatos, whatsapp: m.cliques_whatsapp, ligacoes: m.cliques_telefone,
+    orcamentos: m.orcamentos, pacientes: m.pacientes, investido_reais: m.investido, recebido_reais: m.recebido,
+    custo_por_contato: m.custo_por_contato, retorno: m.retorno,
+    palavras: info.id === 'google' ? (m.termos?.map(t => t.termo) || []) : undefined,
+  }));
   return [
     'Você é um analista de marketing que ajuda uma enfermeira autônoma de São Paulo que faz curativos em domicílio.',
-    'Ela está testando um anúncio pequeno no Google Ads. Abaixo estão os números REAIS. Não invente nenhum número novo e não repita a lista inteira.',
+    'Ela está testando anúncios pequenos (Google Ads e/ou Facebook). Abaixo estão os números REAIS por canal. Não invente nenhum número novo e não repita a lista inteira.',
     'Escreva em português do Brasil, para ler no WhatsApp: no máximo 3 frases curtas e simples, sem jargão.',
-    '1) diga em uma frase como está indo; 2) dê UMA sugestão prática e concreta para os próximos dias.',
-    'Se ainda há poucos dados (menos de 20 visitas), diga que ainda é cedo para concluir. Não fale de diagnóstico nem de saúde de pacientes.',
+    '1) diga em uma frase como está indo; 2) se houver mais de um canal, diga qual está trazendo contato mais barato; 3) dê UMA sugestão prática para os próximos dias.',
+    'Se ainda há poucos dados (menos de 20 visitas num canal), diga que ainda é cedo para concluir sobre ele. Não fale de diagnóstico nem de saúde de pacientes.',
     'Responda só com o texto, sem título e sem emojis no começo.',
     '',
-    `Ontem: ${JSON.stringify(ontem)}`,
-    `Período de ${m.dias} dias: ${JSON.stringify({
-      visitas: m.visitas, contatos: m.contatos, whatsapp: m.cliques_whatsapp, ligacoes: m.cliques_telefone,
-      orcamentos: m.orcamentos, pacientes: m.pacientes, investido_reais: m.investido, recebido_reais: m.recebido,
-      custo_por_contato: m.custo_por_contato, retorno: m.retorno, palavras: m.termos?.map(t => t.termo) || [],
-    })}`,
+    JSON.stringify(dados),
   ].join('\n');
 }
 
 export async function montarResumo(pool, resumoMarketing) {
   const { data } = agoraSP();
-  const [ontem, m] = await Promise.all([numerosDeOntem(pool), resumoMarketing(30, 'google')]);
-  let texto = textoNumeros(data, ontem, m);
+  const canais = await Promise.all(CANAIS.map(async (info) => {
+    const [ontem, m] = await Promise.all([numerosDeOntem(pool, info.id), resumoMarketing(30, info.id)]);
+    return { info, ontem, m };
+  }));
+  let texto = textoNumeros(data, canais);
   let ia = 'sem-ia';
-  if (ociConfigurado()) {
+  const temAtividade = canais.some(ativo);
+  if (temAtividade && ociConfigurado()) {
     try {
-      const comentario = await perguntarOracle(promptAnalista(ontem, m));
+      const comentario = await perguntarOracle(promptAnalista(canais));
       if (comentario) {
-        texto += `\n\n🤖 *Análise:* ${comentario.slice(0, 600)}`;
+        texto += `\n\n🤖 *Análise:* ${comentario.slice(0, 700)}`;
         ia = 'ok';
       }
     } catch (err) {
@@ -128,7 +152,6 @@ export async function montarResumo(pool, resumoMarketing) {
       ia = 'erro';
     }
   }
-  const temAtividade = m.visitas > 0 || m.contatos > 0 || m.investido > 0;
   return { texto, ia, data, temAtividade };
 }
 

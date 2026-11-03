@@ -9,6 +9,11 @@ const brl = (v) =>
     ? '—'
     : Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
+const CANAIS = {
+  google: { nome: 'Google Ads', curto: 'Google' },
+  facebook: { nome: 'Facebook', curto: 'Facebook' },
+};
+
 const PERIODOS = [
   { dias: 7, label: '7 dias' },
   { dias: 30, label: '30 dias' },
@@ -17,6 +22,8 @@ const PERIODOS = [
 
 export default function GoogleAdsCard() {
   const [dias, setDias] = useState(30);
+  const [canal, setCanal] = useState('google');
+  const C = CANAIS[canal];
   const [dados, setDados] = useState(null);
   const [erro, setErro] = useState(false);
   const [investimentos, setInvestimentos] = useState([]);
@@ -31,17 +38,17 @@ export default function GoogleAdsCard() {
   const carregar = useCallback(async () => {
     try {
       const [r1, r2] = await Promise.all([
-        authFetch(`/api/marketing/resumo?dias=${dias}&canal=google`),
+        authFetch(`/api/marketing/resumo?dias=${dias}&canal=${canal}`),
         authFetch('/api/marketing/investimentos'),
       ]);
       if (!r1.ok) throw new Error();
       setDados(await r1.json());
-      setInvestimentos(r2.ok ? (await r2.json()).filter(i => i.canal === 'google') : []);
+      setInvestimentos(r2.ok ? (await r2.json()).filter(i => i.canal === canal) : []);
       setErro(false);
     } catch {
       setErro(true);
     }
-  }, [dias]);
+  }, [dias, canal]);
 
   useEffect(() => { carregar(); }, [carregar]);
 
@@ -52,7 +59,7 @@ export default function GoogleAdsCard() {
       const res = await authFetch('/api/marketing/investimentos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ canal: 'google', valor, descricao }),
+        body: JSON.stringify({ canal, valor, descricao }),
       });
       if (!res.ok) throw new Error((await res.json()).error || 'Erro');
       setValor(''); setDescricao(''); setMostrarForm(false);
@@ -107,7 +114,7 @@ export default function GoogleAdsCard() {
     if (!dados.investido) return { cls: 'neutro', txt: 'Lance quanto você investiu para calcular o retorno.' };
     if (dados.retorno === null || dados.recebido === 0) {
       return dados.contatos > 0
-        ? { cls: 'atencao', txt: `${dados.contatos} contato(s) até agora, ainda sem pagamento confirmado de paciente do Google.` }
+        ? { cls: 'atencao', txt: `${dados.contatos} contato(s) até agora, ainda sem pagamento confirmado de paciente do ${C.curto}.` }
         : { cls: 'atencao', txt: 'Ainda sem contatos vindos do anúncio neste período.' };
     }
     if (dados.retorno >= 1) return { cls: 'bom', txt: `Valeu a pena: cada R$ 1 investido voltou R$ ${dados.retorno.toFixed(2).replace('.', ',')}.` };
@@ -117,9 +124,9 @@ export default function GoogleAdsCard() {
   const v = veredito();
 
   const metricas = dados ? [
-    { icon: MousePointerClick, label: 'Visitas do Google', valor: dados.visitas, sub: dados.taxa_contato !== null ? `${dados.taxa_contato}% viraram contato` : 'pessoas que entraram no site' },
+    { icon: MousePointerClick, label: `Visitas do ${C.curto}`, valor: dados.visitas, sub: dados.taxa_contato !== null ? `${dados.taxa_contato}% viraram contato` : 'pessoas que entraram no site' },
     { icon: MessageCircle, label: 'Contatos', valor: dados.contatos, sub: `${dados.cliques_whatsapp} WhatsApp · ${dados.cliques_telefone} ligação · ${dados.orcamentos} orçamento` },
-    { icon: UserCheck, label: 'Pacientes do Google', valor: dados.pacientes, sub: dados.custo_por_paciente !== null ? `${brl(dados.custo_por_paciente)} por paciente` : 'marque a origem em Pacientes' },
+    { icon: UserCheck, label: `Pacientes do ${C.curto}`, valor: dados.pacientes, sub: dados.custo_por_paciente !== null ? `${brl(dados.custo_por_paciente)} por paciente` : 'marque a origem em Pacientes' },
     { icon: Wallet, label: 'Investido', valor: brl(dados.investido), sub: dados.custo_por_contato !== null ? `${brl(dados.custo_por_contato)} por contato` : 'lançado manualmente' },
     { icon: TrendingUp, label: 'Recebido', valor: brl(dados.recebido), sub: 'PIX confirmados desses pacientes' },
   ] : [];
@@ -129,7 +136,14 @@ export default function GoogleAdsCard() {
       <div className="gads-header">
         <div className="gads-title">
           <Target size={18} className="icon-primary" />
-          Google Ads — valeu a pena?
+          Anúncios — valeu a pena?
+          <div className="gads-periodos gads-canais">
+            {Object.entries(CANAIS).map(([k, c]) => (
+              <button key={k} className={`gads-periodo ${canal === k ? 'ativo' : ''}`} onClick={() => { setCanal(k); setMostrarForm(false); setPrevia(null); }}>
+                {c.nome}
+              </button>
+            ))}
+          </div>
         </div>
         <div className="gads-actions">
           <div className="gads-periodos">
@@ -150,8 +164,8 @@ export default function GoogleAdsCard() {
 
       {mostrarForm && (
         <form className="gads-form" onSubmit={salvarInvestimento}>
-          <input className="form-input" inputMode="decimal" placeholder="Valor (ex.: 40,00)" value={valor} onChange={e => setValor(e.target.value)} required />
-          <input className="form-input" placeholder="Descrição (ex.: Campanha Curativo Domiciliar SP)" value={descricao} onChange={e => setDescricao(e.target.value)} />
+          <input className="form-input" inputMode="decimal" placeholder={`Valor no ${C.curto} (ex.: 25,00)`} value={valor} onChange={e => setValor(e.target.value)} required />
+          <input className="form-input" placeholder={canal === 'facebook' ? 'Descrição (ex.: Curativo Domiciliar SP - Facebook)' : 'Descrição (ex.: Campanha Curativo Domiciliar SP)'} value={descricao} onChange={e => setDescricao(e.target.value)} />
           <button className="btn btn-primary btn-sm" type="submit" disabled={salvando}>{salvando ? 'Salvando…' : 'Salvar'}</button>
         </form>
       )}
@@ -186,7 +200,7 @@ export default function GoogleAdsCard() {
                 {investimentos.map(i => (
                   <li key={i.id}>
                     <span>{new Date(i.data).toLocaleDateString('pt-BR', { timeZone: 'UTC' })}</span>
-                    <span>{i.descricao || 'Google Ads'}</span>
+                    <span>{i.descricao || C.nome}</span>
                     <strong>{brl(i.valor)}</strong>
                     <button type="button" className="icon-action danger" title="Excluir" onClick={() => excluir(i.id)}><Trash2 size={13} /></button>
                   </li>
@@ -219,7 +233,9 @@ export default function GoogleAdsCard() {
           </div>
 
           <p className="gads-nota">
-            Visitas e cliques são contados no site. Ligações feitas direto pelo botão do anúncio aparecem só no Google Ads.
+            Visitas e cliques são contados no site. {canal === 'google'
+              ? 'Ligações feitas direto pelo botão do anúncio aparecem só no Google Ads.'
+              : 'Pessoas que só curtiram ou comentaram o anúncio aparecem só no Gerenciador de Anúncios da Meta.'}
           </p>
         </>
       )}
