@@ -6,7 +6,6 @@ import { ptBR } from 'date-fns/locale';
 import AppointmentModal from '../components/AppointmentModal';
 import './Appointments.css';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function Appointments() {
   const [appointments, setAppointments] = useState([]);
@@ -15,20 +14,24 @@ export default function Appointments() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [patients, setPatients] = useState([]);
+  const [aviso, setAviso] = useState('');
 
   // Fetch real appointments & patients
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/agendamentos`);
-        if (res.ok) {
-          const data = await res.json();
+        const res = await authFetch('/api/agendamentos');
+        const data = await res.json().catch(() => null);
+        if (res.ok && Array.isArray(data)) {
           setAppointments(data);
+          setAviso('');
         } else {
           setAppointments([]);
+          setAviso(data?.error || 'Não foi possível carregar a agenda do AgendaNurse.');
         }
       } catch (err) {
         setAppointments([]);
+        setAviso('Não foi possível carregar a agenda do AgendaNurse.');
       } finally {
         setLoading(false);
       }
@@ -36,7 +39,7 @@ export default function Appointments() {
     
     const fetchPatients = async () => {
       try {
-        const res = await authFetch(`${API_BASE_URL}/api/pacientes`);
+        const res = await authFetch('/api/pacientes');
         if (res.ok) {
           const data = await res.json();
           setPatients(data);
@@ -56,22 +59,19 @@ export default function Appointments() {
 
   const handleSaveAppointment = async (data) => {
     try {
-      const res = await fetch(`${API_BASE_URL}/api/agendamentos`, {
+      const res = await authFetch('/api/agendamentos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
-      if (res.ok) {
-        const newAppt = await res.json();
-        setAppointments(prev => [...prev, newAppt]);
-      } else {
-        // Fallback visual case the API is not ready
-        setAppointments(prev => [...prev, { id: Date.now(), ...data }]);
-      }
+      const novo = await res.json().catch(() => null);
+      if (!res.ok) throw new Error(novo?.error || 'Erro ao salvar');
+      setAppointments(prev => [...prev, novo]);
+      setShowModal(false);
     } catch (err) {
-      setAppointments(prev => [...prev, { id: Date.now(), ...data }]);
+      // não finge que salvou: o agendamento precisa estar no AgendaNurse
+      alert('Não foi possível salvar o agendamento: ' + err.message);
     }
-    setShowModal(false);
   };
 
   // Calendar rendering logic
@@ -123,7 +123,8 @@ export default function Appointments() {
       <div className="page-header">
         <div>
           <h1 className="page-title">Agenda</h1>
-          <p className="page-subtitle">Planejamento de Visitas e Plantões</p>
+          <p className="page-subtitle">Planejamento de Visitas e Plantões · sincronizado com o AgendaNurse</p>
+          {aviso && <p className="text-muted" style={{ color: '#b45309', marginTop: 4 }}>{aviso}</p>}
         </div>
         <button className="btn btn-primary" onClick={() => setShowModal(true)}>
           <CalendarIcon size={16} /> Novo Agendamento

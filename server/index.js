@@ -5,6 +5,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { iniciarAnalista, montarResumo, enviarResumo, destinatarios, ociConfigurado } from './analista.js';
+import { listarPlantoes, criarPlantao } from './agendanurse.js';
 
 dotenv.config();
 
@@ -517,6 +518,25 @@ app.post('/api/orcamento', async (req, res) => {
 });
 
 // Endpoint para buscar pacientes
+// Agenda: os plantões vêm do AgendaNurse (Firebase) — uma agenda só nos dois sistemas
+app.get('/api/agendamentos', requireAdmin, async (req, res) => {
+  try {
+    res.json(await listarPlantoes());
+  } catch (error) {
+    console.error('Erro ao ler o AgendaNurse:', error.message);
+    res.status(error.status || 500).json({ error: error.status ? error.message : 'Erro ao ler a agenda do AgendaNurse' });
+  }
+});
+
+app.post('/api/agendamentos', requireAdmin, async (req, res) => {
+  try {
+    res.status(201).json(await criarPlantao(req.body || {}));
+  } catch (error) {
+    console.error('Erro ao criar plantão no AgendaNurse:', error.message);
+    res.status(error.status || 500).json({ error: error.status ? error.message : 'Erro ao salvar na agenda do AgendaNurse' });
+  }
+});
+
 app.get('/api/pacientes', requireAdmin, async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM pacientes ORDER BY created_at DESC");

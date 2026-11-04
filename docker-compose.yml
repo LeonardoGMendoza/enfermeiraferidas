@@ -41,6 +41,10 @@ services:
       - ZAPI_INSTANCE=${ZAPI_INSTANCE:-}
       - ZAPI_TOKEN=${ZAPI_TOKEN:-}
       - ZAPI_CLIENT_TOKEN=${ZAPI_CLIENT_TOKEN:-}
+      # Agenda do AgendaNurse (Firebase)
+      - FIREBASE_SA_B64=${FIREBASE_SA_B64:-}
+      - AGENDANURSE_EMAIL=${AGENDANURSE_EMAIL:-}
+      - AGENDANURSE_UID=${AGENDANURSE_UID:-}
       - PORT=3000
     extra_hosts:
       - "host.docker.internal:host-gateway"
