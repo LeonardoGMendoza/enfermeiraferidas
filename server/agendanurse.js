@@ -5,14 +5,15 @@
 //
 // Variáveis no .env do servidor:
 //   FIREBASE_SA_B64     chave da conta de serviço do Firebase (JSON em base64)
-//   AGENDANURSE_EMAIL   e-mail com que a Sandra entra no AgendaNurse
-//   AGENDANURSE_UID     (opcional) o uid dela, se preferir em vez do e-mail
+//   AGENDANURSE_EMAIL   e-mail(s) com que a Sandra entra no AgendaNurse, separados por vírgula.
+//                       Lê os plantões de todos; os novos vão para o PRIMEIRO.
+//   AGENDANURSE_UID     (opcional) uid(s) no lugar dos e-mails, também separados por vírgula
 // =============================================
 
 const FUSO = 'America/Sao_Paulo';
 const COR_PADRAO = 0xff1976d2; // Colors.blue[700], a mesma do app
 
-let estado = null; // { db, Timestamp, uid }
+let estado = null; // { db, Timestamp, uids }
 
 export const agendaNurseConfigurado = () => Boolean(process.env.FIREBASE_SA_B64);
 
@@ -30,17 +31,26 @@ async function conectar() {
   const conta = JSON.parse(Buffer.from(process.env.FIREBASE_SA_B64, 'base64').toString('utf8'));
   const app = getApps().find(a => a.name === 'agendanurse') || initializeApp({ credential: cert(conta) }, 'agendanurse');
 
-  let uid = (process.env.AGENDANURSE_UID || '').trim();
-  if (!uid) {
-    const email = (process.env.AGENDANURSE_EMAIL || '').trim();
-    if (!email) {
+  const lista = (v) => String(v || '').split(',').map(s => s.trim()).filter(Boolean);
+  let uids = lista(process.env.AGENDANURSE_UID);
+  if (!uids.length) {
+    const emails = lista(process.env.AGENDANURSE_EMAIL);
+    if (!emails.length) {
       const e = new Error('Falta AGENDANURSE_EMAIL (ou AGENDANURSE_UID) no .env');
       e.status = 503;
       throw e;
     }
-    uid = (await getAuth(app).getUserByEmail(email)).uid;
+    for (const email of emails) {
+      try { uids.push((await getAuth(app).getUserByEmail(email)).uid); }
+      catch (err) { console.error(`AgendaNurse: conta ${email} não encontrada:`, err.message); }
+    }
+    if (!uids.length) {
+      const e = new Error('Nenhuma conta do AGENDANURSE_EMAIL foi encontrada no Firebase');
+      e.status = 503;
+      throw e;
+    }
   }
-  estado = { db: getFirestore(app), Timestamp, uid };
+  estado = { db: getFirestore(app), Timestamp, uids };
   return estado;
 }
 
@@ -56,9 +66,9 @@ function partesSP(d) {
 }
 
 export async function listarPlantoes() {
-  const { db, uid } = await conectar();
-  const snap = await db.collection('users').doc(uid).collection('plantoes').get();
-  return snap.docs
+  const { db, uids } = await conectar();
+  const snaps = await Promise.all(uids.map(uid => db.collection('users').doc(uid).collection('plantoes').get()));
+  return snaps.flatMap(s => s.docs)
     .map(doc => {
       const x = doc.data();
       const quando = x.data?.toDate ? x.data.toDate() : (x.data ? new Date(x.data) : null);
@@ -84,7 +94,8 @@ export async function criarPlantao({ paciente, data, hora, servico, endereco }) 
     e.status = 400;
     throw e;
   }
-  const { db, Timestamp, uid } = await conectar();
+  const { db, Timestamp, uids } = await conectar();
+  const uid = uids[0];
   // o Brasil não tem horário de verão desde 2019: São Paulo é sempre -03:00
   const quando = new Date(`${data}T${hora}:00-03:00`);
   const observacao = [servico, endereco].map(s => String(s || '').trim()).filter(Boolean).join(' — ');
