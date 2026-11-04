@@ -33,7 +33,7 @@ export function ociConfigurado(env = process.env) {
   return Boolean(env.OCI_USER && env.OCI_FINGERPRINT && env.OCI_TENANCY && env.OCI_REGION && env.OCI_COMPARTMENT_ID && chavePrivada(env));
 }
 
-async function perguntarOracle(prompt) {
+export async function perguntarOracle(prompt) {
   if (!ociConfigurado()) throw new Error('OCI não configurado');
   if (!clienteOCI) {
     const commonMod = await import('oci-common');
@@ -167,7 +167,7 @@ export function destinatarios(env = process.env) {
     .split(',').map(n => n.replace(/\D/g, '')).filter(n => n.length >= 12);
 }
 
-async function enviarWhatsApp(numero, texto) {
+export async function enviarWhatsApp(numero, texto) {
   const prov = (process.env.WHATSAPP_PROVIDER || 'waha').toLowerCase();
   let url, body, headers = { 'Content-Type': 'application/json' };
   if (prov === 'zapi') {

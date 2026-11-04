@@ -4,8 +4,9 @@ import pkg from 'pg';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { iniciarAnalista, montarResumo, enviarResumo, destinatarios, ociConfigurado } from './analista.js';
-import { listarPlantoes, criarPlantao } from './agendanurse.js';
+import { iniciarAnalista, montarResumo, enviarResumo, destinatarios, ociConfigurado, enviarWhatsApp, perguntarOracle } from './analista.js';
+import { listarPlantoes, criarPlantao, agendaNurseConfigurado } from './agendanurse.js';
+import { iniciarLembretes } from './lembretes.js';
 
 dotenv.config();
 
@@ -88,6 +89,7 @@ async function ensureMarketingSchema() {
   }
 }
 ensureMarketingSchema().then(() => iniciarAnalista(pool, resumoMarketing)).catch(e => console.error('Analista:', e.message));
+iniciarLembretes(pool, { listarPlantoes, agendaNurseConfigurado, enviarWhatsApp, destinatarios, perguntarOracle, ociConfigurado });
 
 const TIPOS_EVENTO = ['visita', 'whatsapp', 'telefone', 'orcamento'];
 const ORIGENS = ['google', 'google_organico', 'facebook', 'instagram', 'tiktok', 'indicacao', 'site', 'whatsapp', 'outro', 'direto'];
