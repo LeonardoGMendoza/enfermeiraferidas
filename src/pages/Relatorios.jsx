@@ -20,13 +20,13 @@ const FUNIL = ['#86b6ef', '#5598e7', '#2a78d6', '#1c5cab', '#0d366b'];
 const TEMAS = {
   claro: {
     serie: SERIE, outros: OUTROS, seq: SEQ, funil: FUNIL.slice(1),
-    celulaVazia: '#f4f4f1', grade: '#ecebe7', eixo: '#6b6a65', cursor: '#b9b8b2', superficie: '#ffffff', trilho: '#f4f4f1',
+    bom: '#0ca30c', celulaVazia: '#f4f4f1', grade: '#ecebe7', eixo: '#6b6a65', cursor: '#b9b8b2', superficie: '#ffffff', trilho: '#f4f4f1',
   },
   escuro: {
     serie: ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181'], outros: '#8a8f99',
     seq: ['#184f95', '#1c5cab', '#256abf', '#3987e5', '#5598e7', '#86b6ef', '#cde2fb'],
     funil: ['#86b6ef', '#5598e7', '#3987e5', '#256abf'],
-    celulaVazia: '#1a2540', grade: 'rgba(148,170,220,0.10)', eixo: '#9aa3b5', cursor: '#4a5878', superficie: '#111a2e', trilho: '#1a2540',
+    bom: '#2fc22f', celulaVazia: '#1a2540', grade: 'rgba(148,170,220,0.10)', eixo: '#9aa3b5', cursor: '#4a5878', superficie: '#111a2e', trilho: '#1a2540',
   },
 };
 const TemaCtx = createContext(TEMAS.claro);
@@ -95,7 +95,7 @@ function Sparkline({ dados, chave, cor }) {
     <div className="bi-spark" aria-hidden="true">
       <ResponsiveContainer width="100%" height={34}>
         <LineChart data={dados} margin={{ top: 4, right: 2, bottom: 2, left: 2 }}>
-          <Line type="monotone" dataKey={chave} stroke={cor} strokeWidth={2} dot={false} isAnimationActive={false} />
+          <Line type="monotone" dataKey={chave} stroke={cor} strokeWidth={2} dot={false} isAnimationActive animationBegin={0} animationDuration={1100} animationEasing="ease-out" />
         </LineChart>
       </ResponsiveContainer>
     </div>
@@ -158,7 +158,7 @@ function Rosca({ titulo, dados, unidade }) {
             <ResponsiveContainer width="100%" height={190}>
               <PieChart>
                 <Pie data={dados} dataKey="total" nameKey="nome" innerRadius="62%" outerRadius="92%"
-                     startAngle={90} endAngle={-270} stroke={tema.superficie} strokeWidth={dados.length > 1 ? 2 : 0} isAnimationActive={false}>
+                     startAngle={90} endAngle={-270} stroke={tema.superficie} strokeWidth={dados.length > 1 ? 2 : 0} isAnimationActive animationBegin={0} animationDuration={1100} animationEasing="ease-out">
                   {dados.map(d => <Cell key={d.nome} fill={d.cor} />)}
                 </Pie>
                 <Tooltip content={<TooltipPizza />} />
@@ -328,15 +328,15 @@ function Medidor({ valor }) {
         <ResponsiveContainer width="100%" height={150}>
           <PieChart>
             <Pie data={fatias} dataKey="v" startAngle={180} endAngle={0} cx="50%" cy="88%"
-                 innerRadius={84} outerRadius={108} stroke="none" isAnimationActive={false} cornerRadius={4}>
-              <Cell fill={tema.serie[0]} />
+                 innerRadius={84} outerRadius={108} stroke="none" isAnimationActive animationBegin={0} animationDuration={1100} animationEasing="ease-out" cornerRadius={4}>
+              <Cell fill={valor >= meta ? tema.bom : tema.serie[0]} />
               <Cell fill={tema.trilho} />
             </Pie>
           </PieChart>
         </ResponsiveContainer>
         <div className="bi-medidor-centro">
           <strong>{num(valor)}<span>/{num(meta)}</span></strong>
-          <em>{pctMeta}% da meta</em>
+          <em className={valor >= meta ? 'bi-meta-batida' : ''}>{valor >= meta ? '✔ Meta batida!' : `${pctMeta}% da meta`}</em>
         </div>
       </div>
     </div>
@@ -389,6 +389,11 @@ export default function Relatorios() {
   }, [dias, canal]);
 
   useEffect(() => { carregar(); }, [carregar]);
+  // painel vivo: busca os números de novo a cada 60 segundos
+  useEffect(() => {
+    const id = setInterval(() => { if (!document.hidden) carregar(); }, 60000);
+    return () => clearInterval(id);
+  }, [carregar]);
 
   const a = dados ? derivados(dados.atual) : null;
   const b = dados ? derivados(dados.anterior) : null;
@@ -513,8 +518,8 @@ export default function Relatorios() {
                                minTickGap={16} />
                         <YAxis allowDecimals={false} tick={{ fill: tema.eixo, fontSize: 11 }} axisLine={false} tickLine={false} />
                         <Tooltip content={<TooltipLinha />} cursor={{ fill: escuro ? 'rgba(134,182,239,0.08)' : 'rgba(15,23,42,0.05)' }} />
-                        <Bar dataKey="visitas" name="Visitas" fill="url(#biGradVisitas)" radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive={false} />
-                        <Bar dataKey="contatos" name="Contatos" fill="url(#biGradContatos)" radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive={false} />
+                        <Bar dataKey="visitas" name="Visitas" fill="url(#biGradVisitas)" radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive animationBegin={0} animationDuration={1100} animationEasing="ease-out" />
+                        <Bar dataKey="contatos" name="Contatos" fill="url(#biGradContatos)" radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive animationBegin={0} animationDuration={1100} animationEasing="ease-out" />
                       </BarChart>
                     </ResponsiveContainer>
                   )}
