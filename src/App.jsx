@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
-import { seedData } from './data';
+import { limparDadosDeExemplo } from './data';
 import Layout from './components/Layout';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
@@ -24,6 +24,7 @@ const ProtectedRoute = ({ children }) => {
 };
 
 export default function App() {
+  useEffect(() => { limparDadosDeExemplo(); }, []);
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />

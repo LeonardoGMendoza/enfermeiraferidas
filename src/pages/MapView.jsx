@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { getPatients, getHomecares } from '../data';
+import { getHomecares } from '../data';
+import { authFetch } from '../api';
 import { MapPin, Navigation, User, Phone } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -34,7 +35,17 @@ export default function MapView() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPatients(getPatients());
+    authFetch('/api/pacientes')
+      .then(r => (r.ok ? r.json() : []))
+      .then(lista => setPatients(lista.map(p => ({
+        ...p,
+        status: p.status || 'ativo',
+        tipoFerida: p.tipoFerida || p.tipo_ferida,
+        telefone: p.telefone || p.phone,
+        lat: p.lat ? Number(p.lat) : null,
+        lng: p.lng ? Number(p.lng) : null,
+      }))))
+      .catch(() => setPatients([]));
     setHomecares(getHomecares());
   }, []);
 

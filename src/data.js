@@ -97,7 +97,30 @@ export const saveEvolution = (evolution) => {
   return list;
 };
 
-// ── SEED DATA ─────────────────────────────────
+// ── LIMPEZA DOS DADOS DE EXEMPLO ──────────────
+// Versões antigas criavam pacientes e homecares fictícios no navegador.
+// Isto remove SÓ esses exemplos (pelos nomes) e mantém o que a Sandra cadastrou.
+const NOMES_EXEMPLO_PACIENTES = ['José Carlos Silva', 'Maria Aparecida Souza', 'Antônio Ferreira Lima', 'Rita de Cássia Alves', 'Francisco Santos Costa'];
+const NOMES_EXEMPLO_HOMECARES = ['HomeCareSP Premium', 'VidaCare Homecare', 'CuidarBem SP', 'SaúdeLar Assistência'];
+
+export const limparDadosDeExemplo = () => {
+  try {
+    const pac = load(KEYS.PATIENTS);
+    const idsExemplo = new Set(pac.filter(p => NOMES_EXEMPLO_PACIENTES.includes(p.nome)).map(p => p.id));
+    if (idsExemplo.size) save(KEYS.PATIENTS, pac.filter(p => !idsExemplo.has(p.id)));
+    const hcs = load(KEYS.HOMECARES);
+    const restoHc = hcs.filter(h => !NOMES_EXEMPLO_HOMECARES.includes(h.nome));
+    if (restoHc.length !== hcs.length) save(KEYS.HOMECARES, restoHc);
+    const ags = load(KEYS.APPOINTMENTS);
+    const restoAg = ags.filter(a => !idsExemplo.has(a.patientId) && !NOMES_EXEMPLO_PACIENTES.includes(a.patientNome));
+    if (restoAg.length !== ags.length) save(KEYS.APPOINTMENTS, restoAg);
+    const evs = load(KEYS.EVOLUTIONS);
+    const restoEv = evs.filter(e => !idsExemplo.has(e.patientId));
+    if (restoEv.length !== evs.length) save(KEYS.EVOLUTIONS, restoEv);
+  } catch { /* navegador sem armazenamento */ }
+};
+
+// ── SEED DATA (não é mais usado) ───────────────
 export const seedData = () => {
   if (getPatients().length > 0) return;
 

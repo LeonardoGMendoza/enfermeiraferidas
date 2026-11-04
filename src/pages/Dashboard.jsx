@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Users, Building2, Calendar, TrendingUp, Clock, MapPin, ChevronRight, Activity, Bell, Check, X } from 'lucide-react';
-import { getPatients, getHomecares, getAppointments } from '../data';
+import { getHomecares, getAppointments } from '../data';
 import './Dashboard.css';
 import { authFetch } from '../api';
 import GoogleAdsCard from '../components/GoogleAdsCard';
@@ -17,7 +17,11 @@ export default function Dashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setPatients(getPatients());
+    // pacientes reais, do servidor (mesma lista da tela Pacientes)
+    authFetch(`${API_BASE_URL}/api/pacientes`)
+      .then(r => (r.ok ? r.json() : []))
+      .then(lista => setPatients(lista.map(p => ({ ...p, status: p.status || 'ativo', tipoFerida: p.tipoFerida || p.tipo_ferida, telefone: p.telefone || p.phone }))))
+      .catch(() => setPatients([]));
     setHomecares(getHomecares());
     setAppointments(getAppointments());
     
