@@ -389,15 +389,16 @@ export default function Relatorios() {
   }, [dias, canal]);
 
   useEffect(() => { carregar(); }, [carregar]);
-  // painel vivo: a cada 30 s busca os números de novo e as barras sobem outra vez
+  // painel vivo: a cada INTERVALO_SEG segundos busca os números de novo e as barras sobem outra vez
+  const INTERVALO_SEG = 10;
   const [rodada, setRodada] = useState(0);
-  const [faltam, setFaltam] = useState(30);
+  const [faltam, setFaltam] = useState(INTERVALO_SEG);
   useEffect(() => {
     const id = setInterval(() => {
       setFaltam(f => {
         if (f > 1) return f - 1;
         if (!document.hidden) { carregar(); setRodada(r => r + 1); }
-        return 30;
+        return INTERVALO_SEG;
       });
     }, 1000);
     return () => clearInterval(id);
