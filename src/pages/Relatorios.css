@@ -212,3 +212,7 @@
 .bi-escuro table { color: var(--bi-ink); }
 .bi-escuro table th { color: var(--bi-ink-3); background: transparent; border-color: var(--bi-borda); }
 .bi-escuro table td { border-color: var(--bi-borda); }
+
+/* cabeçalho da tabela de palavras sem a cor global */
+.bi-termos thead tr, .bi-termos th { background: transparent !important; }
+.bi-escuro .bi-termos th { color: var(--bi-ink-3); }

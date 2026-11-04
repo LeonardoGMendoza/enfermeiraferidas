@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef, useContext, createContext } from 'react';
 import {
-  ResponsiveContainer, LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell,
+  ResponsiveContainer, LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell,
 } from 'recharts';
 import {
   BarChart3, MousePointerClick, MessageCircle, Percent, UserCheck, Wallet, TrendingUp,
@@ -119,13 +119,14 @@ function Vazio({ texto = 'Sem dados neste período' }) {
 }
 
 function TooltipLinha({ active, payload, label }) {
+  const SERIE_TOOLTIP = useContext(TemaCtx).serie;
   if (!active || !payload?.length) return null;
   return (
     <div className="bi-tooltip">
       <div className="bi-tooltip-titulo">{diaCurto(label)}</div>
       {payload.map(p => (
         <div key={p.dataKey} className="bi-tooltip-linha">
-          <span className="bi-chip" style={{ background: p.color }} /> {p.name}: <strong>{num(p.value)}</strong>
+          <span className="bi-chip" style={{ background: p.dataKey === 'contatos' ? SERIE_TOOLTIP[1] : SERIE_TOOLTIP[0] }} /> {p.name}: <strong>{num(p.value)}</strong>
         </div>
       ))}
     </div>
@@ -395,6 +396,8 @@ export default function Relatorios() {
   const origensPacientes = useMemo(() => agruparOrigens(dados?.origens_pacientes, tema), [dados, tema]);
   const nomeCanal = canal === 'todos' ? 'todas as origens' : canal === 'facebook' ? 'Facebook' : 'Google Ads';
   const temSerie = dados?.serie?.some(d => d.visitas || d.contatos);
+  // o Facebook manda o código do conjunto de anúncios no lugar da palavra: não é palavra pesquisada
+  const termosLimpos = (dados?.termos || []).filter(t => t.termo && !/^\d{6,}$/.test(String(t.termo).trim()));
 
   const SERIE = tema.serie;
 
@@ -494,27 +497,25 @@ export default function Relatorios() {
                   </div>
                   {!temSerie ? <Vazio /> : (
                     <ResponsiveContainer width="100%" height={260}>
-                      <AreaChart data={dados.serie} margin={{ top: 10, right: 16, bottom: 0, left: -18 }}>
+                      <BarChart data={dados.serie} margin={{ top: 10, right: 16, bottom: 0, left: -18 }} barGap={3} barCategoryGap="22%">
                         <defs>
                           <linearGradient id="biGradVisitas" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor={SERIE[0]} stopOpacity={escuro ? 0.45 : 0.22} />
-                            <stop offset="100%" stopColor={SERIE[0]} stopOpacity={0} />
+                            <stop offset="0%" stopColor={escuro ? '#86b6ef' : SERIE[0]} />
+                            <stop offset="100%" stopColor={SERIE[0]} />
                           </linearGradient>
                           <linearGradient id="biGradContatos" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor={SERIE[1]} stopOpacity={escuro ? 0.40 : 0.18} />
-                            <stop offset="100%" stopColor={SERIE[1]} stopOpacity={0} />
+                            <stop offset="0%" stopColor={escuro ? '#f08a5d' : SERIE[1]} />
+                            <stop offset="100%" stopColor={SERIE[1]} />
                           </linearGradient>
                         </defs>
                         <CartesianGrid stroke={tema.grade} vertical={false} />
                         <XAxis dataKey="dia" tickFormatter={diaCurto} tick={{ fill: tema.eixo, fontSize: 11 }} axisLine={false} tickLine={false}
-                               minTickGap={24} />
+                               minTickGap={16} />
                         <YAxis allowDecimals={false} tick={{ fill: tema.eixo, fontSize: 11 }} axisLine={false} tickLine={false} />
-                        <Tooltip content={<TooltipLinha />} cursor={{ stroke: tema.cursor, strokeWidth: 1 }} />
-                        <Area type="monotone" dataKey="visitas" name="Visitas" stroke={SERIE[0]} strokeWidth={2} fill="url(#biGradVisitas)"
-                              dot={false} activeDot={{ r: 4, stroke: tema.superficie, strokeWidth: 2 }} isAnimationActive={false} />
-                        <Area type="monotone" dataKey="contatos" name="Contatos" stroke={SERIE[1]} strokeWidth={2} fill="url(#biGradContatos)"
-                              dot={false} activeDot={{ r: 4, stroke: tema.superficie, strokeWidth: 2 }} isAnimationActive={false} />
-                      </AreaChart>
+                        <Tooltip content={<TooltipLinha />} cursor={{ fill: escuro ? 'rgba(134,182,239,0.08)' : 'rgba(15,23,42,0.05)' }} />
+                        <Bar dataKey="visitas" name="Visitas" fill="url(#biGradVisitas)" radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive={false} />
+                        <Bar dataKey="contatos" name="Contatos" fill="url(#biGradContatos)" radius={[4, 4, 0, 0]} maxBarSize={26} isAnimationActive={false} />
+                      </BarChart>
                     </ResponsiveContainer>
                   )}
                 </div>
@@ -532,11 +533,11 @@ export default function Relatorios() {
                 <MapaCalor linhas={dados.calor} />
                 <div className="bi-card">
                   <div className="bi-card-titulo">Palavras do anúncio</div>
-                  {!dados.termos?.length ? <Vazio texto="Aparece quando o anúncio enviar as palavras pesquisadas" /> : (
+                  {!termosLimpos.length ? <Vazio texto={canal === 'facebook' ? 'O Facebook não informa palavras pesquisadas — só o Google Ads' : 'Aparece quando o anúncio enviar as palavras pesquisadas'} /> : (
                     <table className="bi-termos">
                       <thead><tr><th>Palavra</th><th>Visitas</th><th>Contatos</th></tr></thead>
                       <tbody>
-                        {dados.termos.map(t => (
+                        {termosLimpos.map(t => (
                           <tr key={t.termo}><td>{t.termo}</td><td>{num(t.visitas)}</td><td>{num(t.contatos)}</td></tr>
                         ))}
                       </tbody>
