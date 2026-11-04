@@ -12,6 +12,9 @@ const brl = (v) =>
 const CANAIS = {
   google: { nome: 'Google Ads', curto: 'Google' },
   facebook: { nome: 'Facebook', curto: 'Facebook' },
+  instagram: { nome: 'Instagram', curto: 'Instagram' },
+  tiktok: { nome: 'TikTok', curto: 'TikTok' },
+  whatsapp: { nome: 'WhatsApp', curto: 'WhatsApp' },
 };
 
 const PERIODOS = [
@@ -165,7 +168,7 @@ export default function GoogleAdsCard() {
       {mostrarForm && (
         <form className="gads-form" onSubmit={salvarInvestimento}>
           <input className="form-input" inputMode="decimal" placeholder={`Valor no ${C.curto} (ex.: 25,00)`} value={valor} onChange={e => setValor(e.target.value)} required />
-          <input className="form-input" placeholder={canal === 'facebook' ? 'Descrição (ex.: Curativo Domiciliar SP - Facebook)' : 'Descrição (ex.: Campanha Curativo Domiciliar SP)'} value={descricao} onChange={e => setDescricao(e.target.value)} />
+          <input className="form-input" placeholder={canal === 'google' ? 'Descrição (ex.: Campanha Curativo Domiciliar SP)' : `Descrição (ex.: Curativo Domiciliar SP - ${C.nome})`} value={descricao} onChange={e => setDescricao(e.target.value)} />
           <button className="btn btn-primary btn-sm" type="submit" disabled={salvando}>{salvando ? 'Salvando…' : 'Salvar'}</button>
         </form>
       )}

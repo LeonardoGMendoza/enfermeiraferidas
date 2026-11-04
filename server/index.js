@@ -89,7 +89,7 @@ async function ensureMarketingSchema() {
 ensureMarketingSchema().then(() => iniciarAnalista(pool, resumoMarketing)).catch(e => console.error('Analista:', e.message));
 
 const TIPOS_EVENTO = ['visita', 'whatsapp', 'telefone', 'orcamento'];
-const ORIGENS = ['google', 'google_organico', 'facebook', 'instagram', 'indicacao', 'site', 'whatsapp', 'outro', 'direto'];
+const ORIGENS = ['google', 'google_organico', 'facebook', 'instagram', 'tiktok', 'indicacao', 'site', 'whatsapp', 'outro', 'direto'];
 const limpa = (v, max) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, max) : null);
 
 // Limite simples por IP para o /api/track (evita encher o banco)

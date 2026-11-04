@@ -62,6 +62,10 @@ async function perguntarOracle(prompt) {
 const CANAIS = [
   { id: 'google', nome: 'Google Ads', curto: 'Google' },
   { id: 'facebook', nome: 'Facebook', curto: 'Facebook' },
+  // estes só entram no resumo quando tiverem visita ou investimento
+  { id: 'instagram', nome: 'Instagram', curto: 'Instagram', opcional: true },
+  { id: 'tiktok', nome: 'TikTok', curto: 'TikTok', opcional: true },
+  { id: 'whatsapp', nome: 'WhatsApp', curto: 'WhatsApp', opcional: true },
 ];
 
 async function numerosDeOntem(pool, canal) {
@@ -101,7 +105,7 @@ function blocoCanal({ info, ontem, m }) {
 function textoNumeros(hoje, canais) {
   const mostrar = canais.filter(ativo);
   const partes = [`📊 *Enfermeira Feridas — Anúncios* (${dataBR(hoje)})`, ''];
-  canais.forEach((c, i) => {
+  canais.filter(c => !c.info.opcional || ativo(c)).forEach((c, i) => {
     if (i) partes.push('');
     partes.push(ativo(c) ? blocoCanal(c) : `*${c.info.nome}*\nAinda sem visitas nem investimento lançado nos últimos 30 dias.`);
   });
@@ -123,7 +127,7 @@ function promptAnalista(canais) {
   }));
   return [
     'Você é um analista de marketing que ajuda uma enfermeira autônoma de São Paulo que faz curativos em domicílio.',
-    'Ela está testando anúncios pequenos (Google Ads e/ou Facebook). Abaixo estão os números REAIS por canal. Não invente nenhum número novo e não repita a lista inteira.',
+    'Ela está testando anúncios pequenos (Google Ads, Facebook, Instagram, TikTok). Abaixo estão os números REAIS por canal. Não invente nenhum número novo e não repita a lista inteira.',
     'Escreva em português do Brasil, para ler no WhatsApp: no máximo 3 frases curtas e simples, sem jargão.',
     '1) diga em uma frase como está indo; 2) se houver mais de um canal, diga qual está trazendo contato mais barato; 3) dê UMA sugestão prática para os próximos dias.',
     'Se ainda há poucos dados (menos de 20 visitas num canal), diga que ainda é cedo para concluir sobre ele. Não fale de diagnóstico nem de saúde de pacientes.',

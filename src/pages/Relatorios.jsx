@@ -40,10 +40,18 @@ const ORIGEM = {
   facebook: { label: 'Facebook', slot: 4, ordem: 4 },
 };
 const NOMES_OUTROS = {
-  instagram: 'Instagram', site: 'Site', whatsapp: 'WhatsApp', outro: 'Outro', nao_informado: 'Não informado',
+  instagram: 'Instagram', tiktok: 'TikTok', site: 'Site', whatsapp: 'WhatsApp', outro: 'Outro', nao_informado: 'Não informado',
 };
 
 const PERIODOS = [7, 30, 90];
+// canais com botão no filtro (o investimento de cada um é lançado no Dashboard)
+const CANAIS = [
+  { id: 'google', nome: 'Google Ads' },
+  { id: 'facebook', nome: 'Facebook' },
+  { id: 'instagram', nome: 'Instagram' },
+  { id: 'tiktok', nome: 'TikTok' },
+  { id: 'whatsapp', nome: 'WhatsApp' },
+];
 const DIAS_SEMANA = ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'];
 
 const brl = (v) => (v === null || v === undefined ? '—' : Number(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }));
@@ -408,7 +416,7 @@ export default function Relatorios() {
   const b = dados ? derivados(dados.anterior) : null;
   const origensVisitas = useMemo(() => agruparOrigens(dados?.origens_visitas, tema), [dados, tema]);
   const origensPacientes = useMemo(() => agruparOrigens(dados?.origens_pacientes, tema), [dados, tema]);
-  const nomeCanal = canal === 'todos' ? 'todas as origens' : canal === 'facebook' ? 'Facebook' : 'Google Ads';
+  const nomeCanal = canal === 'todos' ? 'todas as origens' : (CANAIS.find(c => c.id === canal)?.nome || 'Google Ads');
   const temSerie = dados?.serie?.some(d => d.visitas || d.contatos);
   // o Facebook manda o código do conjunto de anúncios no lugar da palavra: não é palavra pesquisada
   const termosLimpos = (dados?.termos || []).filter(t => t.termo && !/^\d{6,}$/.test(String(t.termo).trim()));
@@ -436,8 +444,9 @@ export default function Relatorios() {
           ))}
         </div>
         <div className="bi-segmento" role="group" aria-label="Origem">
-          <button className={canal === 'google' ? 'ativo' : ''} onClick={() => setCanal('google')}>Google Ads</button>
-          <button className={canal === 'facebook' ? 'ativo' : ''} onClick={() => setCanal('facebook')}>Facebook</button>
+          {CANAIS.map(c => (
+            <button key={c.id} className={canal === c.id ? 'ativo' : ''} onClick={() => setCanal(c.id)}>{c.nome}</button>
+          ))}
           <button className={canal === 'todos' ? 'ativo' : ''} onClick={() => setCanal('todos')}>Todas as origens</button>
         </div>
         <div className="bi-filtros-fim">
@@ -550,7 +559,7 @@ export default function Relatorios() {
                 <MapaCalor linhas={dados.calor} />
                 <div className="bi-card">
                   <div className="bi-card-titulo">Palavras do anúncio</div>
-                  {!termosLimpos.length ? <Vazio texto={canal === 'facebook' ? 'O Facebook não informa palavras pesquisadas — só o Google Ads' : 'Aparece quando o anúncio enviar as palavras pesquisadas'} /> : (
+                  {!termosLimpos.length ? <Vazio texto={canal !== 'google' && canal !== 'todos' ? `O ${nomeCanal} não informa palavras pesquisadas — só o Google Ads` : 'Aparece quando o anúncio enviar as palavras pesquisadas'} /> : (
                     <table className="bi-termos">
                       <thead><tr><th>Palavra</th><th>Visitas</th><th>Contatos</th></tr></thead>
                       <tbody>

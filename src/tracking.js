@@ -23,7 +23,7 @@ function detectarOrigem() {
     return { origem: 'google', campanha, termo, gclid };
   }
   if (src) {
-    const map = { facebook: 'facebook', fb: 'facebook', instagram: 'instagram', ig: 'instagram', whatsapp: 'whatsapp' };
+    const map = { facebook: 'facebook', fb: 'facebook', instagram: 'instagram', ig: 'instagram', tiktok: 'tiktok', tt: 'tiktok', whatsapp: 'whatsapp', wa: 'whatsapp' };
     return { origem: map[src] || 'outro', campanha, termo, gclid: null };
   }
   const ref = document.referrer || '';
@@ -31,6 +31,7 @@ function detectarOrigem() {
     if (/google\./.test(ref)) return { origem: 'google_organico', campanha: null, termo: null, gclid: null };
     if (/facebook\.|fb\./.test(ref)) return { origem: 'facebook', campanha: null, termo: null, gclid: null };
     if (/instagram\./.test(ref)) return { origem: 'instagram', campanha: null, termo: null, gclid: null };
+    if (/tiktok\./.test(ref)) return { origem: 'tiktok', campanha: null, termo: null, gclid: null };
     return { origem: 'outro', campanha: null, termo: null, gclid: null };
   }
   return null; // sem informação nova
