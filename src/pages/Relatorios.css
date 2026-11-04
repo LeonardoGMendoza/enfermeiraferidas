@@ -243,7 +243,28 @@
 .bi-meta-batida { color: var(--bi-bom) !important; font-weight: 700; }
 .bi-medidor:has(.bi-meta-batida) { animation: bi-surgir .6s ease-out both, bi-pulso 2.4s ease-in-out .6s infinite; border-color: rgba(47, 194, 47, .5); }
 
-/* quem prefere menos movimento no sistema não vê animação */
-@media (prefers-reduced-motion: reduce) {
-  .bi *, .bi { animation: none !important; }
+
+/* ---------- movimento contínuo ---------- */
+.bi-aovivo {
+  display: inline-flex; align-items: center; gap: 6px; margin-right: 10px; padding: 2px 9px; border-radius: 999px;
+  font-size: 11px; font-weight: 800; letter-spacing: .6px; color: #2fc22f; background: rgba(47,194,47,.12); border: 1px solid rgba(47,194,47,.35);
 }
+.bi-aovivo-ponto { width: 8px; height: 8px; border-radius: 50%; background: #2fc22f; animation: bi-piscar 1.2s ease-in-out infinite; }
+@keyframes bi-piscar { 0%,100% { opacity: 1; box-shadow: 0 0 0 0 rgba(47,194,47,.7); } 50% { opacity: .35; box-shadow: 0 0 0 6px rgba(47,194,47,0); } }
+
+/* brilho que passa por dentro das barras, sem parar */
+.bi-funil-barra, .bi-barra { position: relative; overflow: hidden; }
+.bi-funil-barra::after, .bi-barra::after {
+  content: ''; position: absolute; inset: 0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent);
+  animation: bi-brilho 2.6s ease-in-out 1.2s infinite;
+}
+@keyframes bi-brilho { to { transform: translateX(100%); } }
+
+/* filete de luz correndo no topo dos cartões escuros */
+.bi-escuro .bi-card::before, .bi-escuro .bi-kpi::before { animation: bi-correr 4s linear infinite; left: -40%; right: auto; width: 40%; }
+@keyframes bi-correr { to { left: 100%; } }
+
+/* números respirando de leve */
+.bi-escuro .bi-kpi-valor, .bi-escuro .bi-medidor-centro strong { animation: bi-respirar 3s ease-in-out infinite; }
+@keyframes bi-respirar { 0%,100% { text-shadow: 0 0 14px rgba(57,135,229,.35); } 50% { text-shadow: 0 0 26px rgba(57,135,229,.8); } }

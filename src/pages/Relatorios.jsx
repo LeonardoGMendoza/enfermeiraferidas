@@ -389,9 +389,17 @@ export default function Relatorios() {
   }, [dias, canal]);
 
   useEffect(() => { carregar(); }, [carregar]);
-  // painel vivo: busca os números de novo a cada 60 segundos
+  // painel vivo: a cada 30 s busca os números de novo e as barras sobem outra vez
+  const [rodada, setRodada] = useState(0);
+  const [faltam, setFaltam] = useState(30);
   useEffect(() => {
-    const id = setInterval(() => { if (!document.hidden) carregar(); }, 60000);
+    const id = setInterval(() => {
+      setFaltam(f => {
+        if (f > 1) return f - 1;
+        if (!document.hidden) { carregar(); setRodada(r => r + 1); }
+        return 30;
+      });
+    }, 1000);
     return () => clearInterval(id);
   }, [carregar]);
 
@@ -412,7 +420,10 @@ export default function Relatorios() {
       <div className="page-header">
         <div>
           <h1 className="page-title">Relatórios</h1>
-          <p className="page-subtitle">Marketing e resultados — {nomeCanal}, últimos {dias} dias</p>
+          <p className="page-subtitle">
+            <span className="bi-aovivo"><span className="bi-aovivo-ponto" /> AO VIVO</span>
+            Marketing e resultados — {nomeCanal}, últimos {dias} dias · atualiza em {faltam}s
+          </p>
         </div>
       </div>
 
@@ -447,7 +458,7 @@ export default function Relatorios() {
       {erro && <div className="bi-erro">Não foi possível carregar o relatório agora.</div>}
 
       {a && (
-        <>
+        <div key={rodada} className="bi-conteudo">
           <div className="bi-kpis">
             <Kpi icone={MousePointerClick} titulo="Visitas" valor={num(a.visitas)}
                  spark={<Sparkline dados={dados.serie} chave="visitas" cor={SERIE[0]} />}>
@@ -556,7 +567,7 @@ export default function Relatorios() {
             <BarChart3 size={12} /> Visitas e cliques são medidos no site. Ligações feitas direto pelo botão do anúncio aparecem só no Google Ads.
             A origem dos pacientes vem da coluna "Origem" em Pacientes.
           </p>
-        </>
+        </div>
       )}
     </div>
     </TemaCtx.Provider>
